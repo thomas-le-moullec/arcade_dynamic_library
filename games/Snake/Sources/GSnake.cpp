@@ -9,7 +9,7 @@ arcade::GSnake::GSnake()
 
 bool											arcade::GSnake::isOnSnake(int pos)
 {
-  for (int i = 0; i < this->_player.size(); i++)
+  for (unsigned int i = 0; i < this->_player.size(); i++)
     if (pos == this->_player[i].y * 8 + this->_player[i].x)
       return true;
   return false;
@@ -89,9 +89,9 @@ void                      arcade::GSnake::move()
 void	    							  arcade::GSnake::Update(CommandType type, bool debug)
 {
   if (type == CommandType::WHERE_AM_I)
-    this->GetPlayer(true);
+    this->GetPlayer(debug);
   if (type == CommandType::GET_MAP)
-    this->GetMap(true);
+    this->GetMap(debug);
   if (type == CommandType::GO_UP || type == CommandType::GO_DOWN ||
       type == CommandType::GO_LEFT || type == CommandType::GO_RIGHT)
     this->_dir = type;
@@ -133,7 +133,7 @@ struct arcade::WhereAmI	     			*arcade::GSnake::GetPlayer(bool debug) const
     exit(0);
   player->type = CommandType::WHERE_AM_I;
   player->lenght = this->_player.size();
-  for (int i = 0; i < this->_player.size(); i++)
+  for (unsigned int i = 0; i < this->_player.size(); i++)
     player->position[i] = this->_player[i];
   if (debug == true)
   {
