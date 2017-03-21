@@ -21,7 +21,6 @@ void											arcade::GSnake::dropApple(int dropByDefault)
   int											y;
 
   srand(time(NULL));
-
   if (dropByDefault == 0)
   {
     while (this->_map[dropByDefault] != TileType::EMPTY ||
