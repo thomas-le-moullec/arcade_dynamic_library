@@ -4,6 +4,8 @@
 #include <curses.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
+
 #include "IGraphic.hpp"
 
 #define	MARGIN_Y	15 //à remplacer

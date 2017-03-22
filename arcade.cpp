@@ -1,6 +1,8 @@
 #include "IGraphic.hpp"
 #include "IGame.hpp"
 
+#include <unistd.h>
+
 void			execArcade()
 {
   arcade::IGraphic		*graphic = CreateDisplayModule();
@@ -13,6 +15,7 @@ void			execArcade()
     game->Update(type, false);
     game->Update(arcade::CommandType::PLAY, false);
     graphic->ShowGame(game->GetPlayer(false), game->GetMap(false));
+    usleep(700000);
   }
 }
 

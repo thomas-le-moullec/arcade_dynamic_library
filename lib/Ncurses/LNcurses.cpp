@@ -2,13 +2,14 @@
 
 arcade::LNcurses::LNcurses()
 {
-  //this->modeCanon(0);
   this->initWindow();
+  this->modeCanon(0);
 }
 
 arcade::LNcurses::~LNcurses()
 {
-  //this->modeCanon(1);
+  endwin();
+  this->modeCanon(1);
 }
 
 void		arcade::LNcurses::initWindow() const
@@ -41,7 +42,11 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     while (x < map->width && i < map->width * map->height)
     {
       if (this->isOnMap(player, i) == true)
+      {
+        attron(A_REVERSE);
         mvprintw(y + MARGIN_Y, x + MARGIN_X, "S");
+        attroff(A_REVERSE);
+      }
       else
         mvprintw(y + MARGIN_Y, x + MARGIN_X, "%d", (int)map->tile[i]);
       i++;
@@ -65,8 +70,8 @@ int									arcade::LNcurses::modeCanon(int mode) const
         return (-1);
       next.c_lflag &= ~ECHO;
       next.c_lflag &= ~ICANON;
-      next.c_cc[VMIN] = 1;
-      next.c_cc[VTIME] = 0;
+      next.c_cc[VMIN] = 0;
+      next.c_cc[VTIME] = 1;
       if (ioctl(0, TCSETS, &next) < 0)
         return (-1);
     }
@@ -78,19 +83,19 @@ int									arcade::LNcurses::modeCanon(int mode) const
 
 arcade::CommandType			arcade::LNcurses::GetInput() const
 {
-  arcade::CommandType		type;
-  char									c;
+  arcade::CommandType		type = arcade::CommandType::ILLEGAL;
+  char									c ;
 
-  std::cin.read(&c, 1);
-//  c = buff[0];
+  //while (c != 'z' && c != 'q' && c != 's' && c != 'd')
+  read(0, &c, 1);//std::cin.read(&c, 1);
   if (c == 'z')
-    type == arcade::CommandType::GO_UP;
+    type = arcade::CommandType::GO_UP;
   if (c == 'q')
-    type == arcade::CommandType::GO_LEFT;
+    type = arcade::CommandType::GO_LEFT;
   if (c == 's')
-    type == arcade::CommandType::GO_DOWN;
+    type = arcade::CommandType::GO_DOWN;
   if (c == 'd')
-    type == arcade::CommandType::GO_RIGHT;
+    type = arcade::CommandType::GO_RIGHT;
   return (type);
 }
 
