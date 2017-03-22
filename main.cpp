@@ -1,10 +1,10 @@
 #include "GSnake.hpp"
-#include "LSfml.hpp"
+#include "LNcurses.hpp"
 
 int							main()
 {
   //Play();
-  arcade::IGraphic*	graphic = new arcade::LSfml;
+  arcade::IGraphic*	graphic = new arcade::LNcurses;
   arcade::WhereAmI*	snake = (arcade::WhereAmI*)malloc(sizeof(*snake) + 4 * sizeof(arcade::Position));
   arcade::GetMap*	map = (arcade::GetMap*)malloc(sizeof(*map) + 64 * sizeof(arcade::TileType));
   snake->type = arcade::CommandType::WHERE_AM_I;
@@ -21,8 +21,14 @@ int							main()
   map->width = 8;
   map->height = 8;
   for (int i = 0; i < 64; i++)
-    map->tile[i] = arcade::TileType::EMPTY;
+  {
+    if (i < 8 || i >= 8 * (8 - 1) ||
+        i % 8 == 0 || i % 8 == 7)
+    	map->tile[i] = arcade::TileType::BLOCK;
+    else
+      map->tile[i] = arcade::TileType::EMPTY;
+  }
   graphic->ShowGame(snake, map);
-  while (1);
+  while(1);
   return (0);
 }

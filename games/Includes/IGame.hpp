@@ -3,8 +3,6 @@
 
 #include "ArcadeProtocol.hpp"
 
-extern "C" void Play(void);
-
 namespace arcade
 {
   class IGame
@@ -15,6 +13,10 @@ namespace arcade
       virtual struct GetMap     *GetMap(bool) const = 0;
       virtual struct WhereAmI		*GetPlayer(bool) const = 0;
   };
-}
+};
+
+extern "C"
+void						Play();
+arcade::IGame*	CreateGame();
 
 #endif

@@ -66,22 +66,23 @@ void											arcade::GSnake::initPlayer()
 
 void                      arcade::GSnake::move()
 {
-  if (this->_dir == CommandType::GO_UP)
-    this->increaseSnake(this->_player[0].x, this->_player[0].y - 1);
-  else if (this->_dir == CommandType::GO_DOWN)
-    this->increaseSnake(this->_player[0].x, this->_player[0].y + 1);
-  else if (this->_dir == CommandType::GO_RIGHT)
-    this->increaseSnake(this->_player[0].x + 1, this->_player[0].y);
-  else
-    this->increaseSnake(this->_player[0].x - 1, this->_player[0].y);
-  if (this->_map[this->_player[0].y * 8 + this->_player[0].x] == TileType::BLOCK)
-    exit(84);
-  if (this->_map[this->_player[0].y * 8 + this->_player[0].x] != TileType::POWERUP)
-    this->_player.pop_back();
-  else
+  if (this->_map[this->_player[0].y * 8 + this->_player[0].x] != TileType::BLOCK)
   {
-    this->_map[this->_player[0].y * 8 + this->_player[0].x] = TileType::EMPTY;
-    this->dropApple(0);
+    if (this->_dir == CommandType::GO_UP)
+      this->increaseSnake(this->_player[0].x, this->_player[0].y - 1);
+    else if (this->_dir == CommandType::GO_DOWN)
+      this->increaseSnake(this->_player[0].x, this->_player[0].y + 1);
+    else if (this->_dir == CommandType::GO_RIGHT)
+      this->increaseSnake(this->_player[0].x + 1, this->_player[0].y);
+    else
+      this->increaseSnake(this->_player[0].x - 1, this->_player[0].y);
+    if (this->_map[this->_player[0].y * 8 + this->_player[0].x] != TileType::POWERUP)
+      this->_player.pop_back();
+    else
+    {
+      this->_map[this->_player[0].y * 8 + this->_player[0].x] = TileType::EMPTY;
+      this->dropApple(0);
+    }
   }
 }
 
@@ -150,4 +151,9 @@ void											         Play()
 
   while(std::cin.read(reinterpret_cast<char *>(&type), sizeof(type)))
     Snake.Update(type, true);
+}
+
+arcade::IGame*										CreateGame()
+{
+  return new arcade::GSnake();
 }
