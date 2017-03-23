@@ -3,8 +3,8 @@
 
 #include "IGame.hpp"
 
-#define HEIGHT_MAP			8
-#define WIDTH_MAP				8
+#define HEIGHT_MAP			20
+#define WIDTH_MAP				20
 
 void Play();
 
@@ -18,17 +18,22 @@ namespace arcade
       virtual void	    							  Update(CommandType, bool);
       virtual struct GetMap	  					*GetMap(bool) const;
       virtual struct WhereAmI	     			*GetPlayer(bool) const;
+      virtual bool											IsGameOver() const;
 
     private:
       CommandType												_dir;
       TileType													_map[HEIGHT_MAP * WIDTH_MAP];
       std::vector<arcade::Position>     _player;
+      bool															_isGameOver;
+
       void														  initMap();
       void														  initPlayer();
       void                              increaseSnake(int, int);
       void															move();
       void															dropApple(int);
       bool															isOnSnake(int);
+      void												 			gameOver();
+      bool															snakeBitesItself() const;
   };
 };
 

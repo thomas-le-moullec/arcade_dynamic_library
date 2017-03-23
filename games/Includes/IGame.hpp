@@ -12,6 +12,7 @@ namespace arcade
       virtual void							Update(CommandType, bool) = 0;
       virtual struct GetMap     *GetMap(bool) const = 0;
       virtual struct WhereAmI		*GetPlayer(bool) const = 0;
+      virtual bool							IsGameOver() const = 0;
   };
 };
 

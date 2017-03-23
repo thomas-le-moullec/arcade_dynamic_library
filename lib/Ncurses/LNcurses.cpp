@@ -4,12 +4,15 @@ arcade::LNcurses::LNcurses()
 {
   this->initWindow();
   this->modeCanon(0);
+  this->map[arcade::TileType::EMPTY] = ' ';
+  this->map[arcade::TileType::BLOCK] = '|';
+  this->map[arcade::TileType::POWERUP] = 'O';
 }
 
 arcade::LNcurses::~LNcurses()
 {
-  endwin();
   this->modeCanon(1);
+  endwin();
 }
 
 void		arcade::LNcurses::initWindow() const
@@ -25,7 +28,7 @@ void		arcade::LNcurses::initWindow() const
 bool		arcade::LNcurses::isOnMap(arcade::WhereAmI *player, int i) const
 {
   for (int pos = 0; pos < player->lenght; pos++)
-    if (player->position[pos].x + player->position[pos].y * 8 == i)
+    if (player->position[pos].x + player->position[pos].y * 20 == i)
       return true;
   return false;
 }
@@ -36,6 +39,7 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
   int		y = 0;
   int		i = 0;
 
+  clear();
   while (y < map->height)
   {
     x = 0;
@@ -44,11 +48,11 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
       if (this->isOnMap(player, i) == true)
       {
         attron(A_REVERSE);
-        mvprintw(y + MARGIN_Y, x + MARGIN_X, "S");
+        mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), " ");
         attroff(A_REVERSE);
       }
       else
-        mvprintw(y + MARGIN_Y, x + MARGIN_X, "%d", (int)map->tile[i]);
+        mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), "%c", this->map[map->tile[i]]);
       i++;
       refresh();
       x++;
@@ -84,10 +88,9 @@ int									arcade::LNcurses::modeCanon(int mode) const
 arcade::CommandType			arcade::LNcurses::GetInput() const
 {
   arcade::CommandType		type = arcade::CommandType::ILLEGAL;
-  char									c ;
+  char									c;
 
-  //while (c != 'z' && c != 'q' && c != 's' && c != 'd')
-  read(0, &c, 1);//std::cin.read(&c, 1);
+  read(0, &c, 1);
   if (c == 'z')
     type = arcade::CommandType::GO_UP;
   if (c == 'q')
@@ -97,6 +100,15 @@ arcade::CommandType			arcade::LNcurses::GetInput() const
   if (c == 'd')
     type = arcade::CommandType::GO_RIGHT;
   return (type);
+}
+
+void										arcade::LNcurses::PrintGameOver() const
+{
+  clear();
+  attron(A_REVERSE);
+  mvprintw(LINES / 2, COLS / 2 - 4, "Game Over");
+  attroff(A_REVERSE);
+  refresh();
 }
 
 arcade::IGraphic*		CreateDisplayModule()

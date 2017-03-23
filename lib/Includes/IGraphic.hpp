@@ -11,6 +11,7 @@ namespace arcade
       virtual ~IGraphic() {};
       virtual void				ShowGame(WhereAmI *, GetMap *) = 0;
       virtual CommandType	GetInput() const = 0;
+      virtual void				PrintGameOver() const = 0;
   };
 };
 

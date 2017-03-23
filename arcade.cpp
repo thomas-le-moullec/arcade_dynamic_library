@@ -9,14 +9,18 @@ void			execArcade()
   arcade::IGame				*game = CreateGame();
   arcade::CommandType	type;
 
-  while (1)
+  while (!game->IsGameOver())
   {
     type = graphic->GetInput();
     game->Update(type, false);
     game->Update(arcade::CommandType::PLAY, false);
-    graphic->ShowGame(game->GetPlayer(false), game->GetMap(false));
-    usleep(700000);
+    if (!game->IsGameOver())
+      graphic->ShowGame(game->GetPlayer(false), game->GetMap(false));
+    else
+      graphic->PrintGameOver();
+    usleep(400000);
   }
+  while(1);
 }
 
 int	main()

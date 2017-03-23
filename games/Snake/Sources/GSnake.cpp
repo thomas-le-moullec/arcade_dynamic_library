@@ -5,12 +5,13 @@ arcade::GSnake::GSnake()
   this->initMap();
   this->initPlayer();
   this->_dir = CommandType::GO_RIGHT;
+  this->_isGameOver = false;
 }
 
 bool											arcade::GSnake::isOnSnake(int pos)
 {
   for (unsigned int i = 0; i < this->_player.size(); i++)
-    if (pos == this->_player[i].y * 8 + this->_player[i].x)
+    if (pos == this->_player[i].y * WIDTH_MAP + this->_player[i].x)
       return true;
   return false;
 }
@@ -26,9 +27,9 @@ void											arcade::GSnake::dropApple(int dropByDefault)
     while (this->_map[dropByDefault] != TileType::EMPTY ||
            this->isOnSnake(dropByDefault) == true)
     {
-      x = rand() % 6 + 1;
-      y = rand() % 6 + 1;
-      dropByDefault = y * 8 + x;
+      x = rand() % (WIDTH_MAP - 2) + 1;
+      y = rand() % (HEIGHT_MAP - 2) + 1;
+      dropByDefault = y * WIDTH_MAP + x;
     }
   }
   this->_map[dropByDefault] = TileType::POWERUP;
@@ -39,7 +40,7 @@ void											arcade::GSnake::initMap()
   for (int i = 0; i < HEIGHT_MAP * WIDTH_MAP; i++)
   {
     if (i < WIDTH_MAP || i >= HEIGHT_MAP * (WIDTH_MAP - 1) ||
-        i % WIDTH_MAP == 0 || i % WIDTH_MAP == 7)
+        i % WIDTH_MAP == 0 || i % WIDTH_MAP == WIDTH_MAP - 1)
       this->_map[i] = TileType::BLOCK;
     else
       this->_map[i] = TileType::EMPTY;
@@ -66,24 +67,24 @@ void											arcade::GSnake::initPlayer()
 
 void                      arcade::GSnake::move()
 {
-  if (this->_map[this->_player[0].y * 8 + this->_player[0].x] != TileType::BLOCK)
+  if (this->_dir == CommandType::GO_UP)
+    this->increaseSnake(this->_player[0].x, this->_player[0].y - 1);
+  else if (this->_dir == CommandType::GO_DOWN)
+    this->increaseSnake(this->_player[0].x, this->_player[0].y + 1);
+  else if (this->_dir == CommandType::GO_RIGHT)
+    this->increaseSnake(this->_player[0].x + 1, this->_player[0].y);
+  else
+    this->increaseSnake(this->_player[0].x - 1, this->_player[0].y);
+  if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] != TileType::POWERUP)
+    this->_player.pop_back();
+  else
   {
-    if (this->_dir == CommandType::GO_UP)
-      this->increaseSnake(this->_player[0].x, this->_player[0].y - 1);
-    else if (this->_dir == CommandType::GO_DOWN)
-      this->increaseSnake(this->_player[0].x, this->_player[0].y + 1);
-    else if (this->_dir == CommandType::GO_RIGHT)
-      this->increaseSnake(this->_player[0].x + 1, this->_player[0].y);
-    else
-      this->increaseSnake(this->_player[0].x - 1, this->_player[0].y);
-    if (this->_map[this->_player[0].y * 8 + this->_player[0].x] != TileType::POWERUP)
-      this->_player.pop_back();
-    else
-    {
-      this->_map[this->_player[0].y * 8 + this->_player[0].x] = TileType::EMPTY;
-      this->dropApple(0);
-    }
+    this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] = TileType::EMPTY;
+    this->dropApple(0);
   }
+  if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
+      this->snakeBitesItself() == true)
+    this->gameOver();
 }
 
 void	    							  arcade::GSnake::Update(CommandType type, bool debug)
@@ -142,6 +143,26 @@ struct arcade::WhereAmI	     			*arcade::GSnake::GetPlayer(bool debug) const
       std::cout << s[i];
   }
   return player;
+}
+
+void												 			arcade::GSnake::gameOver()
+{
+  this->_isGameOver = true;
+}
+
+bool												 			arcade::GSnake::IsGameOver() const
+{
+  return this->_isGameOver;
+}
+
+bool															 arcade::GSnake::snakeBitesItself() const
+{
+  for (int i = 0; i < this->_player.size(); i++)
+    for (int j = 0; j < this->_player.size(); j++)
+      if (i != j && this->_player[j].x == this->_player[i].x &&
+          this->_player[j].y == this->_player[i].y)
+          return true;
+  return false;
 }
 
 void											         Play()

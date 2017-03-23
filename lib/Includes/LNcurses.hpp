@@ -5,11 +5,12 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <map>
 
 #include "IGraphic.hpp"
 
-#define	MARGIN_Y	15 //à remplacer
-#define MARGIN_X	80 //à remplacer
+#define	MARGIN_Y	LINES / 2
+#define MARGIN_X	COLS / 2
 
 namespace arcade
 {
@@ -18,12 +19,14 @@ namespace arcade
     public:
       LNcurses();
       virtual ~LNcurses();
-      virtual void				ShowGame(WhereAmI *, GetMap *);
-      virtual CommandType	GetInput() const;
+      virtual void									ShowGame(WhereAmI *, GetMap *);
+      virtual CommandType						GetInput() const;
+      virtual void									PrintGameOver() const;
     private:
-      void								initWindow() const;
-      bool								isOnMap(WhereAmI *, int) const;
-      int									modeCanon(int) const;
+      std::map<arcade::TileType, char>		map;
+      void													initWindow() const;
+      bool													isOnMap(WhereAmI *, int) const;
+      int														modeCanon(int) const;
   };
 };
 
