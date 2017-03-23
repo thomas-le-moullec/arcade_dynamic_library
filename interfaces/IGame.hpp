@@ -18,6 +18,7 @@ namespace arcade
 
 extern "C"
 void						Play();
+extern "C"
 arcade::IGame*	CreateGame();
 
 #endif

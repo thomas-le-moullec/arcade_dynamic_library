@@ -1,12 +1,6 @@
 #ifndef LNcurses_HPP_
 #define LNcurses_HPP_
 
-#include <curses.h>
-#include <termios.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <map>
-
 #include "IGraphic.hpp"
 
 #define	MARGIN_Y	LINES / 2
@@ -20,7 +14,7 @@ namespace arcade
       LNcurses();
       virtual ~LNcurses();
       virtual void									ShowGame(WhereAmI *, GetMap *);
-      virtual CommandType						GetInput() const;
+      virtual void									GetInput(ICore *) const;
       virtual void									PrintGameOver() const;
     private:
       std::map<arcade::TileType, char>		map;

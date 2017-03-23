@@ -1,34 +1,10 @@
-#include "GSnake.hpp"
-#include "LNcurses.hpp"
+#include "Core.hpp"
 
-int							main()
+int							main(int ac, char **av)
 {
-  //Play();
-  arcade::IGraphic*	graphic = new arcade::LNcurses;
-  arcade::WhereAmI*	snake = (arcade::WhereAmI*)malloc(sizeof(*snake) + 4 * sizeof(arcade::Position));
-  arcade::GetMap*	map = (arcade::GetMap*)malloc(sizeof(*map) + 64 * sizeof(arcade::TileType));
-  snake->type = arcade::CommandType::WHERE_AM_I;
-  snake->lenght = 4;
-  snake->position[0].x = 2;
-  snake->position[0].y = 4;
-  snake->position[1].x = 3;
-  snake->position[1].y = 4;
-  snake->position[2].x = 4;
-  snake->position[2].y = 4;
-  snake->position[3].x = 5;
-  snake->position[3].y = 4;
-  map->type = arcade::CommandType::GET_MAP;
-  map->width = 8;
-  map->height = 8;
-  for (int i = 0; i < 64; i++)
-  {
-    if (i < 8 || i >= 8 * (8 - 1) ||
-        i % 8 == 0 || i % 8 == 7)
-    	map->tile[i] = arcade::TileType::BLOCK;
-    else
-      map->tile[i] = arcade::TileType::EMPTY;
-  }
-  graphic->ShowGame(snake, map);
-  while(1);
+  arcade::ICore					*core = new arcade::Core();
+
+  if (ac == 2)
+    core->RunArcade(av[1]);
   return (0);
 }

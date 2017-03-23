@@ -1,6 +1,12 @@
 #ifndef IGRAPHIC_HPP_
 #define IGRAPHIC_HPP_
 
+#include <curses.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <map>
+#include "ICore.hpp"
 #include "ArcadeProtocol.hpp"
 
 namespace arcade
@@ -10,7 +16,7 @@ namespace arcade
     public:
       virtual ~IGraphic() {};
       virtual void				ShowGame(WhereAmI *, GetMap *) = 0;
-      virtual CommandType	GetInput() const = 0;
+      virtual void				GetInput(ICore *) const = 0;
       virtual void				PrintGameOver() const = 0;
   };
 };

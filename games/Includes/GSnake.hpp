@@ -6,8 +6,6 @@
 #define HEIGHT_MAP			20
 #define WIDTH_MAP				20
 
-void Play();
-
 namespace arcade
 {
   class GSnake : public IGame

@@ -159,14 +159,15 @@ bool												 			arcade::GSnake::IsGameOver() const
 
 bool															 arcade::GSnake::snakeBitesItself() const
 {
-  for (int i = 0; i < this->_player.size(); i++)
-    for (int j = 0; j < this->_player.size(); j++)
+  for (unsigned int i = 0; i < this->_player.size(); i++)
+    for (unsigned int j = 0; j < this->_player.size(); j++)
       if (i != j && this->_player[j].x == this->_player[i].x &&
           this->_player[j].y == this->_player[i].y)
           return true;
   return false;
 }
 
+extern "C"
 void											         Play()
 {
   static arcade::GSnake 					 Snake;
@@ -176,6 +177,7 @@ void											         Play()
     Snake.Update(type, true);
 }
 
+extern "C"
 arcade::IGame*										CreateGame()
 {
   return new arcade::GSnake();

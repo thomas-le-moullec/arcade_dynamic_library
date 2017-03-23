@@ -85,21 +85,19 @@ int									arcade::LNcurses::modeCanon(int mode) const
   return (0);
 }
 
-arcade::CommandType			arcade::LNcurses::GetInput() const
+void									arcade::LNcurses::GetInput(ICore *core) const
 {
-  arcade::CommandType		type = arcade::CommandType::ILLEGAL;
   char									c;
 
   read(0, &c, 1);
   if (c == 'z')
-    type = arcade::CommandType::GO_UP;
+    core->Notify(arcade::CommandType::GO_UP);
   if (c == 'q')
-    type = arcade::CommandType::GO_LEFT;
+    core->Notify(arcade::CommandType::GO_LEFT);
   if (c == 's')
-    type = arcade::CommandType::GO_DOWN;
+    core->Notify(arcade::CommandType::GO_DOWN);
   if (c == 'd')
-    type = arcade::CommandType::GO_RIGHT;
-  return (type);
+    core->Notify(arcade::CommandType::GO_RIGHT);
 }
 
 void										arcade::LNcurses::PrintGameOver() const
