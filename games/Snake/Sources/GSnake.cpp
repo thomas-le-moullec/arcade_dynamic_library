@@ -93,8 +93,10 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
     this->GetPlayer(debug);
   if (type == CommandType::GET_MAP)
     this->GetMap(debug);
-  if (type == CommandType::GO_UP || type == CommandType::GO_DOWN ||
-      type == CommandType::GO_LEFT || type == CommandType::GO_RIGHT)
+  if ((type == CommandType::GO_UP && this->_dir != CommandType::GO_DOWN) ||
+      (type == CommandType::GO_DOWN && this->_dir != CommandType::GO_UP) ||
+      (type == CommandType::GO_LEFT && this->_dir != CommandType::GO_RIGHT) ||
+      (type == CommandType::GO_RIGHT && this->_dir != CommandType::GO_LEFT))
     this->_dir = type;
   if (type == CommandType::PLAY)
     this->move();

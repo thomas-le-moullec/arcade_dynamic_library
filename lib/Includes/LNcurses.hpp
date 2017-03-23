@@ -25,7 +25,7 @@ namespace arcade
     private:
       std::map<arcade::TileType, char>		map;
       void													initWindow() const;
-      bool													isOnMap(WhereAmI *, int) const;
+      bool													isOnMap(WhereAmI *, int, int) const;
       int														modeCanon(int) const;
   };
 };

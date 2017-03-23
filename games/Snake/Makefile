@@ -4,7 +4,7 @@ CC					= g++
 
 RM					= rm -rf
 
-NAME				= lib_arcade_snake.so
+NAME				= ../lib_arcade_snake.so
 
 SRCS_PATH		= ./Sources/
 

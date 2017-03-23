@@ -25,10 +25,10 @@ void		arcade::LNcurses::initWindow() const
   refresh();
 }
 
-bool		arcade::LNcurses::isOnMap(arcade::WhereAmI *player, int i) const
+bool		arcade::LNcurses::isOnMap(arcade::WhereAmI *player, int i, int width) const
 {
   for (int pos = 0; pos < player->lenght; pos++)
-    if (player->position[pos].x + player->position[pos].y * 20 == i)
+    if (player->position[pos].x + player->position[pos].y * width == i)
       return true;
   return false;
 }
@@ -45,7 +45,7 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     x = 0;
     while (x < map->width && i < map->width * map->height)
     {
-      if (this->isOnMap(player, i) == true)
+      if (this->isOnMap(player, i, map->width) == true)
       {
         attron(A_REVERSE);
         mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), " ");
