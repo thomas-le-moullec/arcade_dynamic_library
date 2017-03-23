@@ -4,42 +4,56 @@ arcade::Core::Core()
 {
 }
 
-void			arcade::Core::RunArcade(const std::string &lib)
+/*template<typename T>
+T					*arcade::Core::loadArcade(const std::string &lib, const char *constructor)
 {
   void		*handle;
-  arcade::IGame		*(*CreateGame)();
-  char *error;
+  T				*(*create)();
 
   handle = dlopen(lib.c_str(), RTLD_LAZY);
-  if (!handle)
-    std::cout << "handle NULL" << std::endl;
-  dlerror();
-  CreateGame = (arcade::IGame *(*)(void))dlsym(handle, "CreateGame");
+  create = (T *(*)(void))dlsym(handle, constructor);
+  return (*create)();
+}*/
 
+void									arcade::Core::loadLibraries(const std::string &lib)
+{
+  this->_handle_graphic = dlopen(lib.c_str(), RTLD_LAZY);
+  this->_handle_game = dlopen("./games/lib_arcade_snake.so", RTLD_LAZY);
+  arcade::IGraphic		*(*CreateDisplayModule)();
+  arcade::IGame				*(*CreateGame)();
+  CreateDisplayModule = (arcade::IGraphic *(*)(void))dlsym(this->_handle_graphic, "CreateDisplayModule");
+  CreateGame = (arcade::IGame *(*)(void))dlsym(this->_handle_game, "CreateGame");
 
-  arcade::IGraphic		*graphic = CreateDisplayModule();
-  if (CreateGame == NULL)
-    std::cout << "vaut NULL" << std::endl;
-  if ((error = dlerror()) != NULL)  {
-      fprintf(stderr, "%s\n", error);
-      exit(EXIT_FAILURE);}
-  arcade::IGame				*game = (*CreateGame)();
-  std::cout << "Debug --> 4" << std::endl;
+  this->_graphic = (*CreateDisplayModule)();
+  this->_game = (*CreateGame)();
+}
 
-  (void)lib;
-  this->_game = game;
-  while (!game->IsGameOver())
+void									arcade::Core::unloadLibrairies()
+{
+  dlclose(this->_handle_graphic);
+  dlclose(this->_handle_game);
+}
+
+void									arcade::Core::RunArcade(const std::string &lib)
+{
+  this->loadLibraries(lib);
+  while (1)
   {
-    graphic->GetInput(this);
-    game->Update(arcade::CommandType::PLAY, false);
-    if (!game->IsGameOver())
-      graphic->ShowGame(game->GetPlayer(false), game->GetMap(false));
+    this->_graphic->GetInput(this);
+    this->_game->Update(arcade::CommandType::PLAY, false);
+    if (!this->_game->IsGameOver())
+      this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
     else
-      graphic->PrintGameOver();
+    {
+      this->_graphic->PrintGameOver();
+      while(this->_game->IsGameOver())
+        this->_graphic->GetInput(this);
+      delete this->_game;
+      this->_game = (*CreateGame)();
+    }
     usleep(300000);
   }
-  dlclose(handle);
-  while(1);
+  this->unloadLibrairies();
 }
 
 void		arcade::Core::Notify(arcade::CommandType type)

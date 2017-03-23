@@ -4,9 +4,20 @@ arcade::LNcurses::LNcurses()
 {
   this->initWindow();
   this->modeCanon(0);
-  this->map[arcade::TileType::EMPTY] = ' ';
-  this->map[arcade::TileType::BLOCK] = '|';
-  this->map[arcade::TileType::POWERUP] = 'O';
+
+  this->map_disp[arcade::TileType::EMPTY] = ' ';
+  this->map_disp[arcade::TileType::BLOCK] = '|';
+  this->map_disp[arcade::TileType::POWERUP] = 'O';
+
+  this->map_input['z'] = arcade::CommandType::GO_UP;
+  this->map_input['q'] = arcade::CommandType::GO_LEFT;
+  this->map_input['s'] = arcade::CommandType::GO_DOWN;
+  this->map_input['d'] = arcade::CommandType::GO_RIGHT;
+  this->map_input['\r'] = arcade::CommandType::PLAY;
+
+  //this->map_input[13] = arcade::CommandType::GO_UP;
+  //this->map_input['z'] = arcade::CommandType::GO_UP;
+
 }
 
 arcade::LNcurses::~LNcurses()
@@ -52,7 +63,7 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
         attroff(A_REVERSE);
       }
       else
-        mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), "%c", this->map[map->tile[i]]);
+        mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), "%c", this->map_disp[map->tile[i]]);
       i++;
       refresh();
       x++;
@@ -85,19 +96,13 @@ int									arcade::LNcurses::modeCanon(int mode) const
   return (0);
 }
 
-void									arcade::LNcurses::GetInput(ICore *core) const
+void									arcade::LNcurses::GetInput(ICore *core)
 {
-  char									c;
+  char									c = 0;
 
   read(0, &c, 1);
-  if (c == 'z')
-    core->Notify(arcade::CommandType::GO_UP);
-  if (c == 'q')
-    core->Notify(arcade::CommandType::GO_LEFT);
-  if (c == 's')
-    core->Notify(arcade::CommandType::GO_DOWN);
-  if (c == 'd')
-    core->Notify(arcade::CommandType::GO_RIGHT);
+  if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
+    core->Notify(this->map_input[c]);
 }
 
 void										arcade::LNcurses::PrintGameOver() const
@@ -109,7 +114,7 @@ void										arcade::LNcurses::PrintGameOver() const
   refresh();
 }
 
-arcade::IGraphic*		CreateDisplayModule()
+arcade::IGraphic		*CreateDisplayModule()
 {
   return new arcade::LNcurses();
 }

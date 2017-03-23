@@ -4,29 +4,49 @@ CC					= g++
 
 RM					= rm -rf
 
-NAME				= ./games/lib_arcade_snake.so
+NAME_GAME		= ./games/lib_arcade_snake.so
 
-SRCS				=	./games/Snake/GSnake.cpp
+NAME_LIB		= ./lib/lib_arcade_ncurses.so
 
-CPPFLAGS   	=   -I ./games/Includes/ -I ./interfaces
+SRCS_GAME		=	./games/Snake/GSnake.cpp
 
-CXXFLAGS	=		-W -Wall -Werror -Wextra -std=c++11
+SRCS_LIB		=	./lib/Ncurses/LNcurses.cpp
 
-OBJS				= $(SRCS:.cpp=.o)
+CPPFLAGS   	=   -I ./games/Includes/ -I ./interfaces -I ./lib/Includes
 
-all:        $(NAME)
+CXXFLAGS		=		-W -Wall -Werror -Wextra -std=c++11
 
-$(NAME):
+OBJS_GAME		= $(SRCS_GAME:.cpp=.o)
+
+OBJS_LIB		= $(SRCS_LIB:.cpp=.o)
+
+all:        $(NAME_GAME) $(NAME_LIB)
+
+$(NAME_GAME):
 
 ifeq ($(DETAILS),yes)
-		$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS)
-		$(CC) -shared -o $(NAME) *.o
+		$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_GAME)
+		$(CC) -shared -o $(NAME_GAME) *.o
 
 else
     	@echo "Compiling with Position Independent Code..."
-        @$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS)
+        @$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_GAME)
 			@echo "Creating a shared library from an object file..."
-        @$(CC) -shared -o $(NAME) *.o
+        @$(CC) -shared -o $(NAME_GAME) *.o
+
+endif
+
+$(NAME_LIB):
+
+ifeq ($(DETAILS),yes)
+		$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB)
+		$(CC) -shared -o $(NAME_LIB) *.o
+
+else
+    	@echo "Compiling with Position Independent Code..."
+        @$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB)
+			@echo "Creating a shared library from an object file..."
+        @$(CC) -shared -o $(NAME_LIB) *.o
 
 endif
 
@@ -37,7 +57,7 @@ clean:
 
 fclean: clean
 	@echo "Cleaning files ..."
-	@$(RM) $(NAME)
+	@$(RM) $(NAME_GAME) $(NAME_LIB)
 	@echo "Files cleaned."
 
 re: fclean all

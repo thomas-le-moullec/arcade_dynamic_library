@@ -16,22 +16,20 @@ bool											arcade::GSnake::isOnSnake(int pos)
   return false;
 }
 
-void											arcade::GSnake::dropApple(int dropByDefault)
+void											arcade::GSnake::dropApple()
 {
-  int											x;
-  int											y;
+  int											x = 0;
+  int											y = 0;
+  int											dropByDefault = 0;
 
   srand(time(NULL));
-  if (dropByDefault == 0)
-  {
-    while (this->_map[dropByDefault] != TileType::EMPTY ||
-           this->isOnSnake(dropByDefault) == true)
+  while (this->_map[dropByDefault] != TileType::EMPTY ||
+         this->isOnSnake(dropByDefault) == true)
     {
       x = rand() % (WIDTH_MAP - 2) + 1;
       y = rand() % (HEIGHT_MAP - 2) + 1;
       dropByDefault = y * WIDTH_MAP + x;
     }
-  }
   this->_map[dropByDefault] = TileType::POWERUP;
 }
 
@@ -45,7 +43,7 @@ void											arcade::GSnake::initMap()
     else
       this->_map[i] = TileType::EMPTY;
   }
-  this->dropApple(22);
+  this->dropApple();
 }
 
 void                      arcade::GSnake::increaseSnake(int x, int y)
@@ -80,7 +78,7 @@ void                      arcade::GSnake::move()
   else
   {
     this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] = TileType::EMPTY;
-    this->dropApple(0);
+    this->dropApple();
   }
   if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
       this->snakeBitesItself() == true)
@@ -98,8 +96,13 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
       (type == CommandType::GO_LEFT && this->_dir != CommandType::GO_RIGHT) ||
       (type == CommandType::GO_RIGHT && this->_dir != CommandType::GO_LEFT))
     this->_dir = type;
-  if (type == CommandType::PLAY)
+  if (type == CommandType::PLAY && this->_isGameOver == false)
+  {
     this->move();
+    return;
+  }
+  if (type == CommandType::PLAY)
+    this->_isGameOver = false;
 }
 
 struct arcade::GetMap	  					*arcade::GSnake::GetMap(bool debug) const
@@ -109,6 +112,8 @@ struct arcade::GetMap	  					*arcade::GSnake::GetMap(bool debug) const
   int 														size;
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
+  //map = new (size) GetMap();
+
   if ((map = reinterpret_cast<arcade::GetMap *>(malloc(size))) == NULL)
     exit(0);
   map->type = CommandType::GET_MAP;

@@ -3,8 +3,8 @@
 
 #include "IGame.hpp"
 
-#define HEIGHT_MAP			20
-#define WIDTH_MAP				20
+#define HEIGHT_MAP			30
+#define WIDTH_MAP				30
 
 namespace arcade
 {
@@ -28,7 +28,7 @@ namespace arcade
       void														  initPlayer();
       void                              increaseSnake(int, int);
       void															move();
-      void															dropApple(int);
+      void															dropApple();
       bool															isOnSnake(int);
       void												 			gameOver();
       bool															snakeBitesItself() const;
