@@ -12,7 +12,9 @@ namespace arcade
     public:
 	     virtual ~ICore() {};
        virtual void		Notify(arcade::CommandType) = 0;
-       virtual void		RunArcade(const std::string&) = 0;
+       virtual void		RunArcade() = 0;
+       virtual void   LoadGame(const std::string&) = 0;
+       virtual void   LoadGraphic(const std::string&) = 0;
   };
 };
 
