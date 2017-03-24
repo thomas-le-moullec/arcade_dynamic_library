@@ -3,7 +3,7 @@
 arcade::LSfml::LSfml()
 {
   setFullScreen(false);
-  setWindow(1920, 1080, 24, isFullScreen());
+  setWindow(800, 600, 24, isFullScreen());
 }
 
 arcade::LSfml::~LSfml()
@@ -41,14 +41,14 @@ void    arcade::LSfml::GetInput(ICore *core)
               case sf::Keyboard::Z: core->Notify(CommandType::GO_UP); break;
               case sf::Keyboard::D: core->Notify(CommandType::GO_RIGHT); break;
               case sf::Keyboard::S: core->Notify(CommandType::GO_DOWN); break;
-              case sf::Keyboard::BackSpace: core->Notify(CommandType::PLAY); break;
+              case sf::Keyboard::Return: core->Notify(CommandType::PLAY); break;
             }
         break;
       case sf::Event::LostFocus:
-        //myGame.pause();
+        std::cout << "Lost Focus !" << std::endl;
         break;
       case sf::Event::GainedFocus:
-        //myGame.resume();
+        std::cout << "Gained Focus !" << std::endl;
         break;
       // on ne traite pas les autres types d'évènements
       default:

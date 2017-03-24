@@ -6,15 +6,15 @@ RM					= rm -rf
 
 NAME_GAME		= ./games/lib_arcade_snake.so
 
-NAME_LIB		= ./lib/lib_arcade_ncurses.so
+NAME_LIB		= ./lib/lib_arcade_sfml.so
 
 SRCS_GAME		=	./games/Snake/GSnake.cpp
 
-SRCS_LIB		=	./lib/Ncurses/LNcurses.cpp
+SRCS_LIB		=	./lib/SFml/LSfml.cpp
 
-CPPFLAGS   	=   -I ./games/Includes/ -I ./interfaces -I ./lib/Includes
+CPPFLAGS   	=   -I lib/Includes/ -I games/Includes/ -I core/ -I interfaces/
 
-CXXFLAGS		=		-W -Wall -Werror -Wextra -std=c++11
+CXXFLAGS		=		-W -Werror -Wextra -std=c++11
 
 OBJS_GAME		= $(SRCS_GAME:.cpp=.o)
 
