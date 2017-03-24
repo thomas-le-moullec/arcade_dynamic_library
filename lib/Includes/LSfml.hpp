@@ -13,7 +13,8 @@ namespace arcade
       LSfml();
       virtual ~LSfml();
       virtual void		      ShowGame(WhereAmI *, GetMap *);
-      virtual void				  GetInput(ICore *) const;
+      virtual void				  GetInput(ICore *);
+      virtual void					PrintGameOver() const;
     private:
       void                  setFullScreen(bool);
       bool                  isFullScreen();
