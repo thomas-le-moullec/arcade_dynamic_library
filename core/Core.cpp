@@ -42,11 +42,14 @@ void   				arcade::Core::LoadGraphic(const std::string& lib)
 
 void									arcade::Core::RunArcade()
 {
+  int									j = 0;
+
   this->LoadGame("./games/lib_arcade_snake.so");
   while (1)
   {
     this->_graphic->GetInput(this);
-    this->_game->Update(arcade::CommandType::PLAY, false);
+    if (j % 3 == 0)
+      this->_game->Update(arcade::CommandType::PLAY, false);
     if (!this->_game->IsGameOver())
       this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
     else
@@ -56,7 +59,8 @@ void									arcade::Core::RunArcade()
         this->_graphic->GetInput(this);
       this->LoadGame("./games/lib_arcade_snake.so");
     }
-    usleep(300000);
+    std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    j++;
   }
   this->unloadLibrairies();
 }

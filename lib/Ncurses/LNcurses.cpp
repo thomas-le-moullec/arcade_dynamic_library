@@ -13,7 +13,7 @@ arcade::LNcurses::LNcurses()
   this->map_input['q'] = arcade::CommandType::GO_LEFT;
   this->map_input['s'] = arcade::CommandType::GO_DOWN;
   this->map_input['d'] = arcade::CommandType::GO_RIGHT;
-  this->map_input['\r'] = arcade::CommandType::PLAY;
+  this->map_input['\r'] = arcade::CommandType::SHOOT;
 
   //this->map_input[13] = arcade::CommandType::GO_UP;
   //this->map_input['z'] = arcade::CommandType::GO_UP;
@@ -65,11 +65,11 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
       else
         mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), "%c", this->map_disp[map->tile[i]]);
       i++;
-      refresh();
       x++;
     }
     y++;
   }
+  refresh();
 }
 
 int									arcade::LNcurses::modeCanon(int mode) const

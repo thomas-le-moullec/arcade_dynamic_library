@@ -1,6 +1,8 @@
 #ifndef CORE_HPP_
 #define CORE_HPP_
 
+#include <chrono>
+#include <thread>
 #include "ICore.hpp"
 #include "IGraphic.hpp"
 #include "IGame.hpp"

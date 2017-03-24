@@ -101,7 +101,7 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
     this->move();
     return;
   }
-  if (type == CommandType::PLAY)
+  if (type == CommandType::SHOOT && this->_isGameOver == true)
     this->_isGameOver = false;
 }
 
