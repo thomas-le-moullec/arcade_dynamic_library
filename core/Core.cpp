@@ -44,11 +44,11 @@ void									arcade::Core::RunArcade()
 {
   int									j = 0;
 
-  this->LoadGame("./games/lib_arcade_snake.so");
+  this->LoadGame("./games/lib_arcade_solarfox.so");
   while (1)
   {
     this->_graphic->GetInput(this);
-    if (j % 3 == 0)
+    if (j % 5 == 0)
       this->_game->Update(arcade::CommandType::PLAY, false);
     if (!this->_game->IsGameOver())
       this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
@@ -57,7 +57,7 @@ void									arcade::Core::RunArcade()
       this->_graphic->PrintGameOver();
       while(this->_game->IsGameOver())
         this->_graphic->GetInput(this);
-      this->LoadGame("./games/lib_arcade_snake.so");
+      this->LoadGame("./games/lib_arcade_solarfox.so");
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(16));
     j++;

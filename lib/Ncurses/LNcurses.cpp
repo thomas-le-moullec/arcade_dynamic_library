@@ -6,6 +6,9 @@ arcade::LNcurses::LNcurses()
   this->modeCanon(0);
 
   this->map_disp[arcade::TileType::EMPTY] = ' ';
+  this->map_disp[arcade::TileType::EVIL_DUDE] = 'X';
+  this->map_disp[arcade::TileType::MY_SHOOT] = '#';
+  this->map_disp[arcade::TileType::EVIL_SHOOT] = '@';
   this->map_disp[arcade::TileType::BLOCK] = '|';
   this->map_disp[arcade::TileType::POWERUP] = 'O';
 
@@ -98,9 +101,11 @@ int									arcade::LNcurses::modeCanon(int mode) const
 
 void									arcade::LNcurses::GetInput(ICore *core)
 {
-  char									c = 0;
+  char								buff[25];
+  char							  c;
 
-  read(0, &c, 1);
+  read(0, buff, 1);
+  c = buff[0];
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
     core->Notify(this->map_input[c]);
 }
