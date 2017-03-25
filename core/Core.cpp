@@ -67,5 +67,11 @@ void									arcade::Core::RunArcade()
 
 void		arcade::Core::Notify(arcade::CommandType type)
 {
+  /*if (type == arcade::CommandType::GO_UP)
+    std::cout << "GO UP" << std::endl;
+  if (type == arcade::CommandType::GO_DOWN)
+    std::cout << "GO DOWN" << std::endl;
+  if (type == arcade::CommandType::PLAY)
+    std::cout << "PLAY" << std::endl;*/
   this->_game->Update(type, false);
 }
