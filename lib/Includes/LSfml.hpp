@@ -12,16 +12,21 @@ namespace arcade
     public:
       LSfml();
       virtual ~LSfml();
-      virtual void		      ShowGame(WhereAmI *, GetMap *);
-      virtual void				  GetInput(ICore *);
-      virtual void					PrintGameOver() const;
+      virtual void		                                   ShowGame(WhereAmI *, GetMap *);
+      virtual void				                               GetInput(ICore *);
+      virtual void					                             PrintGameOver() const;
     private:
-      void                  setFullScreen(bool);
-      bool                  isFullScreen();
-      void                  setWindow(unsigned int, unsigned int, unsigned int, bool);
-      sf::RenderWindow      *_window;
-      sf::Event             _event;
-      bool                  _fullScreen;
+      bool													                     isOnMap(WhereAmI *, int, int) const;
+      void                                               initMap();
+      void                                               setFullScreen(bool);
+      bool                                               isFullScreen();
+      void                                               setWindow(unsigned int, unsigned int, unsigned int, bool);
+      sf::RenderWindow                                   *_window;
+      sf::Event                                           _event;
+      bool                                                _fullScreen;
+      std::map<arcade::TileType, sf::RectangleShape>			_map;
+      sf::RectangleShape                                  *_player;
+      sf::Texture                                         _texture;
   };
 };
 
