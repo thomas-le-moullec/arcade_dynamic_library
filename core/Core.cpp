@@ -1,22 +1,34 @@
 #include "Core.hpp"
 
-typedef void	(arcade::Core::*coreFct)();
-
 arcade::Core::Core()
 {
   this->_handle_game = NULL;
   this->_handle_graphic = NULL;
   this->_game = NULL;
   this->_graphic = NULL;
-  this->_libs.insert(this->_libs.begin(), "./lib/lib_arcade_ncurses.so");
-  this->_libs.insert(this->_libs.begin(), "./lib/lib_arcade_sfml.so");
+  this->_libs.insert(this->_libs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
+  this->_libs.insert(this->_libs.begin(), "lib/lib_arcade_sfml.so");
   this->_coreCmd = arcade::CoreCommand::NOTHING;
+  this->_idxLib = -1;
+  this->initMap();
 }
 
 arcade::Core::~Core()
 {
   dlclose(this->_handle_game);
   dlclose(this->_handle_graphic);
+}
+
+void					arcade::Core::initMap()
+{
+  this->_mapCore[arcade::CoreCommand::PREV_GRAPHIC] = &arcade::Core::LoadPrevGraphic;
+  this->_mapCore[arcade::CoreCommand::NEXT_GRAPHIC] = &arcade::Core::LoadNextGraphic;
+  this->_mapCore[arcade::CoreCommand::PREV_GAME] = &arcade::Core::LoadPrevGraphic;
+  this->_mapCore[arcade::CoreCommand::NEXT_GAME] = &arcade::Core::LoadNextGraphic;
+  this->_mapCore[arcade::CoreCommand::PAUSE] = &arcade::Core::LoadPrevGame;
+  this->_mapCore[arcade::CoreCommand::RESTART] = &arcade::Core::LoadNextGame;
+  this->_mapCore[arcade::CoreCommand::MENU] = &arcade::Core::Restart;
+  this->_mapCore[arcade::CoreCommand::ESCAPE] = &arcade::Core::Menu;
 }
 
 void   				arcade::Core::LoadGame(const std::string& lib)
@@ -34,6 +46,14 @@ void   				arcade::Core::LoadGame(const std::string& lib)
 
 void   				arcade::Core::LoadGraphic(const std::string& lib)
 {
+  int					j = 0;
+
+  if (this->_idxLib == -1)
+  {
+    while (j < this->_libs.size() && this->_libs[j] != lib)
+      j++;
+    this->_idxLib = j;
+  }
   if (this->_graphic != NULL)
     delete this->_graphic;
   if (this->_handle_graphic != NULL)
@@ -46,11 +66,18 @@ void   				arcade::Core::LoadGraphic(const std::string& lib)
 
 void		arcade::Core::LoadPrevGraphic()
 {
-  exit(0);
+  this->_idxLib--;
+  if (this->_idxLib == -1)
+    this->_idxLib = this->_libs.size() - 1;
+  this->LoadGraphic(this->_libs[this->_idxLib]);
 }
 
 void		arcade::Core::LoadNextGraphic()
 {
+  this->_idxLib++;
+  if (this->_idxLib == this->_libs.size())
+    this->_idxLib = 0;
+  this->LoadGraphic(this->_libs[this->_idxLib]);
 }
 
 void		arcade::Core::LoadPrevGame()
@@ -81,23 +108,12 @@ void									arcade::Core::RunArcade()
 {
   int									j = 0;
   int									i = 0;
-  std::map<arcade::CoreCommand, coreFct> _mapCore;
-  coreFct																 _abc;
-
-  _mapCore[arcade::CoreCommand::PREV_GRAPHIC] = &arcade::Core::LoadPrevGraphic;
-  _mapCore[arcade::CoreCommand::NEXT_GRAPHIC] = &arcade::Core::LoadNextGraphic;
-  _mapCore[arcade::CoreCommand::PREV_GAME] = &arcade::Core::LoadPrevGraphic;
-  _mapCore[arcade::CoreCommand::NEXT_GAME] = &arcade::Core::LoadNextGraphic;
-  _mapCore[arcade::CoreCommand::PAUSE] = &arcade::Core::LoadPrevGame;
-  _mapCore[arcade::CoreCommand::RESTART] = &arcade::Core::LoadNextGame;
-  _mapCore[arcade::CoreCommand::MENU] = &arcade::Core::Restart;
-  _mapCore[arcade::CoreCommand::ESCAPE] = &arcade::Core::Menu;
 
   this->LoadGame("./games/lib_arcade_snake.so");
   while (1)
   {
     this->_graphic->GetInput(this);
-    if (j % 3 == 0)
+    if (j % 4 == 0)
       this->_game->Update(arcade::CommandType::PLAY, false);
     if (!this->_game->IsGameOver())
       this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
@@ -112,9 +128,7 @@ void									arcade::Core::RunArcade()
     j++;
     if (this->_coreCmd != arcade::CoreCommand::NOTHING)
     {
-      _abc = _mapCore[arcade::CoreCommand::PREV_GRAPHIC];
-      (_abc)();
-      //_mapCore[this->_coreCmd];
+      (this->*_mapCore[this->_coreCmd])();
       this->_coreCmd = arcade::CoreCommand::NOTHING;
     }
   }

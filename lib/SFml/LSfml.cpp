@@ -61,6 +61,7 @@ void    arcade::LSfml::GetInput(ICore *core)
               case sf::Keyboard::D: core->NotifyGame(CommandType::GO_RIGHT); break;
               case sf::Keyboard::S: core->NotifyGame(CommandType::GO_DOWN); break;
               case sf::Keyboard::Return: core->NotifyGame(CommandType::SHOOT); break;
+              case sf::Keyboard::P: core->NotifyCore(CoreCommand::NEXT_GRAPHIC); break;
             }
         break;
       case sf::Event::LostFocus:

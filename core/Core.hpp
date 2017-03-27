@@ -14,6 +14,7 @@ namespace arcade
   class Core : public ICore
   {
     public:
+      typedef void	(arcade::Core::*coreFct)();
       Core();
 	    virtual ~Core();
       virtual void		NotifyGame(arcade::CommandType);
@@ -30,12 +31,16 @@ namespace arcade
       void						Quit();
       void						Pause();
     private:
-      IGame												*_game;
-      IGraphic										*_graphic;
-      void												*_handle_game;
-      void												*_handle_graphic;
-      arcade::CoreCommand					_coreCmd;
-      std::vector<std::string> 		_libs;
+      IGame																		*_game;
+      IGraphic																*_graphic;
+      void																		*_handle_game;
+      void																		*_handle_graphic;
+      arcade::CoreCommand											_coreCmd;
+      std::map<arcade::CoreCommand, coreFct>	_mapCore;
+      std::vector<std::string> 								_libs;
+      unsigned int														_idxLib;
+
+      void						initMap();
   };
 };
 
