@@ -1,26 +1,32 @@
-DETAILS     = yes
+DETAILS     			= yes
 
-CC					= g++
+CC								= g++
 
-RM					= rm -rf
+RM								= rm -rf
 
-NAME_GAME		= ./games/lib_arcade_solarfox.so 	\
+NAME_GAME					= ./games/lib_arcade_snake.so
 
-NAME_LIB		= ./lib/lib_arcade_sfml.so
+NAME_LIB_SFML			= ./lib/lib_arcade_sfml.so
 
-SRCS_GAME		=	./games/SolarFox/GSolarFox.cpp	\
+NAME_LIB_NCURSES	= ./lib/lib_arcade_ncurses.so
 
-SRCS_LIB		=	./lib/SFml/LSfml.cpp
+SRCS_GAME					=	./games/Snake/GSnake.cpp
 
-CPPFLAGS   	=   -I lib/Includes/ -I games/Includes/ -I core/ -I interfaces/
+SRCS_LIB_SFML			=	./lib/SFml/LSfml.cpp
 
-CXXFLAGS		=		-W -Werror -Wextra -std=c++11
+SRCS_LIB_NCURSES	=	./lib/Ncurses/LNcurses.cpp
 
-OBJS_GAME		= $(SRCS_GAME:.cpp=.o)
+CPPFLAGS   				=  -I lib/Includes/ -I games/Includes/ -I core/ -I interfaces/
 
-OBJS_LIB		= $(SRCS_LIB:.cpp=.o)
+CXXFLAGS					=		-W -Werror -Wextra -std=c++11
 
-all:        $(NAME_GAME) $(NAME_LIB)
+OBJS_GAME					= $(SRCS_GAME:.cpp=.o)
+
+OBJS_LIB_SFML			= $(SRCS_LIB_SFML:.cpp=.o)
+
+OBJS_LIB_NCURSES	= $(SRCS_LIB_NCURSES:.cpp=.o)
+
+all:        			$(NAME_GAME) #$(NAME_LIB_SFML) $(NAME_LIB_NCURSES)
 
 $(NAME_GAME):
 ifeq ($(DETAILS),yes)
@@ -33,15 +39,26 @@ else
         @$(CC) -shared -o $(NAME_GAME) *.o
 endif
 
-$(NAME_LIB):
+$(NAME_LIB_SFML):
 ifeq ($(DETAILS),yes)
-		$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB)
-		$(CC) -shared -o $(NAME_LIB) *.o
+		$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_SFML)
+		$(CC) -shared -o $(NAME_LIB_SFML) *.o
 else
     	@echo "Compiling with Position Independent Code..."
-        @$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB)
+        @$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_SFML)
 			@echo "Creating a shared library from an object file..."
-        @$(CC) -shared -o $(NAME_LIB) *.o
+        @$(CC) -shared -o $(NAME_LIB_SFML) *.o
+endif
+
+$(NAME_LIB_NCURSES):
+ifeq ($(DETAILS),yes)
+		$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_NCURSES)
+		$(CC) -shared -o $(NAME_LIB_NCURSES) *.o
+else
+    	@echo "Compiling with Position Independent Code..."
+        @$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_NCURSES)
+			@echo "Creating a shared library from an object file..."
+        @$(CC) -shared -o $(NAME_LIB_NCURSES) *.o
 endif
 
 clean:
@@ -51,7 +68,7 @@ clean:
 
 fclean: clean
 	@echo "Cleaning files ..."
-	@$(RM) $(NAME_GAME) $(NAME_LIB)
+	@$(RM) $(NAME_GAME) $(NAME_LIB_SFML) $(NAME_LIB_NCURSES)
 	@echo "Files cleaned."
 
 re: fclean all

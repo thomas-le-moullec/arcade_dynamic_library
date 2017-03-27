@@ -21,7 +21,6 @@ namespace arcade
   };
 };
 
-extern "C"
-arcade::IGraphic*	CreateDisplayModule();
+//extern "C" arcade::IGraphic*	CreateDisplayModule();
 
 #endif

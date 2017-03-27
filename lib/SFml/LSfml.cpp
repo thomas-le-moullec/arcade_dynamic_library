@@ -56,11 +56,11 @@ void    arcade::LSfml::GetInput(ICore *core)
   {
       case sf::Event::KeyPressed:
         switch (_event.key.code) {
-              case sf::Keyboard::Q: core->Notify(CommandType::GO_LEFT); break;
-              case sf::Keyboard::Z: core->Notify(CommandType::GO_UP); break;
-              case sf::Keyboard::D: core->Notify(CommandType::GO_RIGHT); break;
-              case sf::Keyboard::S: core->Notify(CommandType::GO_DOWN); break;
-              case sf::Keyboard::Return: core->Notify(CommandType::SHOOT); break;
+              case sf::Keyboard::Q: core->NotifyGame(CommandType::GO_LEFT); break;
+              case sf::Keyboard::Z: core->NotifyGame(CommandType::GO_UP); break;
+              case sf::Keyboard::D: core->NotifyGame(CommandType::GO_RIGHT); break;
+              case sf::Keyboard::S: core->NotifyGame(CommandType::GO_DOWN); break;
+              case sf::Keyboard::Return: core->NotifyGame(CommandType::SHOOT); break;
             }
         break;
       case sf::Event::LostFocus:
@@ -110,7 +110,7 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     _window->display();
 }
 
-arcade::IGraphic*		CreateDisplayModule()
+extern "C" arcade::IGraphic*		CreateDisplayModule()
 {
   return new arcade::LSfml();
 }
