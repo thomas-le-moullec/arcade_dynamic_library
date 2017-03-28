@@ -21,12 +21,16 @@ namespace arcade
       void                                               setFullScreen(bool);
       bool                                               isFullScreen();
       void                                               setWindow(unsigned int, unsigned int, unsigned int, bool);
+      void                                               initGameInputs();
+      void                                               initCoreInputs();
       sf::RenderWindow                                   *_window;
       sf::Event                                           _event;
       bool                                                _fullScreen;
       std::map<arcade::TileType, sf::RectangleShape>			_map;
       sf::RectangleShape                                  *_player;
       sf::Texture                                         _texture;
+      std::map<>                                          _game_input;
+      std::map<>                                          _core_input;
   };
 };
 

@@ -7,11 +7,33 @@ arcade::LSfml::LSfml()
   initMap();
   _player = new sf::RectangleShape(sf::Vector2f(25, 25));
   _player->setFillColor(sf::Color::Magenta);
+  initGameInputs();
+  initCoreInputs();
 }
 
 arcade::LSfml::~LSfml()
 {
   _window->close();
+}
+
+void    arcade::LSfml::initGameInputs()
+{
+  _game_input[sf::Keyboard::Q] = CommandType::GO_LEFT;
+  _game_input[sf::Keyboard::Z] = CommandType::GO_UP;
+  _game_input[sf::Keyboard::D] = CommandType::GO_RIGHT;
+  _game_input[sf::Keyboard::S] = CommandType::GO_DOWN;
+  _game_input[sf::Keyboard::Return] = CommandType::SHOOT;
+}
+
+void    arcade::LSfml::initGameInputs()
+{
+  _core_input[sf::Keyboard::Num2] = CoreCommand::PREV_GRAPHIC;
+  _core_input[sf::Keyboard::Num3] = CoreCommand::NEXT_GRAPHIC;
+  _core_input[sf::Keyboard::Num4] = CoreCommand::PREV_GAME;
+  _core_input[sf::Keyboard::Num5] = CoreCommand::NEXT_GAME;
+  _core_input[sf::Keyboard::NumSpace] = CoreCommand::PAUSE;
+  _core_input[sf::Keyboard::Num8] = CoreCommand::Restart;
+  _core_input[sf::Keyboard::Num9] = CoreCommand::PREV_GRAPHIC;
 }
 
 void    arcade::LSfml::initMap()
