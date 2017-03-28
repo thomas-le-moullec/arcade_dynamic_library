@@ -137,11 +137,11 @@ int									arcade::LNcurses::modeCanon(int mode) const
 
 void									arcade::LNcurses::GetInput(ICore *core)
 {
-  char								buff[25];
+  //char								buff[];
   char							  c;
 
-  read(0, buff, 1);
-  c = buff[0];
+  read(0, &c, 1);
+  //c = buff[0];
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
     core->NotifyGame(this->input_game[c]);
   if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')

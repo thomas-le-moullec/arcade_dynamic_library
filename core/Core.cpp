@@ -8,10 +8,11 @@ arcade::Core::Core()
   this->_graphic = NULL;
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
+  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");
   this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_snake.so");
   this->_coreCmd = arcade::CoreCommand::NOTHING;
   this->_idxGraphicLib = -1;
-  this->_idxGamesLib = -1;
+  this->_idxGamesLib = 0;
   this->initMapCore();
   this->initMapScene();
 
@@ -126,7 +127,7 @@ void		arcade::Core::LoadNextGame()
 
 void		arcade::Core::Restart()
 {
-  this->LoadGame("games/lib_arcade_snake.so");
+  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
 }
 
 void	  arcade::Core::Menu()
@@ -150,7 +151,7 @@ void									arcade::Core::RunArcade()
 {
   int									j = 0;
 
-  this->LoadGame("games/lib_arcade_snake.so");
+  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
   while (this->_status != arcade::Status::QUIT)
   {
     this->_graphic->GetInput(this);
@@ -187,7 +188,7 @@ void		arcade::Core::ShowGame()
     this->_graphic->PrintGameOver();
     while(this->_game->IsGameOver())
       this->_graphic->GetInput(this);
-    this->LoadGame("games/lib_arcade_snake.so");
+    this->LoadGame("games/lib_arcade_solarfox.so");
   }
 }
 

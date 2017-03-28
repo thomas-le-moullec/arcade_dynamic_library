@@ -19,7 +19,7 @@ namespace arcade
       virtual bool											IsGameOver() const;
 
     private:
-      CommandType												_dir;
+      std::vector<arcade::CommandType>	_dir;
       TileType													_map[HEIGHT_MAP * WIDTH_MAP];
       std::vector<arcade::Position>     _player;
       bool															_isGameOver;
@@ -32,6 +32,7 @@ namespace arcade
       bool															isOnSnake(int);
       void												 			gameOver();
       bool															snakeBitesItself() const;
+      bool															checkDir(arcade::CommandType type);
   };
 };
 
