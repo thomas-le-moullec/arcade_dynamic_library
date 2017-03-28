@@ -18,25 +18,18 @@ arcade::LNcurses::LNcurses()
   this->map_input['d'] = arcade::CommandType::GO_RIGHT;
   this->map_input['\r'] = arcade::CommandType::SHOOT;
 
-  this->map_core['p'] = arcade::CoreCommand::PREV_GRAPHIC;
+  this->map_core['2'] = arcade::CoreCommand::PREV_GRAPHIC;
   this->map_core['3'] = arcade::CoreCommand::NEXT_GRAPHIC;
   this->map_core['4'] = arcade::CoreCommand::PREV_GAME;
   this->map_core['5'] = arcade::CoreCommand::NEXT_GAME;
+  this->map_core[' '] = arcade::CoreCommand::PAUSE;
   this->map_core['8'] = arcade::CoreCommand::RESTART;
   this->map_core['9'] = arcade::CoreCommand::ESCAPE;
-
-
-  //this->map_input[13] = arcade::CommandType::GO_UP;
-  //this->map_input['z'] = arcade::CommandType::GO_UP;
-
 }
 
 arcade::LNcurses::~LNcurses()
 {
-  std::cout << "Delete - debug 1"  << std::endl;
   this->modeCanon(1);
-  std::cout << "Delete - debug 2"  << std::endl;
-
   endwin();
 }
 
@@ -119,7 +112,7 @@ void									arcade::LNcurses::GetInput(ICore *core)
   c = buff[0];
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
     core->NotifyGame(this->map_input[c]);
-  if (c == 'p' || c == '3' ||c == '4' ||c == '5' ||c == '8' || c == '9')
+  if (c == '2' || c == '3' ||c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
     core->NotifyCore(this->map_core[c]);
 }
 

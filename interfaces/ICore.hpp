@@ -17,7 +17,16 @@ namespace arcade
     RESTART = 5,
     MENU = 6,
     ESCAPE = 7,
-    NOTHING = 8
+    NOTHING = 8 // VOIR AVEC CORENTIN
+  };
+
+  enum class			Status : uint16_t
+  {
+    GAME = 0,
+    MENU = 1,
+    SCORE_BOARD = 2,
+    PAUSE_GAME = 3,
+    QUIT = 4
   };
 
   class ICore

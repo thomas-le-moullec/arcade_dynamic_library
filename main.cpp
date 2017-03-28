@@ -8,6 +8,7 @@ int							main(int ac, char **av)
   {
     core->LoadGraphic(av[1]);
     core->RunArcade();
+    delete core;
   }
   return (0);
 }
