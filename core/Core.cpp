@@ -16,7 +16,9 @@ arcade::Core::Core()
   this->initMapCore();
   this->initMapScene();
 
-  this->_status = arcade::Status::GAME; // à modifier en MENU
+  //this->_status = arcade::Status::MENU;
+  this->_status = arcade::Status::GAME;
+
 }
 
 arcade::Core::~Core()
@@ -155,7 +157,7 @@ void									arcade::Core::RunArcade()
   while (this->_status != arcade::Status::QUIT)
   {
     this->_graphic->GetInput(this);
-    if (j % 4 == 0 && this->_status == arcade::Status::GAME)
+    if (j % 6 == 0 && this->_status == arcade::Status::GAME)
       this->_game->Update(arcade::CommandType::PLAY, false);
     (this->*_mapScene[this->_status])();
     std::this_thread::sleep_for(std::chrono::milliseconds(16));
@@ -188,13 +190,13 @@ void		arcade::Core::ShowGame()
     this->_graphic->PrintGameOver();
     while(this->_game->IsGameOver())
       this->_graphic->GetInput(this);
-    this->LoadGame("games/lib_arcade_solarfox.so");
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
   }
 }
 
 void		arcade::Core::ShowMenu()
 {
-  std::cout << "Show Menu" << std::endl;
+  this->_graphic->ShowMenu(this->_graphicLibs, this->_gamesLibs, this->_idxGraphicLib, this->_idxGamesLib);
 }
 
 void		arcade::Core::ShowScoreBoard()
