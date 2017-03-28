@@ -3,34 +3,46 @@
 arcade::LNcurses::LNcurses()
 {
   this->initWindow();
+  this->initMapInputGame();
+  this->initMapInputCore();
+  this->initMapDisplay();
   this->modeCanon(0);
-
-  this->map_disp[arcade::TileType::EMPTY] = ' ';
-  this->map_disp[arcade::TileType::EVIL_DUDE] = 'X';
-  this->map_disp[arcade::TileType::MY_SHOOT] = '#';
-  this->map_disp[arcade::TileType::EVIL_SHOOT] = '@';
-  this->map_disp[arcade::TileType::BLOCK] = '|';
-  this->map_disp[arcade::TileType::POWERUP] = 'O';
-
-  this->map_input['z'] = arcade::CommandType::GO_UP;
-  this->map_input['q'] = arcade::CommandType::GO_LEFT;
-  this->map_input['s'] = arcade::CommandType::GO_DOWN;
-  this->map_input['d'] = arcade::CommandType::GO_RIGHT;
-  this->map_input['\r'] = arcade::CommandType::SHOOT;
-
-  this->map_core['2'] = arcade::CoreCommand::PREV_GRAPHIC;
-  this->map_core['3'] = arcade::CoreCommand::NEXT_GRAPHIC;
-  this->map_core['4'] = arcade::CoreCommand::PREV_GAME;
-  this->map_core['5'] = arcade::CoreCommand::NEXT_GAME;
-  this->map_core[' '] = arcade::CoreCommand::PAUSE;
-  this->map_core['8'] = arcade::CoreCommand::RESTART;
-  this->map_core['9'] = arcade::CoreCommand::ESCAPE;
 }
 
 arcade::LNcurses::~LNcurses()
 {
   this->modeCanon(1);
   endwin();
+}
+
+void													arcade::LNcurses::initMapInputGame()
+{
+  this->input_game['z'] = arcade::CommandType::GO_UP;
+  this->input_game['q'] = arcade::CommandType::GO_LEFT;
+  this->input_game['s'] = arcade::CommandType::GO_DOWN;
+  this->input_game['d'] = arcade::CommandType::GO_RIGHT;
+  this->input_game['\r'] = arcade::CommandType::SHOOT;
+}
+
+void													arcade::LNcurses::initMapInputCore()
+{
+  this->input_core['2'] = arcade::CoreCommand::PREV_GRAPHIC;
+  this->input_core['3'] = arcade::CoreCommand::NEXT_GRAPHIC;
+  this->input_core['4'] = arcade::CoreCommand::PREV_GAME;
+  this->input_core['5'] = arcade::CoreCommand::NEXT_GAME;
+  this->input_core[' '] = arcade::CoreCommand::PAUSE;
+  this->input_core['8'] = arcade::CoreCommand::RESTART;
+  this->input_core['9'] = arcade::CoreCommand::ESCAPE;
+}
+
+void													arcade::LNcurses::initMapDisplay()
+{
+  this->map_disp[arcade::TileType::EMPTY] = ' ';
+  this->map_disp[arcade::TileType::EVIL_DUDE] = 'X';
+  this->map_disp[arcade::TileType::MY_SHOOT] = '#';
+  this->map_disp[arcade::TileType::EVIL_SHOOT] = '@';
+  this->map_disp[arcade::TileType::BLOCK] = '|';
+  this->map_disp[arcade::TileType::POWERUP] = 'O';
 }
 
 void		arcade::LNcurses::initWindow() const
@@ -49,6 +61,25 @@ bool		arcade::LNcurses::isOnMap(arcade::WhereAmI *player, int i, int width) cons
     if (player->position[pos].x + player->position[pos].y * width == i)
       return true;
   return false;
+}
+
+void		arcade::LNcurses::printCmd(arcade::GetMap *map)
+{
+  int		y = MARGIN_Y;
+  int		x = MARGIN_X + map->width + 3;
+
+  attron(A_REVERSE);
+  mvprintw(y++, x, "Commandes du jeu");
+  attroff(A_REVERSE);
+  y++;
+  mvprintw(y++, x, "z - Se déplacer vers le haut");
+  mvprintw(y++, x, "s - Se déplacer vers le bas");
+  mvprintw(y++, x, "q - Se déplacer vers la droite");
+  mvprintw(y++, x, "d - Se déplacer vers la gauche");
+  y++;
+  mvprintw(y++, x, "espace - Mettre le jeu en pause");
+  mvprintw(y++, x, "8 - Recommencer le jeu");
+  mvprintw(y++, x, "9 - Quitter le jeu");
 }
 
 void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
@@ -76,6 +107,7 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     }
     y++;
   }
+  this->printCmd(map);
   refresh();
 }
 
@@ -111,9 +143,9 @@ void									arcade::LNcurses::GetInput(ICore *core)
   read(0, buff, 1);
   c = buff[0];
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
-    core->NotifyGame(this->map_input[c]);
-  if (c == '2' || c == '3' ||c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
-    core->NotifyCore(this->map_core[c]);
+    core->NotifyGame(this->input_game[c]);
+  if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
+    core->NotifyCore(this->input_core[c]);
 }
 
 void										arcade::LNcurses::PrintGameOver() const

@@ -46,9 +46,9 @@ void					arcade::Core::initMapCore()
   this->_mapCore[arcade::CoreCommand::ESCAPE] = &arcade::Core::Quit;
 }
 
-void					arcade::Core::getIndexLib(bool isGame, const std::string& lib)
+void										arcade::Core::getIndexLib(bool isGame, const std::string& lib)
 {
-  int					j = 0;
+  unsigned int					j = 0;
 
   if (isGame == true)
   {
@@ -103,7 +103,7 @@ void		arcade::Core::LoadPrevGraphic()
 void		arcade::Core::LoadNextGraphic()
 {
   this->_idxGraphicLib++;
-  if (this->_idxGraphicLib == this->_graphicLibs.size())
+  if (this->_idxGraphicLib == (int)this->_graphicLibs.size())
     this->_idxGraphicLib = 0;
   this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
 }
@@ -119,7 +119,7 @@ void		arcade::Core::LoadPrevGame()
 void		arcade::Core::LoadNextGame()
 {
   this->_idxGamesLib++;
-  if (this->_idxGamesLib == this->_gamesLibs.size())
+  if (this->_idxGamesLib == (int)this->_gamesLibs.size())
     this->_idxGamesLib = 0;
   this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
 }
@@ -149,7 +149,6 @@ void		arcade::Core::Pause()
 void									arcade::Core::RunArcade()
 {
   int									j = 0;
-  int									i = 0;
 
   this->LoadGame("games/lib_arcade_snake.so");
   while (this->_status != arcade::Status::QUIT)

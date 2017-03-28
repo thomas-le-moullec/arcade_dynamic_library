@@ -44,8 +44,8 @@ namespace arcade
       std::map<arcade::Status, showScene>			_mapScene;
       std::vector<std::string> 								_graphicLibs;
       std::vector<std::string> 								_gamesLibs;
-      unsigned int														_idxGraphicLib;
-      unsigned int														_idxGamesLib;
+      int																			_idxGraphicLib;
+      int																			_idxGamesLib;
 
       void						initMapCore();
       void						initMapScene();
