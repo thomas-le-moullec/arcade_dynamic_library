@@ -14,33 +14,43 @@ RM								=		rm -rf
 
 CPPFLAGS					=		-I ./interfaces/ -I ./core/
 
-CXXFLAGS					=		-W -Wall -Wextra -std=c11 -lsfml-graphics -lsfml-window -lsfml-system -lncurses -ldl
+CXXFLAGS					=		-W -Wall -Wextra -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system -lncurses -ldl
 
 SRCS							=		main.cpp				\
 											core/Core.cpp		\
 
 OBJS							=		$(SRCS:.cpp=.o)
 
-all:							$(NAME)
-									$(MAKE) lib/LNcurses
-									$(MAKE) lib/LSfml
-									$(MAKE) games/GSnake
+all:						  $(NAME)
+									$(MAKE) lib/Ncurses
+									$(MAKE) lib/SFml
+									$(MAKE) games/Snake
 
-$(NAME):
-	@echo "Compiling with Position Independent Code..."
-	@$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_GAME)
-	@echo "Creating a shared library from an object file..."
-	@$(CC) -shared -o $(NAME_GAME) $(OBJS)
+arcade:						$(NAME)
 
+libs:
+									$(MAKE) lib/Ncurses
+									$(MAKE) lib/SFml
+									$(MAKE) games/Snake
+
+$(NAME): 					$(OBJS)
+				 					@echo "Compiling with Position Independent Code..."
+				 					@$(CC) -o  $(NAME) $(CXXFLAGS) $(CPPFLAGS) $(OBJS)
 
 clean:
-	@echo "Cleaning object files ..."
-	@$(RM) $(OBJS)
-	@echo "Object files cleaned."
+									@echo "Cleaning object files ..."
+									$(RM) $(OBJS)
+									@$(CLEAN) lib/Ncurses
+									@$(CLEAN) lib/SFml
+									@$(CLEAN) games/Snake
+									@echo "Object files cleaned."
 
-fclean: clean
-	@echo "Cleaning files ..."
-	@$(RM) $(NAME)
-	@echo "Files cleaned."
+fclean: 					clean
+									@echo "Cleaning files ..."
+									$(RM) $(NAME)
+									@$(FCLEAN) lib/Ncurses
+									@$(FCLEAN) lib/SFml
+									@$(FCLEAN) games/Snake
+									@echo "Files cleaned."
 
-re: fclean all
+re: 							fclean all

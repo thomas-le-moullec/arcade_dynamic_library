@@ -1,5 +1,3 @@
-DETAILS     			= yes
-
 CC								= g++
 
 RM								= rm -rf
@@ -17,19 +15,14 @@ OBJS_LIB_NCURSES	= $(SRCS_LIB_NCURSES:.cpp=.o)
 all:        			$(NAME_LIB_NCURSES)
 
 $(NAME_LIB_NCURSES):
-ifeq ($(DETAILS),yes)
-		$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_NCURSES)
-		$(CC) -shared -o $(NAME_LIB_NCURSES) *.o
-else
-    	@echo "Compiling with Position Independent Code..."
-        @$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_NCURSES)
-			@echo "Creating a shared library from an object file..."
-        @$(CC) -shared -o $(NAME_LIB_NCURSES) *.o
-endif
+	@echo "Compiling with Position Independent Code..."
+	@$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_NCURSES)
+	@echo "Creating a shared library from an object file..."
+	@$(CC) -shared -o $(NAME_LIB_NCURSES) *.o
 
 clean:
 	@echo "Cleaning object files ..."
-	@$(RM) *.o
+	@$(RM) $(OBJS_LIB_NCURSES)
 	@echo "Object files cleaned."
 
 fclean: clean
