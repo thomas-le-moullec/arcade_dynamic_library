@@ -51,6 +51,25 @@ bool		arcade::LNcurses::isOnMap(arcade::WhereAmI *player, int i, int width) cons
   return false;
 }
 
+void		arcade::LNcurses::printCmd(arcade::GetMap *map)
+{
+  int		y = MARGIN_Y;
+  int		x = MARGIN_X + map->width + 3;
+
+  attron(A_REVERSE);
+  mvprintw(y++, x, "Commandes du jeu");
+  attroff(A_REVERSE);
+  y++;
+  mvprintw(y++, x, "z - Se déplacer vers le haut");
+  mvprintw(y++, x, "s - Se déplacer vers le bas");
+  mvprintw(y++, x, "q - Se déplacer vers la droite");
+  mvprintw(y++, x, "d - Se déplacer vers la gauche");
+  y++;
+  mvprintw(y++, x, "espace - Mettre le jeu en pause");
+  mvprintw(y++, x, "8 - Recommencer le jeu");
+  mvprintw(y++, x, "9 - Quitter le jeu");
+}
+
 void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
 {
   int		x;
@@ -76,6 +95,7 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     }
     y++;
   }
+  this->printCmd(map);
   refresh();
 }
 
@@ -112,7 +132,7 @@ void									arcade::LNcurses::GetInput(ICore *core)
   c = buff[0];
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
     core->NotifyGame(this->map_input[c]);
-  if (c == '2' || c == '3' ||c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
+  if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
     core->NotifyCore(this->map_core[c]);
 }
 
