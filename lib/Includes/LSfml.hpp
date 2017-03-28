@@ -5,6 +5,10 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+#define WIDTH_WIN 920
+#define HEIGHT_WIN 1200
+#define PIXELS_WIN 24
+
 namespace arcade
 {
   class LSfml : public IGraphic
@@ -29,8 +33,8 @@ namespace arcade
       std::map<arcade::TileType, sf::RectangleShape>			_map;
       sf::RectangleShape                                  *_player;
       sf::Texture                                         _texture;
-      std::map<>                                          _game_input;
-      std::map<>                                          _core_input;
+      std::map<sf::Keyboard::Key, arcade::CommandType>    _game_input;
+      std::map<sf::Keyboard::Key, arcade::CoreCommand>    _core_input;
   };
 };
 

@@ -3,7 +3,7 @@
 arcade::LSfml::LSfml()
 {
   setFullScreen(false);
-  setWindow(1200, 920, 24, isFullScreen());
+  setWindow(HEIGHT_WIN, WIDTH_WIN, PIXELS_WIN, isFullScreen());
   initMap();
   _player = new sf::RectangleShape(sf::Vector2f(25, 25));
   _player->setFillColor(sf::Color::Magenta);
@@ -25,14 +25,14 @@ void    arcade::LSfml::initGameInputs()
   _game_input[sf::Keyboard::Return] = CommandType::SHOOT;
 }
 
-void    arcade::LSfml::initGameInputs()
+void    arcade::LSfml::initCoreInputs()
 {
   _core_input[sf::Keyboard::Num2] = CoreCommand::PREV_GRAPHIC;
   _core_input[sf::Keyboard::Num3] = CoreCommand::NEXT_GRAPHIC;
   _core_input[sf::Keyboard::Num4] = CoreCommand::PREV_GAME;
   _core_input[sf::Keyboard::Num5] = CoreCommand::NEXT_GAME;
-  _core_input[sf::Keyboard::NumSpace] = CoreCommand::PAUSE;
-  _core_input[sf::Keyboard::Num8] = CoreCommand::Restart;
+  _core_input[sf::Keyboard::Space] = CoreCommand::PAUSE;
+  _core_input[sf::Keyboard::Num8] = CoreCommand::RESTART;
   _core_input[sf::Keyboard::Num9] = CoreCommand::PREV_GRAPHIC;
 }
 
@@ -77,21 +77,15 @@ void    arcade::LSfml::GetInput(ICore *core)
   switch (_event.type)
   {
       case sf::Event::KeyPressed:
-        switch (_event.key.code) {
-              case sf::Keyboard::Q: core->NotifyGame(CommandType::GO_LEFT); break;
-              case sf::Keyboard::Z: core->NotifyGame(CommandType::GO_UP); break;
-              case sf::Keyboard::D: core->NotifyGame(CommandType::GO_RIGHT); break;
-              case sf::Keyboard::S: core->NotifyGame(CommandType::GO_DOWN); break;
-              case sf::Keyboard::Return: core->NotifyGame(CommandType::SHOOT); break;
-              case sf::Keyboard::Num2: core->NotifyCore(CoreCommand::PREV_GRAPHIC); break;
-              case sf::Keyboard::Num3: core->NotifyCore(CoreCommand::NEXT_GRAPHIC); break;
-              case sf::Keyboard::Num4: core->NotifyCore(CoreCommand::PREV_GAME); break;
-              case sf::Keyboard::Num5: core->NotifyCore(CoreCommand::NEXT_GAME); break;
-              case sf::Keyboard::Space: core->NotifyCore(CoreCommand::PAUSE); break;
-              case sf::Keyboard::Num8: core->NotifyCore(CoreCommand::RESTART); break;
-              case sf::Keyboard::Num9: core->NotifyCore(CoreCommand::ESCAPE); break;
-            }
-        break;
+        if (_event.key.code == sf::Keyboard::Q || _event.key.code == sf::Keyboard::Z ||
+           _event.key.code == sf::Keyboard::D || _event.key.code == sf::Keyboard::S ||
+           _event.key.code == sf::Keyboard::Return)
+           core->NotifyGame(_game_input[_event.key.code]);
+        if (_event.key.code == sf::Keyboard::Num2 || _event.key.code == sf::Keyboard::Num3 ||
+           _event.key.code == sf::Keyboard::Num4 || _event.key.code == sf::Keyboard::Num5 ||
+           _event.key.code == sf::Keyboard::Space || _event.key.code == sf::Keyboard::Num8 ||
+           _event.key.code == sf::Keyboard::Num9)
+           core->NotifyCore(_core_input[_event.key.code]);
       case sf::Event::LostFocus:
         std::cout << "Lost Focus !" << std::endl;
         break;
