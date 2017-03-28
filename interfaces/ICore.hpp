@@ -27,6 +27,7 @@ namespace arcade
     SCORE_BOARD = 2,
     PAUSE_GAME = 3,
     QUIT = 4
+    //GAME_OVER = 5
   };
 
   class ICore

@@ -19,13 +19,16 @@ namespace arcade
 
     private:
       std::map<arcade::TileType, char>			map_disp;
-      std::map<char, arcade::CommandType>		map_input;
-      std::map<char, arcade::CoreCommand>		map_core;
+      std::map<char, arcade::CommandType>		input_game;
+      std::map<char, arcade::CoreCommand>		input_core;
 
       void													initWindow() const;
       bool													isOnMap(WhereAmI *, int, int) const;
       int														modeCanon(int) const;
       void													printCmd(arcade::GetMap *);
+      void													initMapInputGame();
+      void													initMapInputCore();
+      void													initMapDisplay();
   };
 };
 

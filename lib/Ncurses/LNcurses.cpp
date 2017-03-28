@@ -3,34 +3,46 @@
 arcade::LNcurses::LNcurses()
 {
   this->initWindow();
+  this->initMapInputGame();
+  this->initMapInputCore();
+  this->initMapDisplay();
   this->modeCanon(0);
-
-  this->map_disp[arcade::TileType::EMPTY] = ' ';
-  this->map_disp[arcade::TileType::EVIL_DUDE] = 'X';
-  this->map_disp[arcade::TileType::MY_SHOOT] = '#';
-  this->map_disp[arcade::TileType::EVIL_SHOOT] = '@';
-  this->map_disp[arcade::TileType::BLOCK] = '|';
-  this->map_disp[arcade::TileType::POWERUP] = 'O';
-
-  this->map_input['z'] = arcade::CommandType::GO_UP;
-  this->map_input['q'] = arcade::CommandType::GO_LEFT;
-  this->map_input['s'] = arcade::CommandType::GO_DOWN;
-  this->map_input['d'] = arcade::CommandType::GO_RIGHT;
-  this->map_input['\r'] = arcade::CommandType::SHOOT;
-
-  this->map_core['2'] = arcade::CoreCommand::PREV_GRAPHIC;
-  this->map_core['3'] = arcade::CoreCommand::NEXT_GRAPHIC;
-  this->map_core['4'] = arcade::CoreCommand::PREV_GAME;
-  this->map_core['5'] = arcade::CoreCommand::NEXT_GAME;
-  this->map_core[' '] = arcade::CoreCommand::PAUSE;
-  this->map_core['8'] = arcade::CoreCommand::RESTART;
-  this->map_core['9'] = arcade::CoreCommand::ESCAPE;
 }
 
 arcade::LNcurses::~LNcurses()
 {
   this->modeCanon(1);
   endwin();
+}
+
+void													arcade::LNcurses::initMapInputGame()
+{
+  this->input_game['z'] = arcade::CommandType::GO_UP;
+  this->input_game['q'] = arcade::CommandType::GO_LEFT;
+  this->input_game['s'] = arcade::CommandType::GO_DOWN;
+  this->input_game['d'] = arcade::CommandType::GO_RIGHT;
+  this->input_game['\r'] = arcade::CommandType::SHOOT;
+}
+
+void													arcade::LNcurses::initMapInputCore()
+{
+  this->input_core['2'] = arcade::CoreCommand::PREV_GRAPHIC;
+  this->input_core['3'] = arcade::CoreCommand::NEXT_GRAPHIC;
+  this->input_core['4'] = arcade::CoreCommand::PREV_GAME;
+  this->input_core['5'] = arcade::CoreCommand::NEXT_GAME;
+  this->input_core[' '] = arcade::CoreCommand::PAUSE;
+  this->input_core['8'] = arcade::CoreCommand::RESTART;
+  this->input_core['9'] = arcade::CoreCommand::ESCAPE;
+}
+
+void													arcade::LNcurses::initMapDisplay()
+{
+  this->map_disp[arcade::TileType::EMPTY] = ' ';
+  this->map_disp[arcade::TileType::EVIL_DUDE] = 'X';
+  this->map_disp[arcade::TileType::MY_SHOOT] = '#';
+  this->map_disp[arcade::TileType::EVIL_SHOOT] = '@';
+  this->map_disp[arcade::TileType::BLOCK] = '|';
+  this->map_disp[arcade::TileType::POWERUP] = 'O';
 }
 
 void		arcade::LNcurses::initWindow() const
@@ -131,9 +143,9 @@ void									arcade::LNcurses::GetInput(ICore *core)
   read(0, buff, 1);
   c = buff[0];
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
-    core->NotifyGame(this->map_input[c]);
+    core->NotifyGame(this->input_game[c]);
   if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
-    core->NotifyCore(this->map_core[c]);
+    core->NotifyCore(this->input_core[c]);
 }
 
 void										arcade::LNcurses::PrintGameOver() const
