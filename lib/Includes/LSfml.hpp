@@ -5,8 +5,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-#define WIDTH_WIN 920
-#define HEIGHT_WIN 1200
+#define WIDTH_WIN 1200
+#define HEIGHT_WIN 980
 #define PIXELS_WIN 24
 
 namespace arcade
@@ -24,7 +24,7 @@ namespace arcade
 
     private:
       bool													                     isOnMap(WhereAmI *, int, int) const;
-      void                                               initMap();
+      void                                               initMap(int, int);
       void                                               setFullScreen(bool);
       bool                                               isFullScreen();
       void                                               setWindow(unsigned int, unsigned int, unsigned int, bool);
@@ -35,9 +35,12 @@ namespace arcade
       bool                                                _fullScreen;
       std::map<arcade::TileType, sf::RectangleShape>			_map;
       sf::RectangleShape                                  *_player;
-      sf::Texture                                         _texture;
+      std::map<arcade::TileType, sf::Texture>			        _mapTexture;
       std::map<sf::Keyboard::Key, arcade::CommandType>    _game_input;
       std::map<sf::Keyboard::Key, arcade::CoreCommand>    _core_input;
+      sf::Texture                                         _textureEmpty;
+      sf::Texture                                         _textureBlock;
+      sf::Texture                                         _texturePower;
   };
 };
 
