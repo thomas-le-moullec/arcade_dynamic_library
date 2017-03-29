@@ -21,7 +21,7 @@ namespace arcade
       virtual void					                             PrintGameOver() const;
     private:
       bool													                     isOnMap(WhereAmI *, int, int) const;
-      void                                               initMap();
+      void                                               initMap(int, int);
       void                                               setFullScreen(bool);
       bool                                               isFullScreen();
       void                                               setWindow(unsigned int, unsigned int, unsigned int, bool);

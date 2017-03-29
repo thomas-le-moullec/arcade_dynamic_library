@@ -4,9 +4,6 @@ arcade::LSfml::LSfml()
 {
   setFullScreen(false);
   setWindow(HEIGHT_WIN, WIDTH_WIN, PIXELS_WIN, isFullScreen());
-  initMap();
-  _player = new sf::RectangleShape(sf::Vector2f(25, 25));
-  _player->setFillColor(sf::Color::Magenta);
   initGameInputs();
   initCoreInputs();
 }
@@ -36,11 +33,11 @@ void    arcade::LSfml::initCoreInputs()
   _core_input[sf::Keyboard::Num9] = CoreCommand::PREV_GRAPHIC;
 }
 
-void    arcade::LSfml::initMap()
+void    arcade::LSfml::initMap(int height, int width)
 {
-  sf::RectangleShape empty(sf::Vector2f(25, 25));
-  sf::RectangleShape block(sf::Vector2f(25, 25));
-  sf::RectangleShape powerup(sf::Vector2f(25, 25));
+  sf::RectangleShape empty(sf::Vector2f(WIDTH_WIN / width, HEIGHT_WIN / height));
+  sf::RectangleShape block(sf::Vector2f(WIDTH_WIN / width, HEIGHT_WIN / height));
+  sf::RectangleShape powerup(sf::Vector2f(WIDTH_WIN / width, HEIGHT_WIN / height));
   if (!_texture.loadFromFile("wall.jpg")) {
     std::cerr << "Error on Wall.jpg" << std::endl;
   }
@@ -110,6 +107,14 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     unsigned int x;
     unsigned int y;
     int          i;
+    static bool  initialisation = true;
+
+    if (initialisation) {
+      _player = new sf::RectangleShape(sf::Vector2f(WIDTH_WIN / map->width, HEIGHT_WIN / map->height));
+      _player->setFillColor(sf::Color::Magenta);
+      initMap(map->height, map->width);
+      initialisation = false;
+    }
 
     y = 0;
     i = 0;
@@ -118,11 +123,11 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
       x = 0;
       while (x < map->width && i < map->width * map->height) {
         if (this->isOnMap(player, i, map->width) == true) {
-          _player->setPosition(x * 25, y * 25);
+          _player->setPosition(x * (WIDTH_WIN / map->width), y * (HEIGHT_WIN / map->height));
           _window->draw(*_player);
         }
         else {
-          _map[map->tile[i]].setPosition(x * 25, y * 25);
+          _map[map->tile[i]].setPosition(x * (WIDTH_WIN / map->width), y * (HEIGHT_WIN / map->height));
           _window->draw(_map[map->tile[i]]);
         }
         x++;
