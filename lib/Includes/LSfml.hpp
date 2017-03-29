@@ -20,6 +20,7 @@ namespace arcade
       virtual void				                               GetInput(ICore *);
       virtual void					                             PrintGameOver() const;
       virtual void																		   ShowMenu(std::vector<std::string>, std::vector<std::string>, int, int);
+      virtual void																		   ShowScoreboard();
 
     private:
       bool													                     isOnMap(WhereAmI *, int, int) const;

@@ -17,11 +17,10 @@ namespace arcade
       virtual ~IGraphic() {};
       virtual void				ShowGame(WhereAmI *, GetMap *) = 0;
       virtual void				ShowMenu(std::vector<std::string>, std::vector<std::string>, int, int) = 0;
+      virtual void				ShowScoreboard() = 0;
       virtual void				GetInput(ICore *) = 0;
       virtual void				PrintGameOver() const = 0;
   };
 };
-
-//extern "C" arcade::IGraphic*	CreateDisplayModule();
 
 #endif

@@ -16,10 +16,10 @@ namespace arcade
     public:
       typedef void	(arcade::Core::*coreFct)();
       typedef void	(arcade::Core::*showScene)();
+      typedef void	(arcade::Core::*notifyScene)(arcade::CommandType);
 
       Core();
 	    virtual ~Core();
-      virtual void		NotifyGame(arcade::CommandType);
       virtual void		NotifyCore(arcade::CoreCommand);
       virtual void		RunArcade();
       virtual void    LoadGame(const std::string&);
@@ -32,8 +32,16 @@ namespace arcade
       void	  				Menu();
       void						Quit();
       void						Pause();
+      void						ShowSceneMenu();
+      void						ShowSceneGame();
+      void						ShowSceneScoreboard();
+      void						NotifyScene(CommandType);
+      void						NotifySceneMenu(CommandType);
+      void						NotifySceneGame(CommandType);
+      void						NotifySceneScoreboard(CommandType);
 
     private:
+      arcade::Scene														_scene;
       arcade::Status													_status;
       IGame																		*_game;
       IGraphic																*_graphic;
@@ -41,18 +49,17 @@ namespace arcade
       void																		*_handle_graphic;
       arcade::CoreCommand											_coreCmd;
       std::map<arcade::CoreCommand, coreFct>	_mapCore;
-      std::map<arcade::Status, showScene>			_mapScene;
+      std::map<arcade::Scene, showScene>			_mapShowScene;
+      std::map<arcade::Scene, notifyScene>		_notifyScene;
       std::vector<std::string> 								_graphicLibs;
       std::vector<std::string> 								_gamesLibs;
       int																			_idxGraphicLib;
       int																			_idxGamesLib;
 
       void						initMapCore();
-      void						initMapScene();
+      void						initMapShowScene();
+      void					  initMapNotifyScene();
       void						getIndexLib(bool, const std::string &);
-      void						ShowGame();
-      void						ShowMenu();
-      void						ShowScoreBoard();
   };
 };
 
