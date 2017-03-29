@@ -8,14 +8,17 @@ arcade::Core::Core()
   this->_graphic = NULL;
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
+  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");
   this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_snake.so");
   this->_coreCmd = arcade::CoreCommand::NOTHING;
   this->_idxGraphicLib = -1;
-  this->_idxGamesLib = -1;
+  this->_idxGamesLib = 0;
   this->initMapCore();
   this->initMapScene();
 
-  this->_status = arcade::Status::GAME; // à modifier en MENU
+  //this->_status = arcade::Status::MENU;
+  this->_status = arcade::Status::GAME;
+
 }
 
 arcade::Core::~Core()
@@ -126,7 +129,7 @@ void		arcade::Core::LoadNextGame()
 
 void		arcade::Core::Restart()
 {
-  this->LoadGame("games/lib_arcade_snake.so");
+  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
 }
 
 void	  arcade::Core::Menu()
@@ -150,11 +153,11 @@ void									arcade::Core::RunArcade()
 {
   int									j = 0;
 
-  this->LoadGame("games/lib_arcade_snake.so");
+  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
   while (this->_status != arcade::Status::QUIT)
   {
     this->_graphic->GetInput(this);
-    if (j % 4 == 0 && this->_status == arcade::Status::GAME)
+    if (j % 6 == 0 && this->_status == arcade::Status::GAME)
       this->_game->Update(arcade::CommandType::PLAY, false);
     (this->*_mapScene[this->_status])();
     std::this_thread::sleep_for(std::chrono::milliseconds(16));
@@ -187,13 +190,13 @@ void		arcade::Core::ShowGame()
     this->_graphic->PrintGameOver();
     while(this->_game->IsGameOver())
       this->_graphic->GetInput(this);
-    this->LoadGame("games/lib_arcade_snake.so");
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
   }
 }
 
 void		arcade::Core::ShowMenu()
 {
-  std::cout << "Show Menu" << std::endl;
+  this->_graphic->ShowMenu(this->_graphicLibs, this->_gamesLibs, this->_idxGraphicLib, this->_idxGamesLib);
 }
 
 void		arcade::Core::ShowScoreBoard()

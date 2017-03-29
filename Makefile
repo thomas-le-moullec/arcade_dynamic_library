@@ -1,5 +1,3 @@
-DETAILS     			=		yes
-
 NAME							=		arcade
 
 MAKE							=		make -C
@@ -25,6 +23,7 @@ all:						  $(NAME)
 									$(MAKE) lib/Ncurses
 									$(MAKE) lib/SFml
 									$(MAKE) games/Snake
+									$(MAKE) games/SolarFox
 
 arcade:						$(NAME)
 
@@ -32,6 +31,7 @@ libs:
 									$(MAKE) lib/Ncurses
 									$(MAKE) lib/SFml
 									$(MAKE) games/Snake
+									$(MAKE) games/SolarFox
 
 $(NAME): 					$(OBJS)
 				 					@echo "Compiling with Position Independent Code..."
@@ -43,6 +43,7 @@ clean:
 									@$(CLEAN) lib/Ncurses
 									@$(CLEAN) lib/SFml
 									@$(CLEAN) games/Snake
+									@$(CLEAN) games/SolarFox
 									@echo "Object files cleaned."
 
 fclean: 					clean
@@ -51,6 +52,7 @@ fclean: 					clean
 									@$(FCLEAN) lib/Ncurses
 									@$(FCLEAN) lib/SFml
 									@$(FCLEAN) games/Snake
+									@$(FCLEAN) games/SolarFox
 									@echo "Files cleaned."
 
 re: 							fclean all

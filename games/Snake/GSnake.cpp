@@ -4,7 +4,7 @@ arcade::GSnake::GSnake()
 {
   this->initMap();
   this->initPlayer();
-  this->_dir = CommandType::GO_RIGHT;
+  this->_dir.insert(this->_dir.begin(), CommandType::GO_RIGHT);
   this->_isGameOver = false;
 }
 
@@ -65,11 +65,11 @@ void											arcade::GSnake::initPlayer()
 
 void                      arcade::GSnake::move()
 {
-  if (this->_dir == CommandType::GO_UP)
+  if (this->_dir[0] == CommandType::GO_UP)
     this->increaseSnake(this->_player[0].x, this->_player[0].y - 1);
-  else if (this->_dir == CommandType::GO_DOWN)
+  else if (this->_dir[0] == CommandType::GO_DOWN)
     this->increaseSnake(this->_player[0].x, this->_player[0].y + 1);
-  else if (this->_dir == CommandType::GO_RIGHT)
+  else if (this->_dir[0] == CommandType::GO_RIGHT)
     this->increaseSnake(this->_player[0].x + 1, this->_player[0].y);
   else
     this->increaseSnake(this->_player[0].x - 1, this->_player[0].y);
@@ -85,20 +85,30 @@ void                      arcade::GSnake::move()
     this->gameOver();
 }
 
+bool											arcade::GSnake::checkDir(arcade::CommandType type)
+{
+  for (unsigned int i = 0; i < this->_dir.size(); i++)
+    if (this->_dir[i] == type)
+      return false;
+  return true;
+}
+
 void	    							  arcade::GSnake::Update(CommandType type, bool debug)
 {
   if (type == CommandType::WHERE_AM_I)
     this->GetPlayer(debug);
   if (type == CommandType::GET_MAP)
     this->GetMap(debug);
-  if ((type == CommandType::GO_UP && this->_dir != CommandType::GO_DOWN) ||
-      (type == CommandType::GO_DOWN && this->_dir != CommandType::GO_UP) ||
-      (type == CommandType::GO_LEFT && this->_dir != CommandType::GO_RIGHT) ||
-      (type == CommandType::GO_RIGHT && this->_dir != CommandType::GO_LEFT))
-    this->_dir = type;
+  if ((type == CommandType::GO_UP && this->checkDir(CommandType::GO_DOWN)) ||
+      (type == CommandType::GO_DOWN && this->checkDir(CommandType::GO_UP)) ||
+      (type == CommandType::GO_LEFT && this->checkDir(CommandType::GO_RIGHT)) ||
+      (type == CommandType::GO_RIGHT && this->checkDir(CommandType::GO_LEFT)))
+    this->_dir.insert(this->_dir.begin(), type);
   if (type == CommandType::PLAY && this->_isGameOver == false)
   {
     this->move();
+    for (unsigned int i = 1; i < this->_dir.size(); i++)
+      this->_dir.erase(this->_dir.begin() + i);
     return;
   }
   if (type == CommandType::SHOOT && this->_isGameOver == true)
@@ -112,8 +122,7 @@ struct arcade::GetMap	  					*arcade::GSnake::GetMap(bool debug) const
   int 														size;
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
-  //map = new (size) GetMap();
-
+  //map = new [size] GetMap; -- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
   if ((map = reinterpret_cast<arcade::GetMap *>(malloc(size))) == NULL)
     exit(0);
   map->type = CommandType::GET_MAP;
@@ -137,6 +146,7 @@ struct arcade::WhereAmI	     			*arcade::GSnake::GetPlayer(bool debug) const
   int 														size;
 
   size = sizeof(*player) + (this->_player.size() * sizeof(Position));
+  //player = new [size] GetPlayer; -- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
   if ((player = reinterpret_cast<arcade::WhereAmI *>(malloc(size))) == NULL)
     exit(0);
   player->type = CommandType::WHERE_AM_I;

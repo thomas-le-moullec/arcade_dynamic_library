@@ -125,7 +125,7 @@ int									arcade::LNcurses::modeCanon(int mode) const
       next.c_lflag &= ~ECHO;
       next.c_lflag &= ~ICANON;
       next.c_cc[VMIN] = 0;
-      next.c_cc[VTIME] = 1;
+      next.c_cc[VTIME] = 0;
       if (ioctl(0, TCSETS, &next) < 0)
         return (-1);
     }
@@ -137,15 +137,50 @@ int									arcade::LNcurses::modeCanon(int mode) const
 
 void									arcade::LNcurses::GetInput(ICore *core)
 {
-  char								buff[25];
+  //char								buff[];
   char							  c;
 
-  read(0, buff, 1);
-  c = buff[0];
+  read(0, &c, 1);
+  //c = buff[0];
+  //if (c == '\r')
+
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
     core->NotifyGame(this->input_game[c]);
   if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
     core->NotifyCore(this->input_core[c]);
+}
+
+void										arcade::LNcurses::ShowMenu(std::vector<std::string> graphicsLibs,
+                                                   std::vector<std::string> gamesLibs,
+                                                   int idxGraphic, int idxGame)
+{
+  int 									y = 0;
+
+  clear();
+  mvprintw(MARGIN_Y, MARGIN_X - 2, "MENU");
+  for(unsigned int i = 0; i < graphicsLibs.size(); i++)
+  {
+    if ((int)i == idxGraphic)
+      attron(A_REVERSE);
+    mvprintw(y + MARGIN_Y - graphicsLibs.size() / 2, MARGIN_X - 10 - graphicsLibs[i].length(), "%s", graphicsLibs[i].c_str());
+    if ((int)i == idxGraphic)
+      attroff(A_REVERSE);
+    y++;
+  }
+  y = 0;
+  for(unsigned int i = 0; i < gamesLibs.size(); i++)
+  {
+    if ((int)i == idxGame)
+      attron(A_REVERSE);
+    mvprintw(y + MARGIN_Y - gamesLibs.size() / 2, MARGIN_X + 10 , "%s", gamesLibs[i].c_str());
+    if ((int)i == idxGame)
+      attroff(A_REVERSE);
+    y++;
+  }
+  refresh();
+
+  (void)graphicsLibs;
+  (void)gamesLibs;
 }
 
 void										arcade::LNcurses::PrintGameOver() const

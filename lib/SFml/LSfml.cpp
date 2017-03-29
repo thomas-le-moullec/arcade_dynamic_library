@@ -138,6 +138,14 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     _window->display();
 }
 
+void										arcade::LSfml::ShowMenu(std::vector<std::string> graphicsLibs,
+                                                std::vector<std::string> gamesLibs,
+                                                int, int)
+{
+  (void)graphicsLibs;
+  (void)gamesLibs;
+}
+
 extern "C" arcade::IGraphic*		CreateDisplayModule()
 {
   return new arcade::LSfml();
