@@ -3,7 +3,7 @@
 arcade::LSfml::LSfml()
 {
   setFullScreen(false);
-  setWindow(HEIGHT_WIN, WIDTH_WIN, PIXELS_WIN, isFullScreen());
+  setWindow(WIDTH_WIN, HEIGHT_WIN, PIXELS_WIN, isFullScreen());
   initGameInputs();
   initCoreInputs();
 }
@@ -35,16 +35,28 @@ void    arcade::LSfml::initCoreInputs()
 
 void    arcade::LSfml::initMap(int height, int width)
 {
-  sf::RectangleShape empty(sf::Vector2f(WIDTH_WIN / width, HEIGHT_WIN / height));
-  sf::RectangleShape block(sf::Vector2f(WIDTH_WIN / width, HEIGHT_WIN / height));
-  sf::RectangleShape powerup(sf::Vector2f(WIDTH_WIN / width, HEIGHT_WIN / height));
-  if (!_texture.loadFromFile("wall.jpg")) {
-    std::cerr << "Error on Wall.jpg" << std::endl;
-  }
+  sf::RectangleShape empty(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
+  sf::RectangleShape block(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
+  sf::RectangleShape powerup(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
+  sf::Texture        textureEmpty;
+  sf::Texture        textureBlock;
+  sf::Texture        texturePower;
 
-  empty.setFillColor(sf::Color::White);
-  block.setTexture(&_texture);
-  powerup.setFillColor(sf::Color::Green);
+  if (!_textureEmpty.loadFromFile("plancher.png"))
+    empty.setFillColor(sf::Color::Green);
+  else
+    empty.setTexture(&_textureEmpty);
+  if (!_textureBlock.loadFromFile("wall.jpg"))
+    block.setFillColor(sf::Color::Red);
+  else
+    block.setTexture(&_textureBlock);
+  if (!_texturePower.loadFromFile("fruits.png"))
+    powerup.setFillColor(sf::Color::Yellow);
+  else
+    powerup.setTexture(&_texturePower);
+  /*_mapTexture[arcade::TileType::EMPTY] = textureEmpty;
+  _mapTexture[arcade::TileType::BLOCK] = textureBlock;
+  _mapTexture[arcade::TileType::POWERUP] = texturePower;*/
   _map[arcade::TileType::EMPTY] = empty;
   _map[arcade::TileType::BLOCK] = block;
   _map[arcade::TileType::POWERUP] = powerup;
@@ -110,7 +122,7 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
     static bool  initialisation = true;
 
     if (initialisation) {
-      _player = new sf::RectangleShape(sf::Vector2f(WIDTH_WIN / map->width, HEIGHT_WIN / map->height));
+      _player = new sf::RectangleShape(sf::Vector2f((WIDTH_WIN * 0.60) / map->width, (HEIGHT_WIN * 0.60) / map->height));
       _player->setFillColor(sf::Color::Magenta);
       initMap(map->height, map->width);
       initialisation = false;
@@ -123,11 +135,11 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
       x = 0;
       while (x < map->width && i < map->width * map->height) {
         if (this->isOnMap(player, i, map->width) == true) {
-          _player->setPosition(x * (WIDTH_WIN / map->width), y * (HEIGHT_WIN / map->height));
+          _player->setPosition((WIDTH_WIN * 0.20) + (x * ((WIDTH_WIN * 0.60)/ map->width)), (HEIGHT_WIN * 0.20) + (y * ((HEIGHT_WIN * 0.60) / map->height)));
           _window->draw(*_player);
         }
         else {
-          _map[map->tile[i]].setPosition(x * (WIDTH_WIN / map->width), y * (HEIGHT_WIN / map->height));
+          _map[map->tile[i]].setPosition((WIDTH_WIN * 0.20) + (x * ((WIDTH_WIN * 0.60) / map->width)), (HEIGHT_WIN * 0.20) + (y * ((HEIGHT_WIN * 0.60) / map->height)));
           _window->draw(_map[map->tile[i]]);
         }
         x++;
