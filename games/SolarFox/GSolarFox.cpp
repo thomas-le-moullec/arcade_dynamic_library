@@ -5,6 +5,7 @@ arcade::GSolarFox::GSolarFox()
   this->initMap();
   this->initPlayer();
   this->initEnemies();
+  this->initAssets();
   this->initPowerUp();
   this->_statusGame = arcade::Status::RUNNING;
   this->_countMovesWidth = 0;
@@ -38,6 +39,16 @@ void											arcade::GSolarFox::initEnemies()
   this->addEnemy(0, HEIGHT_MAP - 3, CommandType::GO_UP);
   this->addEnemy(WIDTH_MAP - 3, HEIGHT_MAP - 1, CommandType::GO_LEFT);
   this->addEnemy(WIDTH_MAP - 1, 2, CommandType::GO_DOWN);
+}
+
+void											arcade::GSolarFox::initAssets()
+{
+  _assets.c_player.r = 0;
+  _assets.c_player.v = 0;
+  _assets.c_player.b = 0;
+  _assets.c_map[0].r = 255;
+  _assets.c_map[0].v = 255;
+  _assets.c_map[0].b = 255;
 }
 
 void											arcade::GSolarFox::initPowerUp()
@@ -353,6 +364,11 @@ bool															arcade::GSolarFox::IsGameOver() const
   if (this->_statusGame == arcade::Status::LOSE)
     return true;
   return false;
+}
+
+const arcade::Assets                  &arcade::GSolarFox::GetAssets() const
+{
+  return _assets;
 }
 
 extern "C"

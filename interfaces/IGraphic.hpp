@@ -11,6 +11,19 @@
 
 namespace arcade
 {
+  union  Color
+  {
+    char r;
+    char v;
+    char b;
+  };
+
+  struct                   Assets
+  {
+    arcade::Color       c_player;
+    arcade::Color       c_map[8];
+  };
+
   class IGraphic
   {
     public:

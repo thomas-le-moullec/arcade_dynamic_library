@@ -31,6 +31,7 @@ namespace arcade
       virtual struct WhereAmI	     			*GetPlayer(bool) const;
       virtual bool											IsGameOver() const;
       virtual arcade::Status						GetStatus() const;
+      virtual const arcade::Assets      &GetAssets() const;
 
     private:
       struct Actor											_player;
@@ -42,9 +43,11 @@ namespace arcade
       arcade::Status										_statusGame;
       int																_countMovesWidth;
       int																_countMovesHeight;
+      arcade::Assets                    _assets;
 
       void														  initMap();
       void														  initPlayer();
+      void                              initAssets();
       void															initPowerUp();
       void															addPowerup(int, int);
       bool															shootPowerup();
