@@ -168,6 +168,7 @@ extern "C" arcade::IGraphic*		CreateDisplayModule()
   return new arcade::LSfml();
 }
 
-void										arcade::LSfml::PrintGameOver() const
+void										arcade::LSfml::PrintGameOver(arcade::Status status) const
 {
+  (void)status;
 }

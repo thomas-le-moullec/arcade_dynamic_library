@@ -1,13 +1,10 @@
 #ifndef IGAME_HPP
 #define IGAME_HPP
 
-#include "ArcadeProtocol.hpp"
+#include "ICore.hpp"
 
 namespace arcade
 {
-
-  
-
   class IGame
   {
     public:
@@ -16,6 +13,7 @@ namespace arcade
       virtual struct GetMap     *GetMap(bool) const = 0;
       virtual struct WhereAmI		*GetPlayer(bool) const = 0;
       virtual bool							IsGameOver() const = 0;
+      virtual arcade::Status		GetStatus() const = 0;
   };
 };
 
