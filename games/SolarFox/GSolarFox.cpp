@@ -44,12 +44,6 @@ void											arcade::GSolarFox::initEnemies()
 
 void											arcade::GSolarFox::initAssets()
 {
-  _assets.c_player.r = 0;
-  _assets.c_player.v = 0;
-  _assets.c_player.b = 0;
-  _assets.c_map[0].r = 255;
-  _assets.c_map[0].v = 255;
-  _assets.c_map[0].b = 255;
 }
 
 void											arcade::GSolarFox::initPowerUp()

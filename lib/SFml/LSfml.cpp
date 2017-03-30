@@ -33,31 +33,27 @@ void    arcade::LSfml::initCoreInputs()
   _core_input[sf::Keyboard::Num9] = CoreCommand::PREV_GRAPHIC;
 }
 
-void    arcade::LSfml::initMap(int height, int width)
+void                  arcade::LSfml::setColor(const unsigned int &color, arcade::TileType tile, sf::RectangleShape rectangle)
 {
-  sf::RectangleShape empty(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
-  sf::RectangleShape block(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
-  sf::RectangleShape powerup(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
-  sf::Texture texture;
+  sf::Texture         texture;
 
-  _mapTexture[arcade::TileType::EMPTY] = texture;
-  if (!_mapTexture[arcade::TileType::EMPTY].loadFromFile("plancher.png"))
-    empty.setFillColor(sf::Color::Green);
+  _mapTexture[tile] = texture;
+  if (!_mapTexture[arcade::TileType::EMPTY].loadFromFile("Errorplancher.png")) //need a map of tiletype and .png
+    rectangle.setFillColor(sf::Color(color));
   else
-    empty.setTexture(&_mapTexture[arcade::TileType::EMPTY]);
-  _mapTexture[arcade::TileType::BLOCK] = texture;
-  if (!_mapTexture[arcade::TileType::BLOCK].loadFromFile("wall.jpg"))
-    block.setFillColor(sf::Color::Red);
-  else
-    block.setTexture(&_mapTexture[arcade::TileType::BLOCK]);
-  _mapTexture[arcade::TileType::POWERUP] = texture;
-  if (!_mapTexture[arcade::TileType::POWERUP].loadFromFile("fruits.png"))
-    powerup.setFillColor(sf::Color::Yellow);
-  else
-    powerup.setTexture(&_mapTexture[arcade::TileType::POWERUP]);
-  _map[arcade::TileType::EMPTY] = empty;
-  _map[arcade::TileType::BLOCK] = block;
-  _map[arcade::TileType::POWERUP] = powerup;
+    rectangle.setTexture(&_mapTexture[tile]);
+  _map[tile] = rectangle;
+}
+
+void                  arcade::LSfml::initMap(int height, int width, const Assets &assets)
+{
+  int                 idx(0);
+  sf::RectangleShape  rectangle(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
+
+  while (idx < static_cast<int>(arcade::TileType::OTHER)) {
+    setColor(assets.c_map[idx].color, static_cast<arcade::TileType>(idx), rectangle);
+    idx++;
+  }
 }
 
 void    arcade::LSfml::setFullScreen(bool isFullScreen)
@@ -72,7 +68,7 @@ bool    arcade::LSfml::isFullScreen()
 
 void    arcade::LSfml::setWindow(unsigned int width, unsigned int height, unsigned int pixels, bool fullscreen)
 {
-  if (fullscreen == true)
+  if (fullscreen == false)
     _window = new sf::RenderWindow(sf::VideoMode(width, height, pixels), "Snake Fullscreen !", sf::Style::Fullscreen);
   else
     _window = new sf::RenderWindow(sf::VideoMode(width, height, pixels), "Snake !");
@@ -112,7 +108,7 @@ bool		arcade::LSfml::isOnMap(arcade::WhereAmI *player, int i, int width) const
   return false;
 }
 
-void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
+void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, const Assets &assets)
 {
     unsigned int x;
     unsigned int y;
@@ -121,8 +117,8 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map)
 
     if (initialisation) {
       _player = new sf::RectangleShape(sf::Vector2f((WIDTH_WIN * 0.60) / map->width, (HEIGHT_WIN * 0.60) / map->height));
-      _player->setFillColor(sf::Color::Magenta);
-      initMap(map->height, map->width);
+      _player->setFillColor(sf::Color(assets.c_player.color));
+      initMap(map->height, map->width, assets);
       initialisation = false;
     }
 

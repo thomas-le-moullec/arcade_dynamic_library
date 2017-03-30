@@ -50,12 +50,10 @@ void											arcade::GSnake::initMap()
 
 void											arcade::GSnake::initAssets()
 {
-  _assets.c_player.r = 0;
-  _assets.c_player.v = 0;
-  _assets.c_player.b = 0;
-  _assets.c_map[0].r = 255;
-  _assets.c_map[0].v = 255;
-  _assets.c_map[0].b = 255;
+  _assets.c_player.color = 0x39ff14FF;
+  _assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].color = 0xf5f5dcFF;
+  _assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].color = 0x5e5d62FF;
+  _assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].color = 0xa8353aFF;
 }
 
 void                      arcade::GSnake::increaseSnake(int x, int y)
