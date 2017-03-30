@@ -19,6 +19,7 @@ namespace arcade
       virtual bool											IsGameOver() const;
       virtual arcade::Status						GetStatus() const;
       virtual const arcade::Assets      &GetAssets() const;
+      virtual unsigned int							GetScore() const;
 
     private:
       std::vector<arcade::CommandType>	_dir;
@@ -27,6 +28,7 @@ namespace arcade
       arcade::Status										_statusGame;
       bool															_isGameOver;
       arcade::Assets                    _assets;
+      unsigned int											_score;
 
       void														  initMap();
       void														  initPlayer();

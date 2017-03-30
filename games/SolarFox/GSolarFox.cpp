@@ -11,6 +11,7 @@ arcade::GSolarFox::GSolarFox()
   this->_countMovesWidth = 0;
   this->_countMovesHeight = 0;
   this->_playerShoot.lifes = 0;
+  this->_score = 0;
 }
 
 void											arcade::GSolarFox::initMap()
@@ -357,6 +358,11 @@ void												 			arcade::GSolarFox::gameEnd(arcade::Status status)
 arcade::Status							 			arcade::GSolarFox::GetStatus() const
 {
   return this->_statusGame;
+}
+
+unsigned int											arcade::GSolarFox::GetScore() const
+{
+  return this->_score;
 }
 
 bool															arcade::GSolarFox::IsGameOver() const

@@ -9,13 +9,14 @@ namespace arcade
   class IGame
   {
     public:
-      virtual										~IGame() {};
-      virtual void							Update(CommandType, bool) = 0;
-      virtual struct GetMap     *GetMap(bool) const = 0;
-      virtual struct WhereAmI		*GetPlayer(bool) const = 0;
-      virtual bool							IsGameOver() const = 0;
-      virtual arcade::Status		GetStatus() const = 0;
+      virtual												~IGame() {};
+      virtual void									Update(CommandType, bool) = 0;
+      virtual struct GetMap     		*GetMap(bool) const = 0;
+      virtual struct WhereAmI				*GetPlayer(bool) const = 0;
+      virtual bool									IsGameOver() const = 0;
+      virtual arcade::Status				GetStatus() const = 0;
       virtual const arcade::Assets  &GetAssets() const = 0;
+      virtual unsigned int					GetScore() const = 0;
   };
 };
 

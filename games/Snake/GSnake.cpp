@@ -7,6 +7,7 @@ arcade::GSnake::GSnake()
   this->initAssets();
   this->_dir.insert(this->_dir.begin(), CommandType::GO_RIGHT);
   this->_statusGame = arcade::Status::RUNNING;
+  this->_score = 0;
 }
 
 bool											arcade::GSnake::isOnSnake(int pos)
@@ -89,6 +90,7 @@ void                      arcade::GSnake::move()
   else
   {
     this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] = TileType::EMPTY;
+    this->_score += 10;
     this->dropApple();
   }
   if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
@@ -189,6 +191,11 @@ bool												 			arcade::GSnake::IsGameOver() const
 arcade::Status							 			arcade::GSnake::GetStatus() const
 {
   return this->_statusGame;
+}
+
+unsigned int											arcade::GSnake::GetScore() const
+{
+  return this->_score;
 }
 
 bool															 arcade::GSnake::snakeBitesItself() const

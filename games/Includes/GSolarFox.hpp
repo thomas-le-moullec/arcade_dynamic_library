@@ -32,6 +32,7 @@ namespace arcade
       virtual bool											IsGameOver() const;
       virtual arcade::Status						GetStatus() const;
       virtual const arcade::Assets      &GetAssets() const;
+      virtual unsigned int							GetScore() const;
 
     private:
       struct Actor											_player;
@@ -44,6 +45,7 @@ namespace arcade
       int																_countMovesWidth;
       int																_countMovesHeight;
       arcade::Assets                    _assets;
+      unsigned int											_score;
 
       void														  initMap();
       void														  initPlayer();

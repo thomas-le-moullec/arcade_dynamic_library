@@ -238,7 +238,10 @@ void		arcade::Core::ShowSceneGame()
 {
   this->_status = this->_game->GetStatus();
   if (this->_status == arcade::Status::RUNNING)
+  {
     this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
+    std::cout << this->_game->GetScore() << std::endl;
+  }
   else
     this->_graphic->PrintGameOver(this->_status);
 }
