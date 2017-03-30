@@ -6,19 +6,20 @@ arcade::Core::Core()
   this->_handle_graphic = NULL;
   this->_game = NULL;
   this->_graphic = NULL;
-  this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
+  this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
   this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");
   this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_snake.so");
   this->_coreCmd = arcade::CoreCommand::NOTHING;
   this->_idxGraphicLib = -1;
   this->_idxGamesLib = 0;
+  this->_changeGraphicMenu = false;
   this->initMapCore();
-  this->initMapScene();
+  this->initMapShowScene();
+  this->initMapNotifyScene();
 
-  //this->_status = arcade::Status::MENU;
-  this->_status = arcade::Status::GAME;
-
+  this->_scene = arcade::Scene::MENU;
+  this->_status = arcade::Status::RUNNING;
 }
 
 arcade::Core::~Core()
@@ -29,12 +30,18 @@ arcade::Core::~Core()
   dlclose(this->_handle_graphic);
 }
 
-void					arcade::Core::initMapScene()
+void					arcade::Core::initMapShowScene()
 {
-  this->_mapScene[arcade::Status::GAME] = &arcade::Core::ShowGame;
-  this->_mapScene[arcade::Status::MENU] = &arcade::Core::ShowMenu;
-  this->_mapScene[arcade::Status::SCORE_BOARD] = &arcade::Core::ShowScoreBoard;
-  this->_mapScene[arcade::Status::PAUSE_GAME] = &arcade::Core::ShowGame;
+  this->_mapShowScene[arcade::Scene::GAME] = &arcade::Core::ShowSceneGame;
+  this->_mapShowScene[arcade::Scene::MENU] = &arcade::Core::ShowSceneMenu;
+  this->_mapShowScene[arcade::Scene::SCOREBOARD] = &arcade::Core::ShowSceneScoreboard;
+}
+
+void					arcade::Core::initMapNotifyScene()
+{
+  this->_notifyScene[arcade::Scene::GAME] = &arcade::Core::NotifySceneGame;
+  this->_notifyScene[arcade::Scene::MENU] = &arcade::Core::NotifySceneMenu;
+  this->_notifyScene[arcade::Scene::SCOREBOARD] = &arcade::Core::NotifySceneScoreboard;
 }
 
 void					arcade::Core::initMapCore()
@@ -79,6 +86,7 @@ void   				arcade::Core::LoadGame(const std::string& lib)
   arcade::IGame				*(*CreateGame)();
   CreateGame = (arcade::IGame *(*)(void))dlsym(this->_handle_game, "CreateGame");
   this->_game = (*CreateGame)();
+  this->_status = arcade::Status::RUNNING;
 }
 
 void   				arcade::Core::LoadGraphic(const std::string& lib)
@@ -100,7 +108,8 @@ void		arcade::Core::LoadPrevGraphic()
   this->_idxGraphicLib--;
   if (this->_idxGraphicLib == -1)
     this->_idxGraphicLib = this->_graphicLibs.size() - 1;
-  this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+  if (this->_scene == arcade::Scene::GAME)
+    this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
 }
 
 void		arcade::Core::LoadNextGraphic()
@@ -108,7 +117,8 @@ void		arcade::Core::LoadNextGraphic()
   this->_idxGraphicLib++;
   if (this->_idxGraphicLib == (int)this->_graphicLibs.size())
     this->_idxGraphicLib = 0;
-  this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+  if (this->_scene == arcade::Scene::GAME)
+    this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
 }
 
 void		arcade::Core::LoadPrevGame()
@@ -138,15 +148,24 @@ void	  arcade::Core::Menu()
 
 void		arcade::Core::Quit()
 {
-  this->_status = arcade::Status::QUIT;
+  if (this->_scene == arcade::Scene::GAME)
+    this->_scene = arcade::Scene::MENU;
+  else
+    this->_scene = arcade::Scene::QUIT;
 }
 
 void		arcade::Core::Pause()
 {
-  if (this->_status == arcade::Status::PAUSE_GAME)
-    this->_status = arcade::Status::GAME;
+  if (this->_status == arcade::Status::PAUSE)
+    this->_status = arcade::Status::RUNNING;
   else
-    this->_status = arcade::Status::PAUSE_GAME;
+    this->_status = arcade::Status::PAUSE;
+}
+
+void		arcade::Core::loadLibAfterMenu()
+{
+  this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+  this->_changeGraphicMenu = false;
 }
 
 void									arcade::Core::RunArcade()
@@ -154,12 +173,15 @@ void									arcade::Core::RunArcade()
   int									j = 0;
 
   this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
-  while (this->_status != arcade::Status::QUIT)
+  while (this->_scene != arcade::Scene::QUIT)
   {
     this->_graphic->GetInput(this);
-    if (j % 6 == 0 && this->_status == arcade::Status::GAME)
+    if (this->_changeGraphicMenu == true)
+      this->loadLibAfterMenu();
+    if (j % 6 == 0 && this->_scene == arcade::Scene::GAME &&
+      this->_status == arcade::Status::RUNNING)
       this->_game->Update(arcade::CommandType::PLAY, false);
-    (this->*_mapScene[this->_status])();
+    (this->*_mapShowScene[this->_scene])();
     std::this_thread::sleep_for(std::chrono::milliseconds(16));
     j++;
     if (this->_coreCmd != arcade::CoreCommand::NOTHING)
@@ -170,10 +192,33 @@ void									arcade::Core::RunArcade()
   }
 }
 
-void		arcade::Core::NotifyGame(arcade::CommandType type)
+void		arcade::Core::NotifySceneGame(arcade::CommandType type)
 {
-  if (this->_status == arcade::Status::GAME)
-    this->_game->Update(type, false);
+  if (this->_status == arcade::Status::LOSE && type == arcade::CommandType::SHOOT)
+  {
+    this->_status = arcade::Status::RUNNING;
+    LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  }
+  this->_game->Update(type, false);
+}
+
+void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
+{
+  if (type == arcade::CommandType::SHOOT)
+  {
+    this->_scene = arcade::Scene::GAME;
+    this->_changeGraphicMenu = true;
+  }
+}
+
+void		arcade::Core::NotifySceneScoreboard(arcade::CommandType type)
+{
+  (void)type;
+}
+
+void		arcade::Core::NotifyScene(arcade::CommandType type)
+{
+  (this->*_notifyScene[this->_scene])(type);
 }
 
 void		arcade::Core::NotifyCore(arcade::CoreCommand type)
@@ -181,25 +226,26 @@ void		arcade::Core::NotifyCore(arcade::CoreCommand type)
   this->_coreCmd = type;
 }
 
-void		arcade::Core::ShowGame()
+void		arcade::Core::ShowSceneGame()
 {
   if (!this->_game->IsGameOver())
     this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
   else
   {
     this->_graphic->PrintGameOver();
-    while(this->_game->IsGameOver())
+    this->_status = arcade::Status::LOSE;
+    /*while(this->_game->IsGameOver())
       this->_graphic->GetInput(this);
-    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);*/
   }
 }
 
-void		arcade::Core::ShowMenu()
+void		arcade::Core::ShowSceneMenu()
 {
   this->_graphic->ShowMenu(this->_graphicLibs, this->_gamesLibs, this->_idxGraphicLib, this->_idxGamesLib);
 }
 
-void		arcade::Core::ShowScoreBoard()
+void		arcade::Core::ShowSceneScoreboard()
 {
   std::cout << "Show Score Board" << std::endl;
 }

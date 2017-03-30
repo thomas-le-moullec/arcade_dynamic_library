@@ -37,6 +37,7 @@ namespace arcade
       struct MyShoot										_playerShoot;
       std::vector<struct Actor>         _shoots;
       std::vector<struct Actor>			    _enemies;
+      std::vector<Position>							_powerUp;
       TileType													_map[HEIGHT_MAP * WIDTH_MAP];
       bool															_isGameOver;
       int																_countMovesWidth;
@@ -46,6 +47,10 @@ namespace arcade
       void														  initMap();
       void														  initPlayer();
       void                              initAssets();
+      void															initPowerUp();
+      void															addPowerup(int, int);
+      bool															shootPowerup();
+      void															deletePowerup();
       void															move();
       void												 			gameOver();
       void											        modifyMapActors(std::vector<struct Actor>, TileType);

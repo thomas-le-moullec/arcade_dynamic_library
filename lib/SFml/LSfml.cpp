@@ -87,7 +87,7 @@ void    arcade::LSfml::GetInput(ICore *core)
         if (_event.key.code == sf::Keyboard::Q || _event.key.code == sf::Keyboard::Z ||
            _event.key.code == sf::Keyboard::D || _event.key.code == sf::Keyboard::S ||
            _event.key.code == sf::Keyboard::Return)
-           core->NotifyGame(_game_input[_event.key.code]);
+           core->NotifyScene(_game_input[_event.key.code]);
         if (_event.key.code == sf::Keyboard::Num2 || _event.key.code == sf::Keyboard::Num3 ||
            _event.key.code == sf::Keyboard::Num4 || _event.key.code == sf::Keyboard::Num5 ||
            _event.key.code == sf::Keyboard::Space || _event.key.code == sf::Keyboard::Num8 ||
@@ -154,6 +154,11 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> graphicsLibs,
 {
   (void)graphicsLibs;
   (void)gamesLibs;
+}
+
+void										arcade::LSfml::ShowScoreboard()
+{
+
 }
 
 extern "C" arcade::IGraphic*		CreateDisplayModule()
