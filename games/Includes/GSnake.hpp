@@ -17,12 +17,14 @@ namespace arcade
       virtual struct GetMap	  					*GetMap(bool) const;
       virtual struct WhereAmI	     			*GetPlayer(bool) const;
       virtual bool											IsGameOver() const;
+      virtual const arcade::Assets      &GetAssets() const;
 
     private:
       std::vector<arcade::CommandType>	_dir;
       TileType													_map[HEIGHT_MAP * WIDTH_MAP];
       std::vector<arcade::Position>     _player;
       bool															_isGameOver;
+      arcade::Assets                    _assets;
 
       void														  initMap();
       void														  initPlayer();
@@ -33,6 +35,7 @@ namespace arcade
       void												 			gameOver();
       bool															snakeBitesItself() const;
       bool															checkDir(arcade::CommandType type);
+      void                              initAssets();
   };
 };
 

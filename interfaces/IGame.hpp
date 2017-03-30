@@ -2,12 +2,10 @@
 #define IGAME_HPP
 
 #include "ArcadeProtocol.hpp"
+#include "IGraphic.hpp"
 
 namespace arcade
 {
-
-  
-
   class IGame
   {
     public:
@@ -16,6 +14,7 @@ namespace arcade
       virtual struct GetMap     *GetMap(bool) const = 0;
       virtual struct WhereAmI		*GetPlayer(bool) const = 0;
       virtual bool							IsGameOver() const = 0;
+      virtual const arcade::Assets  &GetAssets() const = 0;
   };
 };
 

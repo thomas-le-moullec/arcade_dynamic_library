@@ -30,6 +30,7 @@ namespace arcade
       virtual struct GetMap	  					*GetMap(bool) const;
       virtual struct WhereAmI	     			*GetPlayer(bool) const;
       virtual bool											IsGameOver() const;
+      virtual const arcade::Assets      &GetAssets() const;
 
     private:
       struct Actor											_player;
@@ -40,9 +41,11 @@ namespace arcade
       bool															_isGameOver;
       int																_countMovesWidth;
       int																_countMovesHeight;
+      arcade::Assets                    _assets;
 
       void														  initMap();
       void														  initPlayer();
+      void                              initAssets();
       void															move();
       void												 			gameOver();
       void											        modifyMapActors(std::vector<struct Actor>, TileType);

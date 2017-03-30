@@ -38,25 +38,23 @@ void    arcade::LSfml::initMap(int height, int width)
   sf::RectangleShape empty(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
   sf::RectangleShape block(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
   sf::RectangleShape powerup(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));
-  sf::Texture        textureEmpty;
-  sf::Texture        textureBlock;
-  sf::Texture        texturePower;
+  sf::Texture texture;
 
-  if (!_textureEmpty.loadFromFile("plancher.png"))
+  _mapTexture[arcade::TileType::EMPTY] = texture;
+  if (!_mapTexture[arcade::TileType::EMPTY].loadFromFile("plancher.png"))
     empty.setFillColor(sf::Color::Green);
   else
-    empty.setTexture(&_textureEmpty);
-  if (!_textureBlock.loadFromFile("wall.jpg"))
+    empty.setTexture(&_mapTexture[arcade::TileType::EMPTY]);
+  _mapTexture[arcade::TileType::BLOCK] = texture;
+  if (!_mapTexture[arcade::TileType::BLOCK].loadFromFile("wall.jpg"))
     block.setFillColor(sf::Color::Red);
   else
-    block.setTexture(&_textureBlock);
-  if (!_texturePower.loadFromFile("fruits.png"))
+    block.setTexture(&_mapTexture[arcade::TileType::BLOCK]);
+  _mapTexture[arcade::TileType::POWERUP] = texture;
+  if (!_mapTexture[arcade::TileType::POWERUP].loadFromFile("fruits.png"))
     powerup.setFillColor(sf::Color::Yellow);
   else
-    powerup.setTexture(&_texturePower);
-  /*_mapTexture[arcade::TileType::EMPTY] = textureEmpty;
-  _mapTexture[arcade::TileType::BLOCK] = textureBlock;
-  _mapTexture[arcade::TileType::POWERUP] = texturePower;*/
+    powerup.setTexture(&_mapTexture[arcade::TileType::POWERUP]);
   _map[arcade::TileType::EMPTY] = empty;
   _map[arcade::TileType::BLOCK] = block;
   _map[arcade::TileType::POWERUP] = powerup;

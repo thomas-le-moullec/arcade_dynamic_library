@@ -4,6 +4,7 @@ arcade::GSnake::GSnake()
 {
   this->initMap();
   this->initPlayer();
+  this->initAssets();
   this->_dir.insert(this->_dir.begin(), CommandType::GO_RIGHT);
   this->_isGameOver = false;
 }
@@ -44,6 +45,16 @@ void											arcade::GSnake::initMap()
       this->_map[i] = TileType::EMPTY;
   }
   this->dropApple();
+}
+
+void											arcade::GSnake::initAssets()
+{
+  _assets.c_player.r = 0;
+  _assets.c_player.v = 0;
+  _assets.c_player.b = 0;
+  _assets.c_map[0].r = 255;
+  _assets.c_map[0].v = 255;
+  _assets.c_map[0].b = 255;
 }
 
 void                      arcade::GSnake::increaseSnake(int x, int y)
@@ -180,6 +191,11 @@ bool															 arcade::GSnake::snakeBitesItself() const
           this->_player[j].y == this->_player[i].y)
           return true;
   return false;
+}
+
+const arcade::Assets    &arcade::GSnake::GetAssets() const
+{
+  return _assets;
 }
 
 extern "C"
