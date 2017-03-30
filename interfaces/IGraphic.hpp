@@ -11,11 +11,15 @@
 
 namespace arcade
 {
-  union  Color
+  union                 Color
   {
-    char r;
-    char v;
-    char b;
+    struct              s_color {
+      uint8_t           a;
+      uint8_t           b;
+      uint8_t           v;
+      uint8_t           r;
+    }                   val;
+    unsigned int        color;
   };
 
   struct                   Assets
@@ -28,7 +32,7 @@ namespace arcade
   {
     public:
       virtual ~IGraphic() {};
-      virtual void				ShowGame(WhereAmI *, GetMap *) = 0;
+      virtual void				ShowGame(WhereAmI *, GetMap *, const Assets &) = 0;
       virtual void				ShowMenu(std::vector<std::string>, std::vector<std::string>, int, int) = 0;
       virtual void				ShowScoreboard() = 0;
       virtual void				GetInput(ICore *) = 0;

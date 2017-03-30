@@ -229,7 +229,7 @@ void		arcade::Core::NotifyCore(arcade::CoreCommand type)
 void		arcade::Core::ShowSceneGame()
 {
   if (!this->_game->IsGameOver())
-    this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
+    this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
   else
   {
     this->_graphic->PrintGameOver();

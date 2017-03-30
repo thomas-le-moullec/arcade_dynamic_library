@@ -13,11 +13,11 @@ namespace arcade
     public:
       LNcurses();
       virtual ~LNcurses();
-      virtual void									ShowGame(WhereAmI *, GetMap *);
+      virtual void									ShowGame(WhereAmI *, GetMap *, const Assets &);
       virtual void									ShowMenu(std::vector<std::string>, std::vector<std::string>, int, int);
       virtual void									GetInput(ICore *);
       virtual void									PrintGameOver() const;
-      virtual void																		   ShowScoreboard();
+      virtual void							    ShowScoreboard();
 
     private:
       std::map<arcade::TileType, char>			map_disp;
