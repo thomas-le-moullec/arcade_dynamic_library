@@ -55,11 +55,13 @@ namespace arcade
       std::vector<std::string> 								_gamesLibs;
       int																			_idxGraphicLib;
       int																			_idxGamesLib;
+      bool																		_changeGraphicMenu;
 
       void						initMapCore();
       void						initMapShowScene();
       void					  initMapNotifyScene();
       void						getIndexLib(bool, const std::string &);
+      void						loadLibAfterMenu();
   };
 };
 

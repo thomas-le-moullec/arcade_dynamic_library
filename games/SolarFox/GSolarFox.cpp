@@ -5,6 +5,7 @@ arcade::GSolarFox::GSolarFox()
   this->initMap();
   this->initPlayer();
   this->initEnemies();
+  this->initPowerUp();
   this->_isGameOver = false;
   this->_countMovesWidth = 0;
   this->_countMovesHeight = 0;
@@ -39,6 +40,36 @@ void											arcade::GSolarFox::initEnemies()
   this->addEnemy(WIDTH_MAP - 1, 2, CommandType::GO_DOWN);
 }
 
+void											arcade::GSolarFox::initPowerUp()
+{
+  int											x = 0;
+  int											y = 0;
+  int											dropByDefault = 0;
+
+  srand(time(NULL));
+  for (int i = 0; i < 10; i++)
+  {
+    dropByDefault = 0;
+    while (dropByDefault == 0 || this->_map[dropByDefault] != TileType::EMPTY)
+    {
+      x = rand() % (WIDTH_MAP - 3) + 3;
+      y = rand() % (HEIGHT_MAP - 3) + 3;
+      dropByDefault = y * WIDTH_MAP + x;
+    }
+    this->addPowerup(x, y);
+    this->_map[dropByDefault] = TileType::POWERUP;
+  }
+}
+
+void											arcade::GSolarFox::addPowerup(int x, int y)
+{
+  Position								pos;
+
+  pos.x = x;
+  pos.y = y;
+  this->_powerUp.insert(this->_powerUp.begin(), pos);
+}
+
 void											arcade::GSolarFox::modifyMapActors(std::vector<struct Actor> actors, TileType type)
 {
   for (unsigned int i = 0; i < actors.size(); i++)
@@ -53,6 +84,28 @@ void											arcade::GSolarFox::addMyShoot(int x, int y, CommandType dir)
   this->_map[y * WIDTH_MAP + x] = TileType::MY_SHOOT;
 }
 
+bool											arcade::GSolarFox::shootPowerup()
+{
+  for (unsigned int i = 0; i < this->_powerUp.size(); i++)
+    if (this->_playerShoot.pos.x == this->_powerUp[i].x &&
+        this->_playerShoot.pos.y == this->_powerUp[i].y)
+      return true;
+  return false;
+}
+
+void											arcade::GSolarFox::deletePowerup()
+{
+  unsigned int						i = 0;
+
+  while (i < this->_powerUp.size() &&
+         this->_powerUp[i].x != this->_playerShoot.pos.x &&
+         this->_powerUp[i].y != this->_playerShoot.pos.y)
+    i++;
+  if (i != this->_powerUp.size())
+    this->_powerUp.erase(this->_powerUp.begin() + i);
+  this->_playerShoot.lifes = 0;
+}
+
 void											arcade::GSolarFox::moveMyShoot()
 {
   this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] = TileType::EMPTY;
@@ -65,6 +118,8 @@ void											arcade::GSolarFox::moveMyShoot()
   else
     this->_playerShoot.pos.x++;
   this->_playerShoot.lifes--;
+  if (this->shootPowerup())
+    this->deletePowerup();
   if (this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] != TileType::EMPTY)
     this->_playerShoot.lifes = 0;
   if (this->_playerShoot.lifes != 0)

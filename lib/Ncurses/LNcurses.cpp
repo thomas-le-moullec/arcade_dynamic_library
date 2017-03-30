@@ -32,7 +32,7 @@ void													arcade::LNcurses::initMapInputCore()
   this->input_core['5'] = arcade::CoreCommand::NEXT_GAME;
   this->input_core[' '] = arcade::CoreCommand::PAUSE;
   this->input_core['8'] = arcade::CoreCommand::RESTART;
-  this->input_core['9'] = arcade::CoreCommand::ESCAPE;
+  this->input_core[27] = arcade::CoreCommand::ESCAPE;
 }
 
 void													arcade::LNcurses::initMapDisplay()
@@ -146,7 +146,7 @@ void									arcade::LNcurses::GetInput(ICore *core)
 
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
     core->NotifyScene(this->input_game[c]);
-  if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == '9' || c == ' ')
+  if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == 27 || c == ' ')
     core->NotifyCore(this->input_core[c]);
 }
 
