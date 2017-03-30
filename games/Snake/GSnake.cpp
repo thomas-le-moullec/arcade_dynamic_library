@@ -6,7 +6,7 @@ arcade::GSnake::GSnake()
   this->initPlayer();
   this->initAssets();
   this->_dir.insert(this->_dir.begin(), CommandType::GO_RIGHT);
-  this->_isGameOver = false;
+  this->_statusGame = arcade::Status::RUNNING;
 }
 
 bool											arcade::GSnake::isOnSnake(int pos)
@@ -91,7 +91,7 @@ void                      arcade::GSnake::move()
   }
   if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
       this->snakeBitesItself() == true)
-    this->gameOver();
+    this->gameEnd(arcade::Status::LOSE);
 }
 
 bool											arcade::GSnake::checkDir(arcade::CommandType type)
@@ -113,15 +113,15 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
       (type == CommandType::GO_LEFT && this->checkDir(CommandType::GO_RIGHT)) ||
       (type == CommandType::GO_RIGHT && this->checkDir(CommandType::GO_LEFT)))
     this->_dir.insert(this->_dir.begin(), type);
-  if (type == CommandType::PLAY && this->_isGameOver == false)
+  if (type == CommandType::PLAY && this->_statusGame == arcade::Status::RUNNING)
   {
     this->move();
     for (unsigned int i = 1; i < this->_dir.size(); i++)
       this->_dir.erase(this->_dir.begin() + i);
     return;
   }
-  if (type == CommandType::SHOOT && this->_isGameOver == true)
-    this->_isGameOver = false;
+  if (type == CommandType::SHOOT && this->_statusGame == arcade::Status::RUNNING)
+    this->_statusGame = arcade::Status::RUNNING;
 }
 
 struct arcade::GetMap	  					*arcade::GSnake::GetMap(bool debug) const
@@ -171,14 +171,22 @@ struct arcade::WhereAmI	     			*arcade::GSnake::GetPlayer(bool debug) const
   return player;
 }
 
-void												 			arcade::GSnake::gameOver()
+void												 			arcade::GSnake::gameEnd(arcade::Status status)
 {
-  this->_isGameOver = true;
+  this->_statusGame = status;
 }
 
 bool												 			arcade::GSnake::IsGameOver() const
 {
-  return this->_isGameOver;
+  if (this->_statusGame == arcade::Status::LOSE)
+    return true;
+  else
+    return false;
+}
+
+arcade::Status							 			arcade::GSnake::GetStatus() const
+{
+  return this->_statusGame;
 }
 
 bool															 arcade::GSnake::snakeBitesItself() const

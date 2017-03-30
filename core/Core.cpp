@@ -8,8 +8,8 @@ arcade::Core::Core()
   this->_graphic = NULL;
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
-  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");
   this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_snake.so");
+  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");
   this->_coreCmd = arcade::CoreCommand::NOTHING;
   this->_idxGraphicLib = -1;
   this->_idxGamesLib = 0;
@@ -76,6 +76,9 @@ void										arcade::Core::getIndexLib(bool isGame, const std::string& lib)
 
 void   				arcade::Core::LoadGame(const std::string& lib)
 {
+  char *error;
+
+  dlerror();
   if (this->_idxGamesLib == -1)
     this->getIndexLib(true, lib);
   if (this->_game != NULL)
@@ -83,6 +86,12 @@ void   				arcade::Core::LoadGame(const std::string& lib)
   if (this->_handle_game != NULL)
     dlclose(this->_handle_game);
   this->_handle_game = dlopen(lib.c_str(), RTLD_LAZY);
+  if ((error = dlerror()) != NULL)
+  {
+    delete this->_graphic;
+    std::cout << error << std::endl;
+    exit(0);
+  }
   arcade::IGame				*(*CreateGame)();
   CreateGame = (arcade::IGame *(*)(void))dlsym(this->_handle_game, "CreateGame");
   this->_game = (*CreateGame)();
@@ -178,12 +187,11 @@ void									arcade::Core::RunArcade()
     this->_graphic->GetInput(this);
     if (this->_changeGraphicMenu == true)
       this->loadLibAfterMenu();
-    if (j % 6 == 0 && this->_scene == arcade::Scene::GAME &&
-      this->_status == arcade::Status::RUNNING)
+    if (j++ % 6 == 0 && this->_scene == arcade::Scene::GAME &&
+        this->_status == arcade::Status::RUNNING)
       this->_game->Update(arcade::CommandType::PLAY, false);
     (this->*_mapShowScene[this->_scene])();
     std::this_thread::sleep_for(std::chrono::milliseconds(16));
-    j++;
     if (this->_coreCmd != arcade::CoreCommand::NOTHING)
     {
       (this->*_mapCore[this->_coreCmd])();
@@ -194,7 +202,7 @@ void									arcade::Core::RunArcade()
 
 void		arcade::Core::NotifySceneGame(arcade::CommandType type)
 {
-  if (this->_status == arcade::Status::LOSE && type == arcade::CommandType::SHOOT)
+  if (this->_status != arcade::Status::RUNNING && type == arcade::CommandType::SHOOT)
   {
     this->_status = arcade::Status::RUNNING;
     LoadGame(this->_gamesLibs[this->_idxGamesLib]);
@@ -228,16 +236,11 @@ void		arcade::Core::NotifyCore(arcade::CoreCommand type)
 
 void		arcade::Core::ShowSceneGame()
 {
-  if (!this->_game->IsGameOver())
-    this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
+  this->_status = this->_game->GetStatus();
+  if (this->_status == arcade::Status::RUNNING)
+    this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
   else
-  {
-    this->_graphic->PrintGameOver();
-    this->_status = arcade::Status::LOSE;
-    /*while(this->_game->IsGameOver())
-      this->_graphic->GetInput(this);
-    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);*/
-  }
+    this->_graphic->PrintGameOver(this->_status);
 }
 
 void		arcade::Core::ShowSceneMenu()

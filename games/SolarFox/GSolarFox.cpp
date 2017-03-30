@@ -7,7 +7,7 @@ arcade::GSolarFox::GSolarFox()
   this->initEnemies();
   this->initAssets();
   this->initPowerUp();
-  this->_isGameOver = false;
+  this->_statusGame = arcade::Status::RUNNING;
   this->_countMovesWidth = 0;
   this->_countMovesHeight = 0;
   this->_playerShoot.lifes = 0;
@@ -52,7 +52,7 @@ void											arcade::GSolarFox::initPowerUp()
   int											dropByDefault = 0;
 
   srand(time(NULL));
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 2; i++)
   {
     dropByDefault = 0;
     while (dropByDefault == 0 || this->_map[dropByDefault] != TileType::EMPTY)
@@ -177,7 +177,7 @@ void											arcade::GSolarFox::moveShoot()
   {
     if (this->_shoots[i].pos.x == this->_player.pos.x &&
         this->_shoots[i].pos.y == this->_player.pos.y)
-      this->gameOver();
+      this->gameEnd(arcade::Status::LOSE);
     if (this->_shoots[i].dir == CommandType::GO_DOWN)
       this->_shoots[i].pos.y++;
     else if (this->_shoots[i].dir == CommandType::GO_UP)
@@ -190,7 +190,7 @@ void											arcade::GSolarFox::moveShoot()
       this->_shoots.erase(this->_shoots.begin() + i);
     else if (this->_shoots[i].pos.x == this->_player.pos.x &&
              this->_shoots[i].pos.y == this->_player.pos.y)
-      this->gameOver();
+      this->gameEnd(arcade::Status::LOSE);
   }
   this->modifyMapActors(this->_shoots, TileType::EVIL_SHOOT);
 }
@@ -264,7 +264,7 @@ void                      arcade::GSolarFox::move()
   else
     this->_player.pos.x--;
   if (this->_map[this->_player.pos.y * WIDTH_MAP + this->_player.pos.x] == TileType::BLOCK)
-    this->gameOver();
+    this->gameEnd(arcade::Status::LOSE);
 }
 
 void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
@@ -282,17 +282,19 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
     this->_player.dir = type;
   if (type == CommandType::SHOOT && this->_playerShoot.lifes == 0)
     this->initMyShoot();
-  if (type == CommandType::PLAY && this->_isGameOver == false)
+  if (type == CommandType::PLAY && this->_statusGame == arcade::Status::RUNNING)
   {
     this->move();
     this->moveEnemies();
     if (this->_playerShoot.lifes > 0)
       this->moveMyShoot();
     this->moveShoot();
+    if (this->_powerUp.size() == 0)
+      this->gameEnd(arcade::Status::WIN);
     return;
   }
-  if (type == CommandType::SHOOT && this->_isGameOver == true)
-    this->_isGameOver = false;
+  if (type == CommandType::SHOOT && this->_statusGame != arcade::Status::RUNNING)
+    this->_statusGame = arcade::Status::RUNNING;
 }
 
 struct arcade::GetMap	  					*arcade::GSolarFox::GetMap(bool debug) const
@@ -341,14 +343,21 @@ struct arcade::WhereAmI	     			*arcade::GSolarFox::GetPlayer(bool debug) const
   return player;
 }
 
-void												 			arcade::GSolarFox::gameOver()
+void												 			arcade::GSolarFox::gameEnd(arcade::Status status)
 {
-  this->_isGameOver = true;
+  this->_statusGame = status;
 }
 
-bool												 			arcade::GSolarFox::IsGameOver() const
+arcade::Status							 			arcade::GSolarFox::GetStatus() const
 {
-  return this->_isGameOver;
+  return this->_statusGame;
+}
+
+bool															arcade::GSolarFox::IsGameOver() const
+{
+  if (this->_statusGame == arcade::Status::LOSE)
+    return true;
+  return false;
 }
 
 const arcade::Assets                  &arcade::GSolarFox::GetAssets() const

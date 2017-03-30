@@ -188,11 +188,14 @@ void										arcade::LNcurses::ShowScoreboard()
 {
 }
 
-void										arcade::LNcurses::PrintGameOver() const
+void										arcade::LNcurses::PrintGameOver(arcade::Status status) const
 {
   clear();
   attron(A_REVERSE);
-  mvprintw(LINES / 2, COLS / 2 - 4, "Game Over");
+  if (status == arcade::Status::LOSE)
+    mvprintw(LINES / 2, COLS / 2 - 4, "Game Over");
+  else
+    mvprintw(LINES / 2, COLS / 2 - 1, "Win");
   attroff(A_REVERSE);
   refresh();
 }

@@ -1,7 +1,7 @@
 #ifndef IGAME_HPP
 #define IGAME_HPP
 
-#include "ArcadeProtocol.hpp"
+#include "ICore.hpp"
 #include "IGraphic.hpp"
 
 namespace arcade
@@ -14,6 +14,7 @@ namespace arcade
       virtual struct GetMap     *GetMap(bool) const = 0;
       virtual struct WhereAmI		*GetPlayer(bool) const = 0;
       virtual bool							IsGameOver() const = 0;
+      virtual arcade::Status		GetStatus() const = 0;
       virtual const arcade::Assets  &GetAssets() const = 0;
   };
 };
