@@ -101,6 +101,9 @@ void   				arcade::Core::LoadGame(const std::string& lib)
 
 void   				arcade::Core::LoadGraphic(const std::string& lib)
 {
+  char *error;
+
+  dlerror();
   if (this->_idxGraphicLib == -1)
     this->getIndexLib(false, lib);
   if (this->_graphic != NULL)
@@ -108,6 +111,12 @@ void   				arcade::Core::LoadGraphic(const std::string& lib)
   if (this->_handle_graphic != NULL)
     dlclose(this->_handle_graphic);
   this->_handle_graphic = dlopen(lib.c_str(), RTLD_LAZY);
+  if ((error = dlerror()) != NULL)
+  {
+    //delete this->_graphi;
+    std::cout << error << std::endl;
+    exit(0);
+  }
   arcade::IGraphic				*(*CreateDisplayModule)();
   CreateDisplayModule = (arcade::IGraphic *(*)(void))dlsym(this->_handle_graphic, "CreateDisplayModule");
   this->_graphic = (*CreateDisplayModule)();

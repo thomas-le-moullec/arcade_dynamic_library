@@ -5,6 +5,7 @@
 
 #define HEIGHT_MAP			40
 #define WIDTH_MAP				40
+#define RANGE						4
 
 namespace arcade
 {
@@ -12,13 +13,8 @@ namespace arcade
   {
     CommandType dir;
     Position		pos;
-  };
-
-  struct	MyShoot
-  {
-    CommandType dir;
-    Position		pos;
     int					lifes;
+    bool				isStoned;
   };
 
   class GSolarFox : public IGame
@@ -36,7 +32,7 @@ namespace arcade
 
     private:
       struct Actor											_player;
-      struct MyShoot										_playerShoot;
+      struct Actor											_playerShoot;
       std::vector<struct Actor>         _shoots;
       std::vector<struct Actor>			    _enemies;
       std::vector<Position>							_powerUp;
@@ -46,6 +42,7 @@ namespace arcade
       int																_countMovesHeight;
       arcade::Assets                    _assets;
       unsigned int											_score;
+      int																_cmpt;
 
       void														  initMap();
       void														  initPlayer();
@@ -54,6 +51,8 @@ namespace arcade
       void															addPowerup(int, int);
       bool															shootPowerup();
       void															deletePowerup();
+      bool															shootEvilShoot();
+      void															deleteEvilShoot();
       void															move();
       void												 			gameEnd(arcade::Status);
       void											        modifyMapActors(std::vector<struct Actor>, TileType);

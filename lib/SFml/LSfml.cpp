@@ -213,7 +213,7 @@ void										arcade::LSfml::ShowScoreboard()
 {
 }
 
-void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> bestScore)
+void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)
 {
   (void)currentScore;
   (void)bestScore;

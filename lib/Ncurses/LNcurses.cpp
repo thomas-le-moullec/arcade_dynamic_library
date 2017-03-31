@@ -183,7 +183,7 @@ void										arcade::LNcurses::ShowScoreboard()
 {
 }
 
-void										arcade::LNcurses::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> bestScore)
+void										arcade::LNcurses::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)
 {
   int										y = MARGIN_Y - (this->_heigth_map / 2);
   int										x = MARGIN_X + this->_width_map + 3;

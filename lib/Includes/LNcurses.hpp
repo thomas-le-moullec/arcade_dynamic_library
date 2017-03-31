@@ -18,7 +18,7 @@ namespace arcade
       virtual void									GetInput(ICore *);
       virtual void					        PrintGameOver(arcade::Status) const;
       virtual void									ShowScoreboard();
-      virtual void									ShowScore(const arcade::Score &, const std::vector<arcade::Score>);
+      virtual void									ShowScore(const arcade::Score &, const std::vector<arcade::Score> &);
 
     private:
       std::map<arcade::TileType, char>			map_disp;
