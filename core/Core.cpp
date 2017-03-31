@@ -18,7 +18,6 @@ arcade::Core::Core()
   this->initMapCore();
   this->initMapShowScene();
   this->initMapNotifyScene();
-  //this->_scoreBoard;
 
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
@@ -214,8 +213,6 @@ void									arcade::Core::RunArcade()
       this->_scoreBoard.addScore(this->takeGameName(), "Leo", this->_game->GetScore());
       this->_addScore = false;
     }
-    if (this->_scene == arcade::Scene::GAME && this->_status == arcade::Status::RUNNING)
-      this->_scoreBoard.addActualScore(this->takeGameName(), "Leo", this->_game->GetScore());
   }
 }
 
@@ -254,13 +251,18 @@ void		arcade::Core::NotifyCore(arcade::CoreCommand type)
   this->_coreCmd = type;
 }
 
-void		arcade::Core::ShowSceneGame()
+void						arcade::Core::ShowSceneGame()
 {
+  arcade::Score	score;
+
   this->_status = this->_game->GetStatus();
   if (this->_status == arcade::Status::RUNNING)
   {
     this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
-    this->_graphic->ShowScore(this->_scoreBoard.getBestScores(this->_gamesLibs[this->_idxGamesLib].substr(17, this->_gamesLibs[this->_idxGamesLib].length() - 3 - 17), 3));
+    score.nameGame = "";
+    score.namePlayer = "";
+    score.valueScore = this->_game->GetScore();
+    this->_graphic->ShowScore(score, this->_scoreBoard.getBestScores(this->takeGameName(), 3));
   }
   else
   {
@@ -270,7 +272,7 @@ void		arcade::Core::ShowSceneGame()
 
 void		arcade::Core::ShowSceneMenu()
 {
-  this->_graphic->ShowMenu(this->_graphicLibs, this->_gamesLibs, this->_idxGraphicLib, this->_idxGamesLib);
+  this->_graphic->ShowMenu(this->_gamesLibs, this->_idxGamesLib, this->_graphicLibs, this->_idxGraphicLib);
 }
 
 void		arcade::Core::ShowSceneScoreboard()

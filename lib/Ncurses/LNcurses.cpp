@@ -148,9 +148,8 @@ void									arcade::LNcurses::GetInput(ICore *core)
     core->NotifyCore(this->input_core[c]);
 }
 
-void										arcade::LNcurses::ShowMenu(std::vector<std::string> graphicsLibs,
-                                                   std::vector<std::string> gamesLibs,
-                                                   int idxGraphic, int idxGame)
+void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
+                                                   std::vector<std::string> graphicsLibs, int idxGraphic)
 {
   int 									y = 0;
 
@@ -184,7 +183,7 @@ void										arcade::LNcurses::ShowScoreboard()
 {
 }
 
-void										arcade::LNcurses::ShowScore(std::vector<arcade::Score> score)
+void										arcade::LNcurses::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> bestScore)
 {
   int										y = MARGIN_Y - (this->_heigth_map / 2);
   int										x = MARGIN_X + this->_width_map + 3;
@@ -193,14 +192,13 @@ void										arcade::LNcurses::ShowScore(std::vector<arcade::Score> score)
   mvprintw(y++, x, "Scores");
   attroff(A_REVERSE);
   y++;
-  for (unsigned int i = 0; i < score.size() - 1 && score.size() > 0; i++)
-    mvprintw(y++, x, "%s:%u", score[i].namePlayer.c_str(), score[i].valueScore);
+  for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++)
+    mvprintw(y++, x, "%s:%u", bestScore[i].namePlayer.c_str(), bestScore[i].valueScore);
   y++;
   attron(A_REVERSE);
   mvprintw(y++, x, "Your actual score");
   attroff(A_REVERSE);
-  if (score.size() != 0)
-    mvprintw(y++, x, "%u", score[score.size() - 1].valueScore);
+  mvprintw(y++, x, "%u", currentScore.valueScore);
   refresh();
 }
 

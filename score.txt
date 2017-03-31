@@ -1,5 +1,6 @@
-snake:Leo:0
-snake:Leo:70
-snake:Leo:100
+snake:Leo:40
+solarfox:Leo:10
+snake:Leo:10
 snake:Leo:20
-snake:Leo:0
+snake:Leo:50
+snake:Leo:10

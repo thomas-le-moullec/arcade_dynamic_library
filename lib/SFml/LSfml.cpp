@@ -149,9 +149,8 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
     _window->display();
 }
 
-void										arcade::LSfml::ShowMenu(std::vector<std::string> graphicsLibs,
-                                                std::vector<std::string> gamesLibs,
-                                                int idxGraphic, int idxGame)
+void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
+                                                std::vector<std::string> graphicsLibs, int idxGraphic)
 {
   sf::Text              title;
   sf::Text              graphics;
@@ -214,9 +213,10 @@ void										arcade::LSfml::ShowScoreboard()
 {
 }
 
-void										arcade::LSfml::ShowScore(std::vector<arcade::Score> score)
+void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> bestScore)
 {
-  (void)score;
+  (void)currentScore;
+  (void)bestScore;
 }
 
 extern "C" arcade::IGraphic*		CreateDisplayModule()
