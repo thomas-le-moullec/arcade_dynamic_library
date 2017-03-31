@@ -5,6 +5,10 @@
 #include <thread>
 #include <vector>
 #include <map>
+#include <dirent.h>
+#include <stdlib.h>
+#include <sys/types.h>
+
 #include "ICore.hpp"
 #include "IGraphic.hpp"
 #include "IGame.hpp"
@@ -68,6 +72,8 @@ namespace arcade
       void						getIndexLib(bool, const std::string &);
       void						loadLibAfterMenu();
       std::string			takeGameName() const;
+
+      void						takeLibInDir(const char *, int);
   };
 };
 

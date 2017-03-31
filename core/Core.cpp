@@ -6,10 +6,14 @@ arcade::Core::Core()
   this->_handle_graphic = NULL;
   this->_game = NULL;
   this->_graphic = NULL;
-  this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
+  this->takeLibInDir("games/", 0);
+  this->takeLibInDir("lib/", 1);
+
+  /*this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
   this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_snake.so");
-  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");
+  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");*/
+
   this->_coreCmd = arcade::CoreCommand::NOTHING;
   this->_idxGraphicLib = -1;
   this->_idxGamesLib = 0;
@@ -55,6 +59,25 @@ void					arcade::Core::initMapCore()
   this->_mapCore[arcade::CoreCommand::RESTART] = &arcade::Core::Restart;
   this->_mapCore[arcade::CoreCommand::MENU] = &arcade::Core::Menu;
   this->_mapCore[arcade::CoreCommand::ESCAPE] = &arcade::Core::Quit;
+}
+
+void								arcade::Core::takeLibInDir(const char *dirName, int mode)
+{
+  DIR 							*Dir = opendir(dirName);
+  struct dirent 		*DirEntry;
+  std::string				str;
+  std::string				path(dirName);
+
+  while((DirEntry = readdir(Dir)) != NULL)
+  {
+    str = path + DirEntry->d_name;
+    if (mode == 0 && str.compare(0, 17, "games/lib_arcade_") == 0)
+    {
+      this->_gamesLibs.insert(this->_gamesLibs.begin(), str);
+    }
+    if (mode == 1 && str.compare(0, 15, "lib/lib_arcade_") == 0)
+      this->_graphicLibs.insert(this->_graphicLibs.begin(), str);
+  }
 }
 
 void										arcade::Core::getIndexLib(bool isGame, const std::string& lib)

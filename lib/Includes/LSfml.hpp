@@ -18,7 +18,7 @@ namespace arcade
       virtual ~LSfml();
       virtual void		                                   ShowGame(WhereAmI *, GetMap *, const Assets &);
       virtual void				                               GetInput(ICore *);
-      virtual void					                             PrintGameOver(arcade::Status) const;
+      virtual void					                             PrintGameOver(arcade::Status);
       virtual void																		   ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int);
       virtual void																		   ShowScoreboard();
       virtual void																			 ShowScore(const arcade::Score &, const std::vector<arcade::Score> &);

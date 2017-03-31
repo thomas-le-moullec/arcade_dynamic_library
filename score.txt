@@ -22,3 +22,8 @@ solarfox:Leo:20
 solarfox:Leo:50
 solarfox:Leo:50
 solarfox:Leo:0
+solarfox:Leo:0
+solarfox:Leo:0
+solarfox:Leo:0
+solarfox:Leo:0
+solarfox:Leo:40

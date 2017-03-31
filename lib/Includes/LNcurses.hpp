@@ -1,6 +1,7 @@
 #ifndef LNcurses_HPP_
 #define LNcurses_HPP_
 
+#include <fstream>
 #include "IGraphic.hpp"
 
 #define	MARGIN_Y	LINES / 2
@@ -16,7 +17,7 @@ namespace arcade
       virtual void									ShowGame(WhereAmI *, GetMap *, const Assets &);
       virtual void									ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int);
       virtual void									GetInput(ICore *);
-      virtual void					        PrintGameOver(arcade::Status) const;
+      virtual void					        PrintGameOver(arcade::Status);
       virtual void									ShowScoreboard();
       virtual void									ShowScore(const arcade::Score &, const std::vector<arcade::Score> &);
 
@@ -34,6 +35,9 @@ namespace arcade
       void													initMapInputGame();
       void													initMapInputCore();
       void													initMapDisplay();
+
+      void													printFile(const char *, int);
+      std::string										cutName(std::string &, int) const;
   };
 };
 
