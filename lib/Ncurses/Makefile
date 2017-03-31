@@ -6,7 +6,7 @@ NAME_LIB_NCURSES	= ../lib_arcade_ncurses.so
 
 SRCS_LIB_NCURSES	=	./LNcurses.cpp
 
-CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/
+CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/
 
 CXXFLAGS					=		-W -Werror -Wextra -std=c++11
 

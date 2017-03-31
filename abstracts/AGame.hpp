@@ -1,18 +1,15 @@
-#ifndef GSNAKE_HPP_
-#define GSNAKE_HPP_
+#ifndef AGAME_HPP_
+#define AGAME_HPP_
 
 #include "IGame.hpp"
 
-#define HEIGHT_MAP			20
-#define WIDTH_MAP				20
-
 namespace arcade
 {
-  class GSnake : public IGame
+  class AGame : public IGame
   {
     public:
       GSnake();
-      virtual														~GSnake() {};
+      virtual														~AGame() {};
       virtual void	    							  Update(CommandType, bool);
       virtual struct GetMap	  					*GetMap(bool) const;
       virtual struct WhereAmI	     			*GetPlayer(bool) const;
@@ -22,13 +19,6 @@ namespace arcade
       virtual unsigned int							GetScore() const;
 
     private:
-      std::vector<arcade::CommandType>	_dir;
-      TileType													_map[HEIGHT_MAP * WIDTH_MAP];
-      std::vector<arcade::Position>     _player;
-      arcade::Status										_statusGame;
-      bool															_isGameOver;
-      arcade::Assets                    _assets;
-      unsigned int											_score;
 
       void														  initMap();
       void														  initPlayer();

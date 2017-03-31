@@ -6,7 +6,7 @@ NAME_LIB_SFML			= 	../lib_arcade_sfml.so
 
 SRCS_LIB_SFML			=	./LSfml.cpp
 
-CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/
+CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/
 
 CXXFLAGS					=		-W -Werror -Wextra -std=c++11
 

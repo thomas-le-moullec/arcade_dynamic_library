@@ -90,6 +90,8 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, 
 
   (void)assets;
   clear();
+  this->_width_map = map->width;
+  this->_heigth_map = map->height;
   while (y < map->height)
   {
     x = 0;
@@ -109,7 +111,6 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, 
     y++;
   }
   this->printCmd(map);
-  refresh();
 }
 
 int									arcade::LNcurses::modeCanon(int mode) const
@@ -138,13 +139,9 @@ int									arcade::LNcurses::modeCanon(int mode) const
 
 void									arcade::LNcurses::GetInput(ICore *core)
 {
-  //char								buff[];
   char							  c;
 
   read(0, &c, 1);
-  //c = buff[0];
-  //if (c == '\r')
-
   if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
     core->NotifyScene(this->input_game[c]);
   if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == 27 || c == ' ')
@@ -179,13 +176,32 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> graphicsLibs,
     y++;
   }
   refresh();
-
   (void)graphicsLibs;
   (void)gamesLibs;
 }
 
 void										arcade::LNcurses::ShowScoreboard()
 {
+}
+
+void										arcade::LNcurses::ShowScore(std::vector<arcade::Score> score)
+{
+  int										y = MARGIN_Y - (this->_heigth_map / 2);
+  int										x = MARGIN_X + this->_width_map + 3;
+
+  attron(A_REVERSE);
+  mvprintw(y++, x, "Scores");
+  attroff(A_REVERSE);
+  y++;
+  for (unsigned int i = 0; i < score.size() - 1 && score.size() > 0; i++)
+    mvprintw(y++, x, "%s:%u", score[i].namePlayer.c_str(), score[i].valueScore);
+  y++;
+  attron(A_REVERSE);
+  mvprintw(y++, x, "Your actual score");
+  attroff(A_REVERSE);
+  if (score.size() != 0)
+    mvprintw(y++, x, "%u", score[score.size() - 1].valueScore);
+  refresh();
 }
 
 void										arcade::LNcurses::PrintGameOver(arcade::Status status) const
