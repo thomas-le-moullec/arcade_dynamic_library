@@ -110,6 +110,7 @@ void											arcade::GSolarFox::deletePowerup()
   if (i != this->_powerUp.size())
     this->_powerUp.erase(this->_powerUp.begin() + i);
   this->_playerShoot.lifes = 0;
+  this->_score += 10;
 }
 
 void											arcade::GSolarFox::moveMyShoot()

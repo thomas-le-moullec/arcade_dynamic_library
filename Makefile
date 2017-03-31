@@ -10,12 +10,13 @@ CC								=		g++
 
 RM								=		rm -rf
 
-CPPFLAGS					=		-I ./interfaces/ -I ./core/
+CPPFLAGS					=		-I ./interfaces/ -I ./core/ -I ./scoreboard/
 
 CXXFLAGS					=		-W -Wall -Wextra -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system -lncurses -ldl
 
-SRCS							=		main.cpp				\
-											core/Core.cpp		\
+SRCS							=		main.cpp										\
+											core/Core.cpp								\
+											scoreboard/ScoreBoard.cpp		\
 
 OBJS							=		$(SRCS:.cpp=.o)
 

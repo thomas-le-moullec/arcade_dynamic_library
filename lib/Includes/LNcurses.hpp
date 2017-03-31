@@ -16,18 +16,16 @@ namespace arcade
       virtual void									ShowGame(WhereAmI *, GetMap *, const Assets &);
       virtual void									ShowMenu(std::vector<std::string>, std::vector<std::string>, int, int);
       virtual void									GetInput(ICore *);
-<<<<<<< HEAD
-      virtual void									PrintGameOver() const;
-      virtual void							    ShowScoreboard();
-=======
       virtual void					        PrintGameOver(arcade::Status) const;
       virtual void									ShowScoreboard();
->>>>>>> 2ddf3c01a7747c7e3ea7df4d20db21f663f9fe24
+      virtual void									ShowScore(std::vector<Score>);
 
     private:
       std::map<arcade::TileType, char>			map_disp;
       std::map<char, arcade::CommandType>		input_game;
       std::map<char, arcade::CoreCommand>		input_core;
+      int																		_width_map;
+      int																		_heigth_map;
 
       void													initWindow() const;
       bool													isOnMap(WhereAmI *, int, int) const;

@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <map>
 #include "ICore.hpp"
+#include "ScoreBoard.hpp"
 #include "ArcadeProtocol.hpp"
 
 namespace arcade
@@ -35,6 +36,7 @@ namespace arcade
       virtual void				ShowGame(WhereAmI *, GetMap *, const Assets &) = 0;
       virtual void				ShowMenu(std::vector<std::string>, std::vector<std::string>, int, int) = 0;
       virtual void				ShowScoreboard() = 0;
+      virtual void				ShowScore(std::vector<arcade::Score>) = 0;
       virtual void				GetInput(ICore *) = 0;
       virtual void				PrintGameOver(arcade::Status) const = 0;
   };

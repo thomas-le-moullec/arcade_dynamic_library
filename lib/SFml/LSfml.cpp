@@ -157,6 +157,11 @@ void										arcade::LSfml::ShowScoreboard()
 
 }
 
+void										arcade::LSfml::ShowScore(std::vector<arcade::Score> score)
+{
+  (void)score;
+}
+
 extern "C" arcade::IGraphic*		CreateDisplayModule()
 {
   return new arcade::LSfml();

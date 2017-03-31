@@ -14,9 +14,11 @@ arcade::Core::Core()
   this->_idxGraphicLib = -1;
   this->_idxGamesLib = 0;
   this->_changeGraphicMenu = false;
+  this->_addScore = true;
   this->initMapCore();
   this->initMapShowScene();
   this->initMapNotifyScene();
+  //this->_scoreBoard;
 
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
@@ -160,7 +162,10 @@ void		arcade::Core::Quit()
   if (this->_scene == arcade::Scene::GAME)
     this->_scene = arcade::Scene::MENU;
   else
+  {
+    this->_scoreBoard.writeScore();
     this->_scene = arcade::Scene::QUIT;
+  }
 }
 
 void		arcade::Core::Pause()
@@ -169,6 +174,13 @@ void		arcade::Core::Pause()
     this->_status = arcade::Status::RUNNING;
   else
     this->_status = arcade::Status::PAUSE;
+}
+
+std::string	arcade::Core::takeGameName() const
+{
+  int				idx = this->_idxGamesLib;
+
+  return this->_gamesLibs[idx].substr(SIZE_PATH, this->_gamesLibs[idx].length() - 3 - SIZE_PATH);
 }
 
 void		arcade::Core::loadLibAfterMenu()
@@ -197,6 +209,13 @@ void									arcade::Core::RunArcade()
       (this->*_mapCore[this->_coreCmd])();
       this->_coreCmd = arcade::CoreCommand::NOTHING;
     }
+    if (this->_scene == arcade::Scene::GAME && this->_status != arcade::Status::RUNNING && this->_addScore)
+    {
+      this->_scoreBoard.addScore(this->takeGameName(), "Leo", this->_game->GetScore());
+      this->_addScore = false;
+    }
+    if (this->_scene == arcade::Scene::GAME && this->_status == arcade::Status::RUNNING)
+      this->_scoreBoard.addActualScore(this->takeGameName(), "Leo", this->_game->GetScore());
   }
 }
 
@@ -206,6 +225,7 @@ void		arcade::Core::NotifySceneGame(arcade::CommandType type)
   {
     this->_status = arcade::Status::RUNNING;
     LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    this->_addScore = true;
   }
   this->_game->Update(type, false);
 }
@@ -239,11 +259,13 @@ void		arcade::Core::ShowSceneGame()
   this->_status = this->_game->GetStatus();
   if (this->_status == arcade::Status::RUNNING)
   {
-    this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false));
-    std::cout << this->_game->GetScore() << std::endl;
+    this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
+    this->_graphic->ShowScore(this->_scoreBoard.getBestScores(this->_gamesLibs[this->_idxGamesLib].substr(17, this->_gamesLibs[this->_idxGamesLib].length() - 3 - 17), 3));
   }
   else
+  {
     this->_graphic->PrintGameOver(this->_status);
+  }
 }
 
 void		arcade::Core::ShowSceneMenu()
