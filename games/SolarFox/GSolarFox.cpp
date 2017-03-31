@@ -43,6 +43,13 @@ void											arcade::GSolarFox::initEnemies()
 
 void											arcade::GSolarFox::initAssets()
 {
+  _assets.c_player.color = 0x6699ccFF;
+  _assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].color = 0xf5f5dcFF;
+  _assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].color = 0x5e5d62FF;
+  _assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].color = 0x99ffccFF;
+  _assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].color = 0xa40061FF;
+  _assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].color = 0xd9f7f7FF;
+  _assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].color = 0xffc5e4FF;
 }
 
 void											arcade::GSolarFox::initPowerUp()

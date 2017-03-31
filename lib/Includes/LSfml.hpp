@@ -42,6 +42,7 @@ namespace arcade
       sf::Texture                                         _textureEmpty;
       sf::Texture                                         _textureBlock;
       sf::Texture                                         _texturePower;
+      sf::Font                                            _fontArial;
   };
 };
 
