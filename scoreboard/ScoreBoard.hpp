@@ -28,7 +28,6 @@ namespace arcade
     void												addScore(std::string, std::string, unsigned int);
     void												writeScore();
     std::vector<arcade::Score>	&getBestScores(const std::string&, int size = 10);
-    void												addActualScore(std::string, std::string, unsigned int);
   private:
     std::vector<Score>					_board;
     std::vector<arcade::Score> 	_new_score;

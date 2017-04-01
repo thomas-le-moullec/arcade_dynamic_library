@@ -12,6 +12,7 @@ arcade::GSolarFox::GSolarFox()
   this->_countMovesHeight = 0;
   this->_playerShoot.lifes = 0;
   this->_score = 0;
+  this->_cmpt = 0;
 }
 
 void											arcade::GSolarFox::initMap()
@@ -60,13 +61,13 @@ void											arcade::GSolarFox::initPowerUp()
   int											dropByDefault = 0;
 
   srand(time(NULL));
-  for (int i = 0; i < 2; i++)
+  for (int i = 0; i < 5; i++)
   {
     dropByDefault = 0;
     while (dropByDefault == 0 || this->_map[dropByDefault] != TileType::EMPTY)
     {
-      x = rand() % (WIDTH_MAP - 3) + 3;
-      y = rand() % (HEIGHT_MAP - 3) + 3;
+      x = rand() % (WIDTH_MAP - 10) + 3;
+      y = rand() % (HEIGHT_MAP - 10) + 3;
       dropByDefault = y * WIDTH_MAP + x;
     }
     this->addPowerup(x, y);
@@ -114,10 +115,33 @@ void											arcade::GSolarFox::deletePowerup()
          this->_powerUp[i].x != this->_playerShoot.pos.x &&
          this->_powerUp[i].y != this->_playerShoot.pos.y)
     i++;
-  if (i != this->_powerUp.size())
-    this->_powerUp.erase(this->_powerUp.begin() + i);
+  this->_map[this->_powerUp[i].y * WIDTH_MAP + this->_powerUp[i].x] = TileType::EMPTY;
+  this->_powerUp.erase(this->_powerUp.begin() + i);
   this->_playerShoot.lifes = 0;
   this->_score += 10;
+}
+
+bool											arcade::GSolarFox::shootEvilShoot()
+{
+  for (unsigned int i = 0; i < this->_shoots.size(); i++)
+    if (this->_playerShoot.pos.x == this->_shoots[i].pos.x &&
+        this->_playerShoot.pos.y == this->_shoots[i].pos.y)
+      return true;
+  return false;
+}
+
+void											arcade::GSolarFox::deleteEvilShoot()
+{
+  unsigned int						i = 0;
+
+  while (i < this->_shoots.size() &&
+         this->_shoots[i].pos.x != this->_playerShoot.pos.x &&
+         this->_shoots[i].pos.y != this->_playerShoot.pos.y)
+    i++;
+
+  this->_map[this->_shoots[i].pos.y * WIDTH_MAP + this->_shoots[i].pos.x] = TileType::EMPTY;
+  this->_shoots.erase(this->_shoots.begin() + i);
+  this->_playerShoot.lifes = 0;
 }
 
 void											arcade::GSolarFox::moveMyShoot()
@@ -134,6 +158,8 @@ void											arcade::GSolarFox::moveMyShoot()
   this->_playerShoot.lifes--;
   if (this->shootPowerup())
     this->deletePowerup();
+  if (this->shootEvilShoot())
+    this->deleteEvilShoot();
   if (this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] != TileType::EMPTY)
     this->_playerShoot.lifes = 0;
   if (this->_playerShoot.lifes != 0)
@@ -142,7 +168,7 @@ void											arcade::GSolarFox::moveMyShoot()
 
 void											arcade::GSolarFox::initMyShoot()
 {
-  this->_playerShoot.lifes = 3;
+  this->_playerShoot.lifes = RANGE;
   if (this->_player.dir == CommandType::GO_DOWN)
     this->addMyShoot(this->_player.pos.x, this->_player.pos.y + 1, CommandType::GO_DOWN);
   else if (this->_player.dir == CommandType::GO_UP)
@@ -293,13 +319,17 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
     this->initMyShoot();
   if (type == CommandType::PLAY && this->_statusGame == arcade::Status::RUNNING)
   {
-    this->move();
-    this->moveEnemies();
+    if (this->_cmpt % 2 == 0)
+    {
+      this->move();
+      this->moveEnemies();
+      this->moveShoot();
+    }
     if (this->_playerShoot.lifes > 0)
       this->moveMyShoot();
-    this->moveShoot();
     if (this->_powerUp.size() == 0)
       this->gameEnd(arcade::Status::WIN);
+    this->_cmpt++;
     return;
   }
   if (type == CommandType::SHOOT && this->_statusGame != arcade::Status::RUNNING)

@@ -18,10 +18,10 @@ namespace arcade
       virtual ~LSfml();
       virtual void		                                   ShowGame(WhereAmI *, GetMap *, const Assets &);
       virtual void				                               GetInput(ICore *);
-      virtual void					                             PrintGameOver(arcade::Status) const;
-      virtual void																		   ShowMenu(std::vector<std::string>, std::vector<std::string>, int, int);
+      virtual void					                             PrintGameOver(arcade::Status);
+      virtual void																		   ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int);
       virtual void																		   ShowScoreboard();
-      virtual void																			 ShowScore(std::vector<Score>);
+      virtual void																			 ShowScore(const arcade::Score &, const std::vector<arcade::Score> &);
 
     private:
       bool													                     isOnMap(WhereAmI *, int, int) const;

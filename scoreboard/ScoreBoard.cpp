@@ -39,19 +39,6 @@ void											arcade::ScoreBoard::separateInfoScore(std::string str)
   this->addScore(nameGame, namePlayer, valueScore);
 }
 
-void											arcade::ScoreBoard::addActualScore(std::string game, std::string name, unsigned int value)
-{
-  unsigned int						i = 0;
-
-  if (this->_board.size() == 0)
-    this->addScore("", "", 0);
-  while (i < this->_board.size() - 1)
-    i++;
-  this->_board[i].nameGame = game;
-  this->_board[i].namePlayer = name;
-  this->_board[i].valueScore = value;
-}
-
 void											arcade::ScoreBoard::addScore(std::string game, std::string name, unsigned int value)
 {
   arcade::Score						score;
@@ -103,9 +90,5 @@ std::vector<arcade::Score>	&arcade::ScoreBoard::getBestScores(const std::string&
     }
   while (size < (int)this->_new_score.size())
     this->_new_score.erase(this->_new_score.end());
-  while (j < this->_board.size())
-    j++;
-  if (j > 0)
-    this->_new_score.insert(this->_new_score.end(), this->_board[j - 1]);
   return this->_new_score;
 }

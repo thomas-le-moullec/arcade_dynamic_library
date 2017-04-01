@@ -103,8 +103,9 @@ void		arcade::LNcurses::printCmd(arcade::GetMap *map)
   mvprintw(y++, x, "d - Se déplacer vers la gauche");
   y++;
   mvprintw(y++, x, "espace - Mettre le jeu en pause");
+  mvprintw(y++, x, "esc - Quitter le jeu");
   mvprintw(y++, x, "8 - Recommencer le jeu");
-  mvprintw(y++, x, "9 - Quitter le jeu");
+  mvprintw(y++, x, "9 - Quitter l'arcade");
 }
 
 void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, const Assets &assets)
@@ -115,6 +116,7 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, 
 
   (void)assets;
   initColors(assets);
+  clear();
   this->_width_map = map->width;
   this->_heigth_map = map->height;
   while (y < map->height)
@@ -176,32 +178,54 @@ void									arcade::LNcurses::GetInput(ICore *core)
     core->NotifyCore(this->input_core[c]);
 }
 
-void										arcade::LNcurses::ShowMenu(std::vector<std::string> graphicsLibs,
-                                                   std::vector<std::string> gamesLibs,
-                                                   int idxGraphic, int idxGame)
+void								arcade::LNcurses::printFile(const char *fileName, int y)
 {
-  int 									y = 0;
+  std::fstream			file;
+  std::string				str;
+
+  file.open(fileName);
+  if (file)
+  {
+    getline(file, str);
+    while(!file.eof())
+    {
+      mvprintw((LINES / 2) - 5 + y++, (COLS / 2) - (str.length() / 2), "%s", str.c_str());
+      getline(file, str);
+    }
+  }
+}
+
+std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
+{
+  return libName.substr(size_path, libName.length() - 3 - size_path);
+}
+
+void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
+                                                   std::vector<std::string> graphicsLibs, int idxGraphic)
+{
+  int 									y = 5;
 
   clear();
-  mvprintw(MARGIN_Y, MARGIN_X - 2, "MENU");
+  this->printFile("ascii_files/menu.txt", -10);
+  //mvprintw(MARGIN_Y, MARGIN_X - 2, "MENU");
   for(unsigned int i = 0; i < graphicsLibs.size(); i++)
   {
     if ((int)i == idxGraphic)
       attron(A_REVERSE);
-    mvprintw(y + MARGIN_Y - graphicsLibs.size() / 2, MARGIN_X - 10 - graphicsLibs[i].length(), "%s", graphicsLibs[i].c_str());
+    mvprintw(y + MARGIN_Y - graphicsLibs.size() / 2, MARGIN_X - 10 - graphicsLibs[i].length() + 20, " %s ", this->cutName(graphicsLibs[i], 15).c_str());
     if ((int)i == idxGraphic)
       attroff(A_REVERSE);
-    y++;
+    y += 2;
   }
-  y = 0;
+  y = 5;
   for(unsigned int i = 0; i < gamesLibs.size(); i++)
   {
     if ((int)i == idxGame)
       attron(A_REVERSE);
-    mvprintw(y + MARGIN_Y - gamesLibs.size() / 2, MARGIN_X + 10 , "%s", gamesLibs[i].c_str());
+    mvprintw(y + MARGIN_Y - gamesLibs.size() / 2, MARGIN_X + 10 , " %s ", this->cutName(gamesLibs[i], 17).c_str());
     if ((int)i == idxGame)
       attroff(A_REVERSE);
-    y++;
+    y += 2;
   }
   refresh();
   (void)graphicsLibs;
@@ -212,37 +236,32 @@ void										arcade::LNcurses::ShowScoreboard()
 {
 }
 
-void										arcade::LNcurses::ShowScore(std::vector<arcade::Score> score)
+void										arcade::LNcurses::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)
 {
   int										y = MARGIN_Y - (this->_heigth_map / 2);
   int										x = MARGIN_X + this->_width_map + 3;
 
   attron(A_REVERSE);
-  mvprintw(y++, x, "Scores");
+  mvprintw(y++, x, "Meilleurs scores");
   attroff(A_REVERSE);
   y++;
-  for (unsigned int i = 0; i < score.size() - 1 && score.size() > 0; i++)
-    mvprintw(y++, x, "%s:%u", score[i].namePlayer.c_str(), score[i].valueScore);
+  for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++)
+    mvprintw(y++, x, "%s:%u", bestScore[i].namePlayer.c_str(), bestScore[i].valueScore);
   y++;
   attron(A_REVERSE);
-  mvprintw(y++, x, "Your actual score");
+  mvprintw(y++, x, "Score actuel");
   attroff(A_REVERSE);
-  if (score.size() != 0)
-    mvprintw(y++, x, "%u", score[score.size() - 1].valueScore);
+  mvprintw(y++, x, "%u", currentScore.valueScore);
   refresh();
 }
 
-void										arcade::LNcurses::PrintGameOver(arcade::Status status) const
+void										arcade::LNcurses::PrintGameOver(arcade::Status status)
 {
   clear();
-  attron(A_REVERSE);
   if (status == arcade::Status::LOSE)
-  {
-    mvprintw(LINES / 2, COLS / 2 - 4, "Game Over");
-  }
+    this->printFile("./ascii_files/game_over.txt", 0);
   else
-    mvprintw(LINES / 2, COLS / 2 - 1, "Win");
-  attroff(A_REVERSE);
+    this->printFile("./ascii_files/win.txt", 0);
   refresh();
 }
 

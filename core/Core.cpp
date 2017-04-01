@@ -6,10 +6,14 @@ arcade::Core::Core()
   this->_handle_graphic = NULL;
   this->_game = NULL;
   this->_graphic = NULL;
-  this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
+  this->takeLibInDir("games/", 0);
+  this->takeLibInDir("lib/", 1);
+
+  /*this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
   this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
   this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_snake.so");
-  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");
+  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");*/
+
   this->_coreCmd = arcade::CoreCommand::NOTHING;
   this->_idxGraphicLib = -1;
   this->_idxGamesLib = 0;
@@ -18,7 +22,6 @@ arcade::Core::Core()
   this->initMapCore();
   this->initMapShowScene();
   this->initMapNotifyScene();
-  //this->_scoreBoard;
 
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
@@ -56,6 +59,25 @@ void					arcade::Core::initMapCore()
   this->_mapCore[arcade::CoreCommand::RESTART] = &arcade::Core::Restart;
   this->_mapCore[arcade::CoreCommand::MENU] = &arcade::Core::Menu;
   this->_mapCore[arcade::CoreCommand::ESCAPE] = &arcade::Core::Quit;
+}
+
+void								arcade::Core::takeLibInDir(const char *dirName, int mode)
+{
+  DIR 							*Dir = opendir(dirName);
+  struct dirent 		*DirEntry;
+  std::string				str;
+  std::string				path(dirName);
+
+  while((DirEntry = readdir(Dir)) != NULL)
+  {
+    str = path + DirEntry->d_name;
+    if (mode == 0 && str.compare(0, 17, "games/lib_arcade_") == 0)
+    {
+      this->_gamesLibs.insert(this->_gamesLibs.begin(), str);
+    }
+    if (mode == 1 && str.compare(0, 15, "lib/lib_arcade_") == 0)
+      this->_graphicLibs.insert(this->_graphicLibs.begin(), str);
+  }
 }
 
 void										arcade::Core::getIndexLib(bool isGame, const std::string& lib)
@@ -102,6 +124,9 @@ void   				arcade::Core::LoadGame(const std::string& lib)
 
 void   				arcade::Core::LoadGraphic(const std::string& lib)
 {
+  char *error;
+
+  dlerror();
   if (this->_idxGraphicLib == -1)
     this->getIndexLib(false, lib);
   if (this->_graphic != NULL)
@@ -109,6 +134,12 @@ void   				arcade::Core::LoadGraphic(const std::string& lib)
   if (this->_handle_graphic != NULL)
     dlclose(this->_handle_graphic);
   this->_handle_graphic = dlopen(lib.c_str(), RTLD_LAZY);
+  if ((error = dlerror()) != NULL)
+  {
+    //delete this->_graphi;
+    std::cout << error << std::endl;
+    exit(0);
+  }
   arcade::IGraphic				*(*CreateDisplayModule)();
   CreateDisplayModule = (arcade::IGraphic *(*)(void))dlsym(this->_handle_graphic, "CreateDisplayModule");
   this->_graphic = (*CreateDisplayModule)();
@@ -214,8 +245,6 @@ void									arcade::Core::RunArcade()
       this->_scoreBoard.addScore(this->takeGameName(), "Leo", this->_game->GetScore());
       this->_addScore = false;
     }
-    if (this->_scene == arcade::Scene::GAME && this->_status == arcade::Status::RUNNING)
-      this->_scoreBoard.addActualScore(this->takeGameName(), "Leo", this->_game->GetScore());
   }
 }
 
@@ -254,13 +283,18 @@ void		arcade::Core::NotifyCore(arcade::CoreCommand type)
   this->_coreCmd = type;
 }
 
-void		arcade::Core::ShowSceneGame()
+void						arcade::Core::ShowSceneGame()
 {
+  arcade::Score	score;
+
   this->_status = this->_game->GetStatus();
   if (this->_status == arcade::Status::RUNNING)
   {
     this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
-    this->_graphic->ShowScore(this->_scoreBoard.getBestScores(this->_gamesLibs[this->_idxGamesLib].substr(17, this->_gamesLibs[this->_idxGamesLib].length() - 3 - 17), 3));
+    score.nameGame = "";
+    score.namePlayer = "";
+    score.valueScore = this->_game->GetScore();
+    this->_graphic->ShowScore(score, this->_scoreBoard.getBestScores(this->takeGameName(), 3));
   }
   else
   {
@@ -270,7 +304,7 @@ void		arcade::Core::ShowSceneGame()
 
 void		arcade::Core::ShowSceneMenu()
 {
-  this->_graphic->ShowMenu(this->_graphicLibs, this->_gamesLibs, this->_idxGraphicLib, this->_idxGamesLib);
+  this->_graphic->ShowMenu(this->_gamesLibs, this->_idxGamesLib, this->_graphicLibs, this->_idxGraphicLib);
 }
 
 void		arcade::Core::ShowSceneScoreboard()
