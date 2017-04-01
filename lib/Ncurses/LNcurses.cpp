@@ -1,4 +1,5 @@
 #include "LNcurses.hpp"
+#include <stdio.h>
 
 arcade::LNcurses::LNcurses()
 {
@@ -13,6 +14,28 @@ arcade::LNcurses::~LNcurses()
 {
   this->modeCanon(1);
   endwin();
+}
+
+void                          arcade::LNcurses::initColors(const Assets &assets)
+{
+  init_color(COLOR_BLUE, assets.c_player.val.r * (1000 / 255), assets.c_player.val.v * (1000 / 255), assets.c_player.val.b * (1000 / 255));
+  //init_color(COLOR_BLACK, assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.b * (1000 / 255));
+  init_color(COLOR_YELLOW, assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.b * (1000 / 255));
+  //init_color(COLOR_WHITE, assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.b * (1000 / 255));
+  init_color(COLOR_RED, assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.b * (1000 / 255));
+  init_color(COLOR_MAGENTA, assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.b * (1000 / 255));
+  init_color(COLOR_CYAN, assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.b * (1000 / 255));
+  init_color(COLOR_GREEN, assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.b * (1000 / 255));
+  //miss one arcade::TileType::OTHER
+
+  init_pair(static_cast<int>(arcade::TileType::EMPTY), COLOR_BLACK, COLOR_BLACK);
+  init_pair(static_cast<int>(arcade::TileType::BLOCK), COLOR_YELLOW, COLOR_YELLOW);
+  init_pair(static_cast<int>(arcade::TileType::OBSTACLE), COLOR_WHITE, COLOR_WHITE);
+  init_pair(static_cast<int>(arcade::TileType::EVIL_DUDE), COLOR_RED, COLOR_RED);
+  init_pair(static_cast<int>(arcade::TileType::EVIL_SHOOT), COLOR_MAGENTA, COLOR_MAGENTA);
+  init_pair(static_cast<int>(arcade::TileType::MY_SHOOT), COLOR_CYAN, COLOR_CYAN);
+  init_pair(static_cast<int>(arcade::TileType::POWERUP), COLOR_GREEN, COLOR_GREEN);
+  init_pair(static_cast<int>(arcade::TileType::OTHER), COLOR_BLUE, COLOR_BLUE);
 }
 
 void													arcade::LNcurses::initMapInputGame()
@@ -48,6 +71,8 @@ void													arcade::LNcurses::initMapDisplay()
 void		arcade::LNcurses::initWindow() const
 {
   newterm(NULL, stderr, stdin);
+  start_color();
+
   keypad(stdscr, TRUE);
   set_escdelay(25);
   noecho();
@@ -89,7 +114,7 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, 
   int		i = 0;
 
   (void)assets;
-  clear();
+  initColors(assets);
   this->_width_map = map->width;
   this->_heigth_map = map->height;
   while (y < map->height)
@@ -99,12 +124,15 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, 
     {
       if (this->isOnMap(player, i, map->width) == true)
       {
-        attron(A_REVERSE);
+        attron(COLOR_PAIR(static_cast<int>(arcade::TileType::OTHER)));
         mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), " ");
-        attroff(A_REVERSE);
+        attroff(COLOR_PAIR(static_cast<int>(arcade::TileType::OTHER)));
       }
-      else
+      else {
+        attron(COLOR_PAIR(static_cast<int>(map->tile[i])));
         mvprintw(y + (MARGIN_Y - map->height / 2), x + (MARGIN_X - map->width / 2), "%c", this->map_disp[map->tile[i]]);
+        attroff(COLOR_PAIR(static_cast<int>(map->tile[i])));
+      }
       i++;
       x++;
     }
@@ -209,7 +237,9 @@ void										arcade::LNcurses::PrintGameOver(arcade::Status status) const
   clear();
   attron(A_REVERSE);
   if (status == arcade::Status::LOSE)
+  {
     mvprintw(LINES / 2, COLS / 2 - 4, "Game Over");
+  }
   else
     mvprintw(LINES / 2, COLS / 2 - 1, "Win");
   attroff(A_REVERSE);

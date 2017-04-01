@@ -19,8 +19,10 @@ namespace arcade
       virtual void					        PrintGameOver(arcade::Status) const;
       virtual void									ShowScoreboard();
       virtual void									ShowScore(std::vector<Score>);
+      void                          initColors(const Assets &);
 
     private:
+      unsigned int                             _color;
       std::map<arcade::TileType, char>			map_disp;
       std::map<char, arcade::CommandType>		input_game;
       std::map<char, arcade::CoreCommand>		input_core;
