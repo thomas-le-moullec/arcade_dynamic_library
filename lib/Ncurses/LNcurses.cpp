@@ -200,13 +200,24 @@ std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
 }
 
 void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
-                                                   std::vector<std::string> graphicsLibs, int idxGraphic)
+                                                   std::vector<std::string> graphicsLibs, int idxGraphic,
+                                                   arcade::Player player)
 {
   int 									y = 5;
+  int										x = -6;
 
   clear();
   this->printFile("ascii_files/menu.txt", -10);
   //mvprintw(MARGIN_Y, MARGIN_X - 2, "MENU");
+  for (unsigned int i = 0; i < 8; i++)
+  {
+    if (i == player.idx)
+      attron(A_REVERSE);
+    mvprintw(MARGIN_Y, MARGIN_X + x , "%c", player.name[i]);
+    if (i == player.idx)
+    attroff(A_REVERSE);
+    x += 2;
+  }
   for(unsigned int i = 0; i < graphicsLibs.size(); i++)
   {
     if ((int)i == idxGraphic)

@@ -18,6 +18,8 @@
 
 namespace arcade
 {
+
+
   class Core : public ICore
   {
     public:
@@ -65,6 +67,7 @@ namespace arcade
       int																			_idxGamesLib;
       bool																		_changeGraphicMenu;
       bool																		_addScore;
+      arcade::Player													_player;
 
       void						initMapCore();
       void						initMapShowScene();

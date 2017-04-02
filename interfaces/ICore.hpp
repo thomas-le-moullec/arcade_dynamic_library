@@ -37,6 +37,12 @@ namespace arcade
     SCORE = 4,
   };
 
+  struct Player
+  {
+    std::string 	name;
+    unsigned int	idx;
+  };
+
   class ICore
   {
     public:

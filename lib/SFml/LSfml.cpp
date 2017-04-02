@@ -167,13 +167,15 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
 }
 
 void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
-                                                std::vector<std::string> graphicsLibs, int idxGraphic)
+                                                std::vector<std::string> graphicsLibs, int idxGraphic,
+                                                arcade::Player player)
 {
   sf::Text              title;
   sf::Text              graphics;
   sf::Text              games;
   sf::Texture           texture;
 
+  (void)player;
   _window->clear();
   if (!texture.loadFromFile("backgroundMenu.jpg")) {
   }

@@ -18,6 +18,7 @@ arcade::Core::Core()
   this->initMapNotifyScene();
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
+  this->_player.name = "AAAAAAAA";
 }
 
 arcade::Core::~Core()
@@ -65,9 +66,7 @@ void								arcade::Core::takeLibInDir(const char *dirName, int mode)
   {
     str = path + DirEntry->d_name;
     if (mode == 0 && str.compare(0, 17, "games/lib_arcade_") == 0)
-    {
       this->_gamesLibs.insert(this->_gamesLibs.begin(), str);
-    }
     if (mode == 1 && str.compare(0, 15, "lib/lib_arcade_") == 0)
       this->_graphicLibs.insert(this->_graphicLibs.begin(), str);
   }
@@ -235,7 +234,7 @@ void									arcade::Core::RunArcade()
     }
     if (this->_scene == arcade::Scene::GAME && this->_status != arcade::Status::RUNNING && this->_addScore)
     {
-      this->_scoreBoard.addScore(this->takeGameName(), "Leo", this->_game->GetScore());
+      this->_scoreBoard.addScore(this->takeGameName(), this->_player.name, this->_game->GetScore());
       this->_addScore = false;
     }
   }
@@ -259,6 +258,22 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
     this->_scene = arcade::Scene::GAME;
     this->_changeGraphicMenu = true;
   }
+  else if (type == arcade::CommandType::GO_RIGHT)
+    this->_player.idx++;
+  else if (type == arcade::CommandType::GO_LEFT)
+    this->_player.idx--;
+  else if (type == arcade::CommandType::GO_UP)
+    this->_player.name[this->_player.idx]++;
+  else if (type == arcade::CommandType::GO_DOWN)
+    this->_player.name[this->_player.idx]--;
+  if (this->_player.idx == 8)
+    this->_player.idx = 0;
+  else if (this->_player.idx > 8)
+    this->_player.idx = 7;
+  if (this->_player.name[this->_player.idx] < 'A')
+    this->_player.name[this->_player.idx] = 'Z';
+  else if (this->_player.name[this->_player.idx] > 'Z')
+    this->_player.name[this->_player.idx] = 'A';
 }
 
 void		arcade::Core::NotifySceneScoreboard(arcade::CommandType type)
@@ -280,7 +295,8 @@ void						arcade::Core::ShowSceneGame()
 {
   arcade::Score	score;
 
-  this->_status = this->_game->GetStatus();
+  if (this->_status != arcade::Status::PAUSE)
+    this->_status = this->_game->GetStatus();
   if (this->_status == arcade::Status::RUNNING)
   {
     this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
@@ -289,7 +305,7 @@ void						arcade::Core::ShowSceneGame()
     score.valueScore = this->_game->GetScore();
     this->_graphic->ShowScore(score, this->_scoreBoard.getBestScores(this->takeGameName(), 3));
   }
-  else
+  else if (this->_status != arcade::Status::PAUSE)
   {
     this->_graphic->PrintGameOver(this->_status);
   }
@@ -297,7 +313,7 @@ void						arcade::Core::ShowSceneGame()
 
 void		arcade::Core::ShowSceneMenu()
 {
-  this->_graphic->ShowMenu(this->_gamesLibs, this->_idxGamesLib, this->_graphicLibs, this->_idxGraphicLib);
+  this->_graphic->ShowMenu(this->_gamesLibs, this->_idxGamesLib, this->_graphicLibs, this->_idxGraphicLib, this->_player);
 }
 
 void		arcade::Core::ShowSceneScoreboard()
