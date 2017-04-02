@@ -2,7 +2,6 @@ snake:Leo:40
 solarfox:Leo:10
 snake:Leo:10
 snake:Leo:20
-<<<<<<< HEAD
 solarfox:Leo:0
 solarfox:Leo:0
 solarfox:Leo:0
@@ -22,7 +21,6 @@ snake:Leo:70
 solarfox:Leo:0
 snake:Leo:40
 solarfox:Leo:0
-=======
 snake:Leo:50
 snake:Leo:10
 snake:Leo:50
@@ -42,13 +40,20 @@ solarfox:Leo:40
 solarfox:Leo:20
 solarfox:Leo:50
 solarfox:Leo:50
->>>>>>> 0e2ba7e6d76f6819dbd6588050035771dd3b5df9
 solarfox:Leo:0
 solarfox:Leo:0
 solarfox:Leo:0
 solarfox:Leo:0
-<<<<<<< HEAD
-=======
 solarfox:Leo:0
 solarfox:Leo:40
->>>>>>> 0e2ba7e6d76f6819dbd6588050035771dd3b5df9
+snake:Leo:80
+snake:Leo:50
+snake:Leo:10
+snake:Leo:0
+snake:Leo:0
+solarfox:Leo:0
+solarfox:Leo:40
+snake:Leo:210
+snake:Leo:30
+snake:Leo:10
+snake:Leo:0
