@@ -38,6 +38,20 @@ void    arcade::LSfml::initCoreInputs()
   _core_input[sf::Keyboard::Escape] = CoreCommand::ESCAPE;
 }
 
+/*void   arcade::LSfml::print_commands()
+{
+
+  mvprintw(y++, x, "z - Se déplacer vers le haut");
+  mvprintw(y++, x, "s - Se déplacer vers le bas");
+  mvprintw(y++, x, "q - Se déplacer vers la droite");
+  mvprintw(y++, x, "d - Se déplacer vers la gauche");
+  y++;
+  mvprintw(y++, x, "espace - Mettre le jeu en pause");
+  mvprintw(y++, x, "esc - Quitter le jeu");
+  mvprintw(y++, x, "8 - Recommencer le jeu");
+  mvprintw(y++, x, "9 - Quitter l'arcade");
+}*/
+
 void                  arcade::LSfml::setColor(const unsigned int &color, arcade::TileType tile, sf::RectangleShape rectangle)
 {
   sf::Texture         texture;
@@ -113,6 +127,8 @@ bool		arcade::LSfml::isOnMap(arcade::WhereAmI *player, int i, int width) const
   return false;
 }
 
+
+
 void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, const Assets &assets)
 {
     unsigned int x;
@@ -146,6 +162,7 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
       }
       y++;
     }
+    //print_commands();
     _window->display();
 }
 
@@ -158,8 +175,7 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
   sf::Texture           texture;
 
   _window->clear();
-  if (!texture.loadFromFile("backgroundMenu.jpg"))
-  {
+  if (!texture.loadFromFile("backgroundMenu.jpg")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);

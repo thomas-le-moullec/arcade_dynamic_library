@@ -23,7 +23,6 @@ namespace arcade
       virtual void									ShowScore(const arcade::Score &, const std::vector<arcade::Score> &);
 
     private:
-      unsigned int                             _color;
       std::map<arcade::TileType, char>			map_disp;
       std::map<char, arcade::CommandType>		input_game;
       std::map<char, arcade::CoreCommand>		input_core;

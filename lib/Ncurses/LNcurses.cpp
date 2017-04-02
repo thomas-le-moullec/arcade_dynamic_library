@@ -72,7 +72,6 @@ void		arcade::LNcurses::initWindow() const
 {
   newterm(NULL, stderr, stdin);
   start_color();
-
   keypad(stdscr, TRUE);
   set_escdelay(25);
   noecho();
@@ -92,7 +91,7 @@ void		arcade::LNcurses::printCmd(arcade::GetMap *map)
 {
   int		y = MARGIN_Y;
   int		x = MARGIN_X + map->width + 3;
-
+//Ne pas mettre en dur
   attron(A_REVERSE);
   mvprintw(y++, x, "Commandes du jeu");
   attroff(A_REVERSE);
