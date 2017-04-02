@@ -101,9 +101,11 @@ void											arcade::GSolarFox::addMyShoot(int x, int y, CommandType dir)
 bool											arcade::GSolarFox::shootPowerup()
 {
   for (unsigned int i = 0; i < this->_powerUp.size(); i++)
+  {
     if (this->_playerShoot.pos.x == this->_powerUp[i].x &&
         this->_playerShoot.pos.y == this->_powerUp[i].y)
       return true;
+  }
   return false;
 }
 
@@ -138,7 +140,6 @@ void											arcade::GSolarFox::deleteEvilShoot()
          this->_shoots[i].pos.x != this->_playerShoot.pos.x &&
          this->_shoots[i].pos.y != this->_playerShoot.pos.y)
     i++;
-
   this->_map[this->_shoots[i].pos.y * WIDTH_MAP + this->_shoots[i].pos.x] = TileType::EMPTY;
   this->_shoots.erase(this->_shoots.begin() + i);
   this->_playerShoot.lifes = 0;
@@ -146,6 +147,10 @@ void											arcade::GSolarFox::deleteEvilShoot()
 
 void											arcade::GSolarFox::moveMyShoot()
 {
+  if (this->shootPowerup())
+    this->deletePowerup();
+  if (this->_playerShoot.lifes == 0)
+    return ;
   this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] = TileType::EMPTY;
   if (this->_playerShoot.dir == CommandType::GO_DOWN)
     this->_playerShoot.pos.y++;
@@ -319,14 +324,14 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
     this->initMyShoot();
   if (type == CommandType::PLAY && this->_statusGame == arcade::Status::RUNNING)
   {
-    if (this->_cmpt % 2 == 0)
+    if (this->_playerShoot.lifes > 0)
+      this->moveMyShoot();
+    if (this->_cmpt % 3 < 2)
     {
       this->move();
       this->moveEnemies();
       this->moveShoot();
     }
-    if (this->_playerShoot.lifes > 0)
-      this->moveMyShoot();
     if (this->_powerUp.size() == 0)
       this->gameEnd(arcade::Status::WIN);
     this->_cmpt++;

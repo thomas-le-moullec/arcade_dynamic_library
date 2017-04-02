@@ -8,12 +8,6 @@ arcade::Core::Core()
   this->_graphic = NULL;
   this->takeLibInDir("games/", 0);
   this->takeLibInDir("lib/", 1);
-
-  /*this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_sfml.so");
-  this->_graphicLibs.insert(this->_graphicLibs.begin(), "lib/lib_arcade_ncurses.so"); // A REVOIR POUR LE PATH
-  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_snake.so");
-  this->_gamesLibs.insert(this->_gamesLibs.begin(), "games/lib_arcade_solarfox.so");*/
-
   this->_coreCmd = arcade::CoreCommand::NOTHING;
   this->_idxGraphicLib = -1;
   this->_idxGamesLib = 0;
@@ -22,7 +16,6 @@ arcade::Core::Core()
   this->initMapCore();
   this->initMapShowScene();
   this->initMapNotifyScene();
-
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
 }

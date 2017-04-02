@@ -8,6 +8,7 @@ arcade::GSnake::GSnake()
   this->_dir.insert(this->_dir.begin(), CommandType::GO_RIGHT);
   this->_statusGame = arcade::Status::RUNNING;
   this->_score = 0;
+  this->_lvl = 1;
 }
 
 bool											arcade::GSnake::isOnSnake(int pos)
@@ -120,6 +121,8 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
     this->move();
     for (unsigned int i = 1; i < this->_dir.size(); i++)
       this->_dir.erase(this->_dir.begin() + i);
+    if (this->_score == this->_lvl * 50 + (this->_lvl - 1) * 50)
+      this->_lvl++;
     return;
   }
   if (type == CommandType::SHOOT && this->_statusGame == arcade::Status::RUNNING)
