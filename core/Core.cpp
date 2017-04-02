@@ -182,7 +182,7 @@ void	  arcade::Core::Menu()
 
 void		arcade::Core::Quit()
 {
-  if (this->_scene == arcade::Scene::GAME)
+  if (this->_scene != arcade::Scene::MENU)
     this->_scene = arcade::Scene::MENU;
   else
   {
@@ -266,6 +266,8 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
     this->_player.name[this->_player.idx]++;
   else if (type == arcade::CommandType::GO_DOWN)
     this->_player.name[this->_player.idx]--;
+  else if (type == arcade::CommandType::ILLEGAL)
+    this->_scene = arcade::Scene::SCOREBOARD;
   if (this->_player.idx == 8)
     this->_player.idx = 0;
   else if (this->_player.idx > 8)
@@ -318,5 +320,5 @@ void		arcade::Core::ShowSceneMenu()
 
 void		arcade::Core::ShowSceneScoreboard()
 {
-  std::cout << "Show Score Board" << std::endl;
+  this->_graphic->ShowScoreboard(this->_gamesLibs[this->_idxGamesLib], this->_scoreBoard.getBestScores(this->takeGameName(), 20));
 }

@@ -227,8 +227,10 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
   _window->display();
 }
 
-void										arcade::LSfml::ShowScoreboard()
+void									ShowScoreboard(std::string &nameGame, std::vector<arcade::Score> score)
 {
+  (void)nameGame;
+  (void)score;
 }
 
 void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)

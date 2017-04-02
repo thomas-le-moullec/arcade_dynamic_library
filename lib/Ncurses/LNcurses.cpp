@@ -44,6 +44,7 @@ void													arcade::LNcurses::initMapInputGame()
   this->input_game['q'] = arcade::CommandType::GO_LEFT;
   this->input_game['s'] = arcade::CommandType::GO_DOWN;
   this->input_game['d'] = arcade::CommandType::GO_RIGHT;
+  this->input_game['t'] = arcade::CommandType::ILLEGAL;
   this->input_game['\r'] = arcade::CommandType::SHOOT;
 }
 
@@ -171,7 +172,7 @@ void									arcade::LNcurses::GetInput(ICore *core)
   char							  c;
 
   read(0, &c, 1);
-  if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r')
+  if (c == 'q' || c == 'z' || c == 'd' || c == 's' || c == '\r' || c == 't')
     core->NotifyScene(this->input_game[c]);
   if (c == '2' || c == '3' || c == '4' ||c == '5' || c == '8' || c == 27 || c == ' ')
     core->NotifyCore(this->input_core[c]);
@@ -242,8 +243,23 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int
   (void)gamesLibs;
 }
 
-void										arcade::LNcurses::ShowScoreboard()
+void									arcade::LNcurses::ShowScoreboard(std::string &nameGame, std::vector<arcade::Score> score)
 {
+  std::string					game = this->cutName(nameGame, 17);
+  int									y = 0;
+
+	clear();
+  //while(1);
+  mvprintw(MARGIN_Y / 4, MARGIN_X - game.length() / 2 - 2, "[ %s ]", game.c_str());
+  mvprintw(MARGIN_Y / 3, MARGIN_X - 13, "Top 20 des meilleurs scores");
+  for (int i = 0; i < 20 && i < (int)score.size(); i++)
+  {
+    attron(A_REVERSE);
+    mvprintw(MARGIN_Y - 5 + y, MARGIN_X - 3 - score[i].namePlayer.length(), "%s", score[i].namePlayer.c_str());
+    attron(A_REVERSE);
+    mvprintw(MARGIN_Y - 5 + y++, MARGIN_X + 3, "%d", score[i].valueScore);
+  }
+  refresh();
 }
 
 void										arcade::LNcurses::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)

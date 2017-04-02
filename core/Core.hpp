@@ -18,8 +18,6 @@
 
 namespace arcade
 {
-
-
   class Core : public ICore
   {
     public:
