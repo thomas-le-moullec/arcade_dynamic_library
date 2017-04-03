@@ -202,11 +202,12 @@ std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
 
 void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                    std::vector<std::string> graphicsLibs, int idxGraphic,
-                                                   const arcade::playerName &player)
+                                                   arcade::Button button, const arcade::playerName &player)
 {
   int 									y = 5;
   int										x = -2;
 
+  (void)button;
   clear();
   this->printFile("ascii_files/menu.txt", -10);
   //mvprintw(MARGIN_Y, MARGIN_X - 2, "MENU");
