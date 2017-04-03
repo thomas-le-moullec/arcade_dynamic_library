@@ -213,17 +213,33 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
   sf::Text              graphics;
   sf::Text              games;
   sf::Texture           texture;
+  sf::Text              name;
 
-  (void)player;
   _window->clear();
   if (!texture.loadFromFile("backgroundMenu.gif")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);
   _window->draw(background);
+  name.setCharacterSize(30);
+  name.setFont(_fontMasque);
+  for (unsigned int i = 0; i < 3; i++)
+  {
+    name.setStyle(sf::Text::Regular);
+    name.setString(player.name[i]);
+    name.setColor(sf::Color::Black);
+    sf::FloatRect textName = name.getLocalBounds();
+    name.setOrigin(textName.left + textName.width/2.0f, textName.top  + textName.height/2.0f);
+    name.setPosition(sf::Vector2f((WIDTH_WIN * 0.45) + ((i  + 1)* 30), HEIGHT_WIN * 0.53));
+    if (i == player.idx) {
+      name.setStyle(sf::Text::Bold);
+      name.setColor(sf::Color(0x157FEFFF));
+    }
+    _window->draw(name);
+  }
   graphics.setFont(_fontMasque);
   games.setFont(_fontMasque);
-  for (unsigned int idx = 0; idx < graphicsLibs.size(); idx++){
+  for (unsigned int idx = 0; idx < graphicsLibs.size(); idx++) {
     graphics.setString(cutName(graphicsLibs[idx], 15));
     graphics.setCharacterSize(12);
     graphics.setColor(sf::Color(0x157FEFFF));
