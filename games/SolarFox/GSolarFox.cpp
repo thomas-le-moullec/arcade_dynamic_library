@@ -349,9 +349,7 @@ struct arcade::GetMap	  					*arcade::GSolarFox::GetMap(bool debug) const
   int 														size;
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
-  //map = new (size) GetMap();
-
-  if ((map = reinterpret_cast<arcade::GetMap *>(malloc(size))) == NULL)
+  if ((map = new arcade::GetMap[size]) == NULL)
     exit(0);
   map->type = CommandType::GET_MAP;
   map->width = WIDTH_MAP;
@@ -374,7 +372,7 @@ struct arcade::WhereAmI	     			*arcade::GSolarFox::GetPlayer(bool debug) const
   int 														size;
 
   size = sizeof(*player) + (sizeof(Position));
-  if ((player = reinterpret_cast<arcade::WhereAmI *>(malloc(size))) == NULL)
+  if ((player = new arcade::WhereAmI[size]) == NULL)
     exit(0);
   player->type = CommandType::WHERE_AM_I;
   player->lenght = 1;

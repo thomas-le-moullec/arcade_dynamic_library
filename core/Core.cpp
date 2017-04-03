@@ -322,7 +322,7 @@ void						arcade::Core::ShowSceneGame()
 
 void		arcade::Core::ShowSceneMenu()
 {
-  this->_graphic->ShowMenu(this->_gamesLibs, this->_idxGamesLib, this->_graphicLibs, this->_idxGraphicLib, this->_player);
+  this->_graphic->ShowMenu(this->_gamesLibs, this->_idxGamesLib, this->_graphicLibs, this->_idxGraphicLib, arcade::Button::PLAY, this->_player);
 }
 
 void		arcade::Core::ShowSceneScoreboard()

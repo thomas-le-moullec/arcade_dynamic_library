@@ -34,7 +34,7 @@ namespace arcade
     public:
       virtual ~IGraphic() {};
       virtual void				ShowGame(WhereAmI *, GetMap *, const Assets &) = 0;
-      virtual void				ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int, const arcade::playerName &) = 0;
+      virtual void				ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int, Button, const arcade::playerName &) = 0;
       virtual void				ShowScoreboard(const std::string &, std::vector<arcade::Score>) = 0;
       virtual void				ShowScore(const arcade::Score &, const std::vector<arcade::Score> &) = 0;
       virtual void				GetInput(ICore *) = 0;

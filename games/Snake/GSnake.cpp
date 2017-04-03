@@ -8,7 +8,7 @@ arcade::GSnake::GSnake()
   this->_dir.insert(this->_dir.begin(), CommandType::GO_RIGHT);
   this->_statusGame = arcade::Status::RUNNING;
   this->_score = 0;
-  this->_lvl = 1;
+  //this->_lvl = 1;
 }
 
 bool											arcade::GSnake::isOnSnake(int pos)
@@ -121,8 +121,8 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
     this->move();
     for (unsigned int i = 1; i < this->_dir.size(); i++)
       this->_dir.erase(this->_dir.begin() + i);
-    if (this->_score == this->_lvl * 50 + (this->_lvl - 1) * 50)
-      this->_lvl++;
+    //if (this->_score == this->_lvl * 50 + (this->_lvl - 1) * 50)
+    //this->_lvl++;
     this->_score ++;
     return;
   }
@@ -137,8 +137,7 @@ struct arcade::GetMap	  					*arcade::GSnake::GetMap(bool debug) const
   int 														size;
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
-  //map = new [size] GetMap; -- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-  if ((map = reinterpret_cast<arcade::GetMap *>(malloc(size))) == NULL)
+  if ((map = new arcade::GetMap[size]) == NULL)
     exit(0);
   map->type = CommandType::GET_MAP;
   map->width = WIDTH_MAP;
@@ -161,8 +160,7 @@ struct arcade::WhereAmI	     			*arcade::GSnake::GetPlayer(bool debug) const
   int 														size;
 
   size = sizeof(*player) + (this->_player.size() * sizeof(Position));
-  //player = new [size] GetPlayer; -- OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-  if ((player = reinterpret_cast<arcade::WhereAmI *>(malloc(size))) == NULL)
+  if ((player = new arcade::WhereAmI[size]) == NULL)
     exit(0);
   player->type = CommandType::WHERE_AM_I;
   player->lenght = this->_player.size();

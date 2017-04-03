@@ -178,7 +178,7 @@ void									arcade::LNcurses::GetInput(ICore *core)
     core->NotifyCore(this->input_core[c]);
 }
 
-void								arcade::LNcurses::printFile(const char *fileName, int y)
+bool								arcade::LNcurses::printFile(const char *fileName, int y)
 {
   std::fstream			file;
   std::string				str;
@@ -192,7 +192,9 @@ void								arcade::LNcurses::printFile(const char *fileName, int y)
       mvprintw((LINES / 2) - 5 + y++, (COLS / 2) - (str.length() / 2), "%s", str.c_str());
       getline(file, str);
     }
+    return true;
   }
+  return false;
 }
 
 std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
@@ -202,14 +204,15 @@ std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
 
 void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                    std::vector<std::string> graphicsLibs, int idxGraphic,
-                                                   const arcade::playerName &player)
+                                                   arcade::Button button, const arcade::playerName &player)
 {
   int 									y = 5;
   int										x = -2;
 
+  (void)button;
   clear();
-  this->printFile("ascii_files/menu.txt", -10);
-  //mvprintw(MARGIN_Y, MARGIN_X - 2, "MENU");
+  if (!this->printFile("ascii_files/menu.txt", -10))
+    mvprintw(MARGIN_Y - 3, MARGIN_X - 2, "ARCADE");
   for (unsigned int i = 0; i < 3; i++)
   {
     if (i == player.idx)
@@ -284,9 +287,15 @@ void										arcade::LNcurses::PrintGameOver(arcade::Status status)
 {
   clear();
   if (status == arcade::Status::LOSE)
-    this->printFile("./ascii_files/game_over.txt", 0);
+  {
+    if (!this->printFile("./ascii_files/game_over.txt", 0))
+      mvprintw(MARGIN_Y, MARGIN_X - 4, "Game Over");
+  }
   else
-    this->printFile("./ascii_files/win.txt", 0);
+  {
+    if (!this->printFile("./ascii_files/win.txt", 0))
+      mvprintw(MARGIN_Y, MARGIN_X - 1, "Win");
+  }
   refresh();
 }
 
