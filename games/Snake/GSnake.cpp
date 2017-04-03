@@ -8,6 +8,7 @@ arcade::GSnake::GSnake()
   this->_dir.insert(this->_dir.begin(), CommandType::GO_RIGHT);
   this->_statusGame = arcade::Status::RUNNING;
   this->_score = 0;
+  this->_lvl = 1;
 }
 
 bool											arcade::GSnake::isOnSnake(int pos)
@@ -88,7 +89,7 @@ void                      arcade::GSnake::move()
   else
   {
     this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] = TileType::EMPTY;
-    this->_score += 10;
+    this->_score += 100;
     this->dropApple();
   }
   if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
@@ -120,6 +121,9 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
     this->move();
     for (unsigned int i = 1; i < this->_dir.size(); i++)
       this->_dir.erase(this->_dir.begin() + i);
+    if (this->_score == this->_lvl * 50 + (this->_lvl - 1) * 50)
+      this->_lvl++;
+    this->_score ++;
     return;
   }
   if (type == CommandType::SHOOT && this->_statusGame == arcade::Status::RUNNING)

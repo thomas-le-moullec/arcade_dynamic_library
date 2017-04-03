@@ -29,6 +29,7 @@ namespace arcade
       bool															_isGameOver;
       arcade::Assets                    _assets;
       unsigned int											_score;
+      unsigned int											_lvl;
 
       void														  initMap();
       void														  initPlayer();
