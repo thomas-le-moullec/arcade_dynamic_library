@@ -14,3 +14,5 @@ snake:ZOE:246
 snake:AAA:2898
 solarfox:AAA:50
 solarfox:AAA:40
+snake:AAA:13
+solarfox:AAA:0

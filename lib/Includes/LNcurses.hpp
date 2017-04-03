@@ -37,7 +37,7 @@ namespace arcade
       void													initMapInputCore();
       void													initMapDisplay();
 
-      void													printFile(const char *, int);
+      bool													printFile(const char *, int);
       std::string										cutName(std::string &, int) const;
   };
 };
