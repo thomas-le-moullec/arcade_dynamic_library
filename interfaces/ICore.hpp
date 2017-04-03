@@ -37,6 +37,16 @@ namespace arcade
     SCORE = 4,
   };
 
+  enum class      Button : uint16_t
+  {
+    PLAY = 0,
+    LEFT_PANE = 1,
+    RIGHT_PANE = 2,
+    SCOREBOARD = 3,
+    QUIT = 4,
+    NAME = 5
+  };
+
   struct playerName
   {
     std::string 	name;
