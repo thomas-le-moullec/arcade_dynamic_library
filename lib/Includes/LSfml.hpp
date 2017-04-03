@@ -19,7 +19,7 @@ namespace arcade
       virtual void		                                   ShowGame(WhereAmI *, GetMap *, const Assets &);
       virtual void				                               GetInput(ICore *);
       virtual void					                             PrintGameOver(arcade::Status);
-      virtual void																		   ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int,  arcade::playerName);
+      virtual void																		   ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int, const arcade::playerName &);
 			virtual void										 									 ShowScoreboard(const std::string &, std::vector<arcade::Score>);
       virtual void																			 ShowScore(const arcade::Score &, const std::vector<arcade::Score> &);
 

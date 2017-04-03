@@ -315,10 +315,11 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
     this->GetPlayer(debug);
   if (type == CommandType::GET_MAP)
     this->GetMap(debug);
-  if ((type == CommandType::GO_UP && this->_player.dir != CommandType::GO_DOWN) ||
+  if ((debug == true && (type == CommandType::GO_UP || type == CommandType::GO_DOWN || type == CommandType::GO_RIGHT || type == CommandType::GO_LEFT))
+      || ((type == CommandType::GO_UP && this->_player.dir != CommandType::GO_DOWN) ||
       (type == CommandType::GO_DOWN && this->_player.dir != CommandType::GO_UP) ||
       (type == CommandType::GO_LEFT && this->_player.dir != CommandType::GO_RIGHT) ||
-      (type == CommandType::GO_RIGHT && this->_player.dir != CommandType::GO_LEFT))
+      (type == CommandType::GO_RIGHT && this->_player.dir != CommandType::GO_LEFT)))
     this->_player.dir = type;
   if (type == CommandType::SHOOT && this->_playerShoot.lifes == 0)
     this->initMyShoot();
@@ -326,7 +327,7 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
   {
     if (this->_playerShoot.lifes > 0)
       this->moveMyShoot();
-    if (this->_cmpt % 3 < 2)
+    if (this->_cmpt % 3 < 2 || debug == true)
     {
       this->move();
       this->moveEnemies();

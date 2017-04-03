@@ -202,7 +202,7 @@ std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
 
 void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                    std::vector<std::string> graphicsLibs, int idxGraphic,
-                                                   arcade::playerName player)
+                                                   const arcade::playerName &player)
 {
   int 									y = 5;
   int										x = -2;

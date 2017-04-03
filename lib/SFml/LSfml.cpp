@@ -207,7 +207,7 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
 
 void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                 std::vector<std::string> graphicsLibs, int idxGraphic,
-                                                arcade::playerName player)
+                                                const arcade::playerName &player)
 {
   sf::Text              graphics;
   sf::Text              games;
