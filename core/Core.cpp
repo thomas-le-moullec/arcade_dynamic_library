@@ -18,7 +18,7 @@ arcade::Core::Core()
   this->initMapNotifyScene();
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
-  this->_player.name = "AAAAAAAA";
+  this->_player.name = "AAA";
 }
 
 arcade::Core::~Core()
@@ -256,6 +256,7 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
   if (type == arcade::CommandType::SHOOT)
   {
     this->_scene = arcade::Scene::GAME;
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
     this->_changeGraphicMenu = true;
   }
   else if (type == arcade::CommandType::GO_RIGHT)
@@ -268,10 +269,10 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
     this->_player.name[this->_player.idx]--;
   else if (type == arcade::CommandType::ILLEGAL)
     this->_scene = arcade::Scene::SCOREBOARD;
-  if (this->_player.idx == 8)
+  if (this->_player.idx == 3)
     this->_player.idx = 0;
-  else if (this->_player.idx > 8)
-    this->_player.idx = 7;
+  else if (this->_player.idx > 3)
+    this->_player.idx = 3;
   if (this->_player.name[this->_player.idx] < 'A')
     this->_player.name[this->_player.idx] = 'Z';
   else if (this->_player.name[this->_player.idx] > 'Z')
@@ -280,7 +281,10 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
 
 void		arcade::Core::NotifySceneScoreboard(arcade::CommandType type)
 {
-  (void)type;
+  if (type == arcade::CommandType::GO_RIGHT)
+    this->LoadNextGame();
+  if (type == arcade::CommandType::GO_LEFT)
+    this->LoadPrevGame();
 }
 
 void		arcade::Core::NotifyScene(arcade::CommandType type)
@@ -299,7 +303,7 @@ void						arcade::Core::ShowSceneGame()
 
   if (this->_status != arcade::Status::PAUSE)
     this->_status = this->_game->GetStatus();
-  if (this->_status == arcade::Status::RUNNING)
+  if (this->_status == arcade::Status::RUNNING || this->_status == arcade::Status::PAUSE)
   {
     this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
     score.nameGame = "";
@@ -307,7 +311,7 @@ void						arcade::Core::ShowSceneGame()
     score.valueScore = this->_game->GetScore();
     this->_graphic->ShowScore(score, this->_scoreBoard.getBestScores(this->takeGameName(), 3));
   }
-  else if (this->_status != arcade::Status::PAUSE)
+  else
   {
     this->_graphic->PrintGameOver(this->_status);
   }
@@ -320,5 +324,5 @@ void		arcade::Core::ShowSceneMenu()
 
 void		arcade::Core::ShowSceneScoreboard()
 {
-  this->_graphic->ShowScoreboard(this->_gamesLibs[this->_idxGamesLib], this->_scoreBoard.getBestScores(this->takeGameName(), 20));
+  this->_graphic->ShowScoreboard(this->takeGameName(), this->_scoreBoard.getBestScores(this->takeGameName(), 20));
 }

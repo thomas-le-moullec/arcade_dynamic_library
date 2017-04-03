@@ -202,15 +202,15 @@ std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
 
 void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                    std::vector<std::string> graphicsLibs, int idxGraphic,
-                                                   arcade::Player player)
+                                                   arcade::playerName player)
 {
   int 									y = 5;
-  int										x = -6;
+  int										x = -2;
 
   clear();
   this->printFile("ascii_files/menu.txt", -10);
   //mvprintw(MARGIN_Y, MARGIN_X - 2, "MENU");
-  for (unsigned int i = 0; i < 8; i++)
+  for (unsigned int i = 0; i < 3; i++)
   {
     if (i == player.idx)
       attron(A_REVERSE);
@@ -243,22 +243,21 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int
   (void)gamesLibs;
 }
 
-void									arcade::LNcurses::ShowScoreboard(std::string &nameGame, std::vector<arcade::Score> score)
+void									arcade::LNcurses::ShowScoreboard(const std::string &game, std::vector<arcade::Score> score)
 {
-  std::string					game = this->cutName(nameGame, 17);
   int									y = 0;
 
 	clear();
   //while(1);
-  mvprintw(MARGIN_Y / 4, MARGIN_X - game.length() / 2 - 2, "[ %s ]", game.c_str());
+  attron(A_REVERSE);
+  mvprintw(MARGIN_Y / 4, MARGIN_X - (game.length() / 2) - 2, "[ %s ]", game.c_str());
   mvprintw(MARGIN_Y / 3, MARGIN_X - 13, "Top 20 des meilleurs scores");
   for (int i = 0; i < 20 && i < (int)score.size(); i++)
   {
-    attron(A_REVERSE);
-    mvprintw(MARGIN_Y - 5 + y, MARGIN_X - 3 - score[i].namePlayer.length(), "%s", score[i].namePlayer.c_str());
-    attron(A_REVERSE);
+    mvprintw(MARGIN_Y - 5 + y, MARGIN_X - 8, "%d. %s", i, score[i].namePlayer.c_str());
     mvprintw(MARGIN_Y - 5 + y++, MARGIN_X + 3, "%d", score[i].valueScore);
   }
+  attroff(A_REVERSE);
   refresh();
 }
 

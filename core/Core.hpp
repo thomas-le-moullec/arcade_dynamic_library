@@ -65,7 +65,7 @@ namespace arcade
       int																			_idxGamesLib;
       bool																		_changeGraphicMenu;
       bool																		_addScore;
-      arcade::Player													_player;
+      arcade::playerName											_player;
 
       void						initMapCore();
       void						initMapShowScene();

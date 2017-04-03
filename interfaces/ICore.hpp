@@ -37,7 +37,7 @@ namespace arcade
     SCORE = 4,
   };
 
-  struct Player
+  struct playerName
   {
     std::string 	name;
     unsigned int	idx;

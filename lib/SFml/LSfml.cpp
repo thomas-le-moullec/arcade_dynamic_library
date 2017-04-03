@@ -1,4 +1,5 @@
 #include "LSfml.hpp"
+#include <sstream>
 
 arcade::LSfml::LSfml()
 {
@@ -6,7 +7,7 @@ arcade::LSfml::LSfml()
   setWindow(WIDTH_WIN, HEIGHT_WIN, PIXELS_WIN, isFullScreen());
   initGameInputs();
   initCoreInputs();
-  if (!_fontArial.loadFromFile("arial.ttf")) {
+  if (!_fontMasque.loadFromFile("MASQUE__.ttf") || !_fontArial.loadFromFile("arial.ttf")) {
     _window->close();
     exit(0);
   }
@@ -38,19 +39,54 @@ void    arcade::LSfml::initCoreInputs()
   _core_input[sf::Keyboard::Escape] = CoreCommand::ESCAPE;
 }
 
-/*void   arcade::LSfml::print_commands()
+void   arcade::LSfml::print_commands() const
 {
+  sf::Text                    commands;
+  std::string                 restart = std::to_string(8) + " - Recommencer";
+  static sf::RectangleShape   background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN * 0.07));
 
-  mvprintw(y++, x, "z - Se déplacer vers le haut");
-  mvprintw(y++, x, "s - Se déplacer vers le bas");
-  mvprintw(y++, x, "q - Se déplacer vers la droite");
-  mvprintw(y++, x, "d - Se déplacer vers la gauche");
-  y++;
-  mvprintw(y++, x, "espace - Mettre le jeu en pause");
-  mvprintw(y++, x, "esc - Quitter le jeu");
-  mvprintw(y++, x, "8 - Recommencer le jeu");
-  mvprintw(y++, x, "9 - Quitter l'arcade");
-}*/
+  background.setPosition(0, HEIGHT_WIN * 0.93);
+  background.setFillColor(sf::Color::Black);
+  _window->draw(background);
+  background.setPosition(0, 0);
+  _window->draw(background);
+  commands.setFont(_fontArial); //Not fun but visible
+  commands.setCharacterSize(18);
+  commands.setColor(sf::Color(0xe2fefeFF));
+  commands.setStyle(sf::Text::Bold);
+  sf::FloatRect commandsArea = commands.getLocalBounds();
+  commands.setOrigin(commandsArea.left + commandsArea.width/2.0f, commandsArea.top  + commandsArea.height/2.0f);
+
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.05, HEIGHT_WIN * 0.025));
+  commands.setString("z - Deplacement Haut");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.30, HEIGHT_WIN * 0.025));
+  commands.setString("s - Deplacement Bas");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.55, HEIGHT_WIN * 0.025));
+  commands.setString("q - Deplacement Droite");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.8, HEIGHT_WIN * 0.025));
+  commands.setString("d - Deplacement Gauche");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.15, (HEIGHT_WIN * 0.95)));
+  commands.setString("espace - Pause");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.35, (HEIGHT_WIN * 0.95)));
+  commands.setString("esc - Quitter le jeu");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.55, (HEIGHT_WIN * 0.95)));
+  commands.setString("8 - Recommencer");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.75, (HEIGHT_WIN * 0.95)));
+  commands.setString("9 - Quitter l'arcade");
+  _window->draw(commands);
+}
+
+std::string	arcade::LSfml::cutName(std::string &libName, int size_path) const
+{
+  return libName.substr(size_path, libName.length() - 3 - size_path);
+}
 
 void                  arcade::LSfml::setColor(const unsigned int &color, arcade::TileType tile, sf::RectangleShape rectangle)
 {
@@ -88,9 +124,9 @@ bool    arcade::LSfml::isFullScreen()
 void    arcade::LSfml::setWindow(unsigned int width, unsigned int height, unsigned int pixels, bool fullscreen)
 {
   if (fullscreen == true)
-    _window = new sf::RenderWindow(sf::VideoMode(width, height, pixels), "Snake Fullscreen !", sf::Style::Fullscreen);
+    _window = new sf::RenderWindow(sf::VideoMode(width, height, pixels), "Play Fullscreen !", sf::Style::Fullscreen);
   else
-    _window = new sf::RenderWindow(sf::VideoMode(width, height, pixels), "Snake !");
+    _window = new sf::RenderWindow(sf::VideoMode(width, height, pixels), "Play !");
 }
 
 void    arcade::LSfml::GetInput(ICore *core)
@@ -127,25 +163,28 @@ bool		arcade::LSfml::isOnMap(arcade::WhereAmI *player, int i, int width) const
   return false;
 }
 
-
-
 void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, const Assets &assets)
 {
     unsigned int x;
     unsigned int y;
     int          i;
-    //static bool  initialisation = true; //Réinitialiser la map dans le cas ou il y a eu des changements d'assets, de jeu etc.
+    static bool  initialisation = true; //Réinitialiser la map dans le cas ou il y a eu des changements d'assets, de jeu etc.
+    static sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
 
-    //if (initialisation) {
-      _player = new sf::RectangleShape(sf::Vector2f((WIDTH_WIN * 0.60) / map->width, (HEIGHT_WIN * 0.60) / map->height)); //add value to map->width et map->height
-      _player->setFillColor(sf::Color(assets.c_player.color));
-      initMap(map->height, map->width, assets);
-    //  initialisation = false;
-    //}
+    _window->clear();
+    if (initialisation) {
+      if (!_textureBackgroundGame.loadFromFile("backgroundGame.jpg")) {
+      }
+      initialisation = false;
+      background.setTexture(&_textureBackgroundGame);
+    }
+    _window->draw(background);
+    _player = new sf::RectangleShape(sf::Vector2f((WIDTH_WIN * 0.60) / map->width, (HEIGHT_WIN * 0.60) / map->height)); //add value to map->width et map->height
+    _player->setFillColor(sf::Color(assets.c_player.color));
+    initMap(map->height, map->width, assets);
 
     y = 0;
     i = 0;
-    _window->clear();
     while (y < map->height) {
       x = 0;
       while (x < map->width && i < map->width * map->height) {
@@ -162,72 +201,63 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
       }
       y++;
     }
-    //print_commands();
-    _window->display();
+    print_commands();
+    //_window->display();
 }
 
 void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                 std::vector<std::string> graphicsLibs, int idxGraphic,
-                                                arcade::Player player)
+                                                arcade::playerName player)
 {
-  sf::Text              title;
   sf::Text              graphics;
   sf::Text              games;
   sf::Texture           texture;
 
   (void)player;
   _window->clear();
-  if (!texture.loadFromFile("backgroundMenu.jpg")) {
+  if (!texture.loadFromFile("backgroundMenu.gif")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);
   _window->draw(background);
-  title.setFont(_fontArial);
-  graphics.setFont(_fontArial);
-  games.setFont(_fontArial);
-  title.setString("Menu");
-  title.setCharacterSize(42);
-  title.setColor(sf::Color::Green);
-  title.setStyle(sf::Text::Bold);
-  sf::FloatRect textRect = title.getLocalBounds();
-  title.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
-  title.setPosition(sf::Vector2f(WIDTH_WIN/2.0f,HEIGHT_WIN * 0.20));
+  graphics.setFont(_fontMasque);
+  games.setFont(_fontMasque);
   for (unsigned int idx = 0; idx < graphicsLibs.size(); idx++){
-    graphics.setString(graphicsLibs[idx].c_str());
-    graphics.setCharacterSize(18);
-    graphics.setColor(sf::Color::White);
+    graphics.setString(cutName(graphicsLibs[idx], 15));
+    graphics.setCharacterSize(12);
+    graphics.setColor(sf::Color(0x157FEFFF));
     graphics.setStyle(sf::Text::Regular);
     sf::FloatRect textRectGraphics = graphics.getLocalBounds();
     graphics.setOrigin(textRectGraphics.left + textRectGraphics.width/2.0f, textRectGraphics.top  + textRectGraphics.height/2.0f);
-    graphics.setPosition(sf::Vector2f(WIDTH_WIN * 0.30, (HEIGHT_WIN * 0.20) + 300 + (idx * 50)));
+    graphics.setPosition(sf::Vector2f(WIDTH_WIN * 0.2, (HEIGHT_WIN * 0.20) + 200 + (idx * 50)));
     if (static_cast<int>(idx) == idxGraphic) {
-      graphics.setCharacterSize(24);
-      graphics.setColor(sf::Color::Red);
+      graphics.setCharacterSize(28);
+      graphics.setColor(sf::Color(0xD011D0FF));
       graphics.setStyle(sf::Text::Bold);
     }
     _window->draw(graphics);
   }
   //functions !
   for (unsigned int idx = 0; idx < gamesLibs.size(); idx++){
-    games.setString(gamesLibs[idx].c_str());
-    games.setCharacterSize(18);
-    games.setColor(sf::Color::White);
+    games.setString(cutName(gamesLibs[idx], 17));
+    games.setCharacterSize(12);
+    games.setColor(sf::Color(0x157FEFFF));
     games.setStyle(sf::Text::Regular);
     sf::FloatRect textRectGraphics = games.getLocalBounds();
     games.setOrigin(textRectGraphics.left + textRectGraphics.width/2.0f, textRectGraphics.top  + textRectGraphics.height/2.0f);
-    games.setPosition(sf::Vector2f((WIDTH_WIN * 0.7), (HEIGHT_WIN * 0.20) + 300 + (idx * 50)));
+    games.setPosition(sf::Vector2f((WIDTH_WIN * 0.7), (HEIGHT_WIN * 0.20) + 200 + (idx * 50)));
     if (static_cast<int>(idx) == idxGame) {
-      games.setCharacterSize(24);
-      games.setColor(sf::Color::Red);
+      games.setCharacterSize(28);
+      games.setColor(sf::Color(0xD011D0FF));
       games.setStyle(sf::Text::Bold);
     }
     _window->draw(games);
   }
-  _window->draw(title);
+  //_window->draw(title);
   _window->display();
 }
 
-void										arcade::LSfml::ShowScoreboard(std::string &nameGame, std::vector<arcade::Score> score)
+void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::vector<arcade::Score> score)
 {
   (void)nameGame;
   (void)score;
@@ -235,8 +265,36 @@ void										arcade::LSfml::ShowScoreboard(std::string &nameGame, std::vector<a
 
 void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)
 {
-  (void)currentScore;
-  (void)bestScore;
+  sf::Text              commands;
+
+  commands.setFont(_fontMasque);
+  commands.setCharacterSize(17);
+  commands.setColor(sf::Color(0xe2fefeFF));
+  sf::FloatRect commandsArea = commands.getLocalBounds();
+  commands.setOrigin(commandsArea.left + commandsArea.width/2.0f, commandsArea.top  + commandsArea.height/2.0f);
+
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.815, (HEIGHT_WIN * 0.20) + 100));
+  commands.setStyle(sf::Text::Bold);
+  commands.setString("Meilleurs Scores");
+  _window->draw(commands);
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.815, (HEIGHT_WIN * 0.20) + 300));
+  commands.setString("Score actuel");
+  _window->draw(commands);
+  commands.setFont(_fontArial);
+  commands.setCharacterSize(19);
+
+  for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++) {
+    commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.815, (HEIGHT_WIN * 0.20) + ((i + 1) * 50) + 100));
+    commands.setString(bestScore[i].namePlayer.c_str());
+    _window->draw(commands);
+    commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.85, (HEIGHT_WIN * 0.20) + ((i + 1) * 50) + 100));
+    commands.setString(std::to_string(bestScore[i].valueScore));
+    _window->draw(commands);
+  }
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.85, (HEIGHT_WIN * 0.20) + 350));
+  commands.setString(std::to_string(currentScore.valueScore));
+  _window->draw(commands);
+  _window->display();
 }
 
 extern "C" arcade::IGraphic*		CreateDisplayModule()
@@ -249,7 +307,7 @@ void										arcade::LSfml::PrintGameOver(arcade::Status status)
   sf::Texture           texture;
 
   _window->clear();
-  if (status == arcade::Status::WIN && !texture.loadFromFile("win.png"))
+  if (status == arcade::Status::WIN && !texture.loadFromFile("win.jpg"))
   {
   }
   if (status == arcade::Status::LOSE && !texture.loadFromFile("lose.jpg"))
