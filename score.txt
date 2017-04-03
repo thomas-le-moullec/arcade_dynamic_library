@@ -4,3 +4,7 @@ snake:AAA:4658
 snake:AAA:1483
 snake:AAA:1887
 snake:AAA:8
+solarfox:AAA:50
+solarfox:AAA:0
+solarfox:AAA:30
+solarfox:AAA:0

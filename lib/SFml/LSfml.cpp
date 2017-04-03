@@ -25,6 +25,7 @@ void    arcade::LSfml::initGameInputs()
   _game_input[sf::Keyboard::D] = CommandType::GO_RIGHT;
   _game_input[sf::Keyboard::S] = CommandType::GO_DOWN;
   _game_input[sf::Keyboard::Return] = CommandType::SHOOT;
+  _game_input[sf::Keyboard::T] = CommandType::ILLEGAL;
 }
 
 void    arcade::LSfml::initCoreInputs()
@@ -137,7 +138,7 @@ void    arcade::LSfml::GetInput(ICore *core)
       case sf::Event::KeyPressed:
         if (_event.key.code == sf::Keyboard::Q || _event.key.code == sf::Keyboard::Z ||
            _event.key.code == sf::Keyboard::D || _event.key.code == sf::Keyboard::S ||
-           _event.key.code == sf::Keyboard::Return)
+           _event.key.code == sf::Keyboard::Return || _event.key.code == sf::Keyboard::T)
            core->NotifyScene(_game_input[_event.key.code]);
         if (_event.key.code == sf::Keyboard::Num2 || _event.key.code == sf::Keyboard::Num3 ||
            _event.key.code == sf::Keyboard::Num4 || _event.key.code == sf::Keyboard::Num5 ||
@@ -259,8 +260,44 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
 
 void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::vector<arcade::Score> score)
 {
-  (void)nameGame;
-  (void)score;
+  int									  y = 0;
+  sf::Texture           texture;
+  sf::Text              Scores;
+
+  _window->clear();
+  if (!texture.loadFromFile("Scoreboard.gif")) {
+  }
+  sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
+  background.setTexture(&texture);
+  _window->draw(background);
+  Scores.setFont(_fontMasque);
+  Scores.setCharacterSize(25);
+  Scores.setColor(sf::Color(0xe2fefeFF));
+  sf::FloatRect ScoresArea = Scores.getLocalBounds();
+  Scores.setOrigin(ScoresArea.left + ScoresArea.width/2.0f, ScoresArea.top  + ScoresArea.height/2.0f);
+  Scores.setStyle(sf::Text::Bold);
+
+  Scores.setPosition(sf::Vector2f(WIDTH_WIN * 0.47, HEIGHT_WIN * 0.1));
+  Scores.setString(nameGame);
+  _window->draw(Scores);
+  Scores.setCharacterSize(20);
+  Scores.setPosition(sf::Vector2f(WIDTH_WIN * 0.42, (HEIGHT_WIN * 0.15) + 50));
+  Scores.setFont(_fontArial);
+  Scores.setString("Top 20 des meilleurs scores");
+  _window->draw(Scores);
+  Scores.setCharacterSize(17);
+  for (int i = 0; i < 20 && i < (int)score.size(); i++)
+  {
+    Scores.setPosition(sf::Vector2f(WIDTH_WIN * 0.30, (HEIGHT_WIN * 0.3) + ((i + 1) * 30)));
+    Scores.setString(score[i].namePlayer);
+    Scores.setFont(_fontArial);
+    _window->draw(Scores);
+    Scores.setPosition(sf::Vector2f(WIDTH_WIN * 0.75, (HEIGHT_WIN * 0.3) + ((i + 1) * 30)));
+    Scores.setString(std::to_string(score[i].valueScore));
+    Scores.setFont(_fontArial);
+    _window->draw(Scores);
+  }
+  _window->display();
 }
 
 void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)
