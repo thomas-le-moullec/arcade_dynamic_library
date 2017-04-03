@@ -8,13 +8,11 @@ solarfox:AAA:50
 solarfox:AAA:0
 solarfox:AAA:30
 solarfox:AAA:0
-<<<<<<< HEAD
 solarfox:AAA:50
 solarfox:AAA:50
 snake:AAA:347
 snake:AAA:8
 solarfox:AAA:50
-=======
 snake:ZOE:1593
 snake:ZOE:3329
 snake:ZOE:246
@@ -23,4 +21,5 @@ solarfox:AAA:50
 solarfox:AAA:40
 snake:AAA:13
 solarfox:AAA:0
->>>>>>> 6df11e0903cf08c7a81bf30438e47bb2ba951e64
+snake:LEO:4501
+snake:LEO:2375

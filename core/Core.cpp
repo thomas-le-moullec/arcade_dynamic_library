@@ -272,7 +272,7 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
   if (this->_player.idx == 3)
     this->_player.idx = 0;
   else if (this->_player.idx > 3)
-    this->_player.idx = 3;
+    this->_player.idx = 2;
   if (this->_player.name[this->_player.idx] < 'A')
     this->_player.name[this->_player.idx] = 'Z';
   else if (this->_player.name[this->_player.idx] > 'Z')
