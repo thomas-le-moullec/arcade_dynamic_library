@@ -6,21 +6,29 @@ arcade::LSfml::LSfml()
   setWindow(WIDTH_WIN, HEIGHT_WIN, PIXELS_WIN, isFullScreen());
   initGameInputs();
   initCoreInputs();
-  if (!_fontMasque.loadFromFile(Ressources"MASQUE__.ttf") ||
-      !_fontArial.loadFromFile(Ressources"arial.ttf")) {
+  if (!_fontMasque.loadFromFile(RESSOURCES_FONTS"MASQUE__.ttf") ||
+      !_fontArial.loadFromFile(RESSOURCES_FONTS"arial.ttf")) {
     _window->close();
     exit(0);
   }
-  if (!_music.openFromFile(Ressources"Push_It_To_The_Limit_scarface_.ogg")) {
-  }
-  _music.setVolume(100);
-  _music.play();
-  _music.setLoop(true);
+  loadSounds();
 }
 
 arcade::LSfml::~LSfml()
 {
   _window->close();
+}
+
+void    arcade::LSfml::loadSounds()
+{
+  if (!_music.openFromFile(RESSOURCES_SOUNDS"Push_It_To_The_Limit_scarface_.ogg")) {
+  }
+  _music.setVolume(15);
+  _music.play();
+  _music.setLoop(true);
+
+  _sounds[arcade::SoundType::EATAPPLE].loadFromFile(RESSOURCES_SOUNDS"eatApple.wav");
+  _sounds[arcade::SoundType::SHOOT].loadFromFile(RESSOURCES_SOUNDS"shoot.wav");
 }
 
 void    arcade::LSfml::initGameInputs()
@@ -99,10 +107,10 @@ void                  arcade::LSfml::setColor(const unsigned int &color, arcade:
   sf::Texture         texture;
 
   _mapTexture[tile] = texture;
-  if (!_mapTexture[arcade::TileType::EMPTY].loadFromFile("Errorplancher.png")) //need a map of tiletype and .png
-    rectangle.setFillColor(sf::Color(color));
-  else
-    rectangle.setTexture(&_mapTexture[tile]);
+  //if (!_mapTexture[arcade::TileType::EMPTY].loadFromFile("Errorplancher.png")) //need a map of tiletype and .png
+  rectangle.setFillColor(sf::Color(color));
+  //else
+    //rectangle.setTexture(&_mapTexture[tile]);
   _map[tile] = rectangle;
 }
 
@@ -151,10 +159,10 @@ void    arcade::LSfml::GetInput(ICore *core)
            _event.key.code == sf::Keyboard::Num9 || _event.key.code == sf::Keyboard::Escape)
            core->NotifyCore(_core_input[_event.key.code]);
       case sf::Event::LostFocus:
-        std::cout << "Lost Focus !" << std::endl;
+        //std::cout << "Lost Focus !" << std::endl;
         break;
       case sf::Event::GainedFocus:
-        std::cout << "Gained Focus !" << std::endl;
+        //std::cout << "Gained Focus !" << std::endl;
         break;
       default:
           break;
@@ -169,6 +177,13 @@ bool		arcade::LSfml::isOnMap(arcade::WhereAmI *player, int i, int width) const
   return false;
 }
 
+void arcade::LSfml::playSound(arcade::SoundType type)
+{
+  _sound.setBuffer(_sounds[type]);
+  _sound.setVolume(100);
+  _sound.play();
+}
+
 void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, const Assets &assets)
 {
     unsigned int x;
@@ -178,8 +193,11 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
     static sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
 
     _window->clear();
+    if (assets.sound != arcade::SoundType::NOTHING) {
+      playSound(assets.sound);
+    }
     if (initialisation) {
-      if (!_textureBackgroundGame.loadFromFile(Ressources"backgroundGame.jpg")) {
+      if (!_textureBackgroundGame.loadFromFile(RESSOURCES"backgroundGame.jpg")) {
       }
       initialisation = false;
       background.setTexture(&_textureBackgroundGame);
@@ -222,7 +240,7 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
 
   (void)button;
   _window->clear();
-  if (!texture.loadFromFile(Ressources"backgroundMenu.gif")) {
+  if (!texture.loadFromFile(RESSOURCES"backgroundMenu.gif")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);
@@ -287,7 +305,7 @@ void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::ve
   sf::Text              Scores;
 
   _window->clear();
-  if (!texture.loadFromFile(Ressources"Scoreboard.gif")) {
+  if (!texture.loadFromFile(RESSOURCES"Scoreboard.gif")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);
@@ -366,10 +384,10 @@ void										arcade::LSfml::PrintGameOver(arcade::Status status)
   sf::Texture           texture;
 
   _window->clear();
-  if (status == arcade::Status::WIN && !texture.loadFromFile(Ressources"win.jpg"))
+  if (status == arcade::Status::WIN && !texture.loadFromFile(RESSOURCES"win.jpg"))
   {
   }
-  if (status == arcade::Status::LOSE && !texture.loadFromFile(Ressources"lose.jpg"))
+  if (status == arcade::Status::LOSE && !texture.loadFromFile(RESSOURCES"lose.jpg"))
   {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));

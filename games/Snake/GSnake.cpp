@@ -91,6 +91,7 @@ void                      arcade::GSnake::move()
     this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] = TileType::EMPTY;
     this->_score += 100;
     this->dropApple();
+    _assets.sound = arcade::SoundType::EATAPPLE;
   }
   if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
       this->snakeBitesItself() == true)
@@ -107,6 +108,7 @@ bool											arcade::GSnake::checkDir(arcade::CommandType type)
 
 void	    							  arcade::GSnake::Update(CommandType type, bool debug)
 {
+  _assets.sound = arcade::SoundType::NOTHING;
   if (type == CommandType::WHERE_AM_I)
     this->GetPlayer(debug);
   if (type == CommandType::GET_MAP)

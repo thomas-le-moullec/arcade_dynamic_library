@@ -20,6 +20,13 @@ namespace arcade
     NOTHING       = 8
   };
 
+  enum class SoundType : uint16_t
+  {
+    NOTHING = 0,
+    EATAPPLE = 1,
+    SHOOT = 2
+  };
+
   enum class			Scene : uint16_t
   {
     MENU = 0,
