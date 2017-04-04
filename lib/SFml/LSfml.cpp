@@ -364,7 +364,7 @@ void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const 
     commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.815, (HEIGHT_WIN * 0.20) + ((i + 1) * 50) + 100));
     commands.setString(bestScore[i].namePlayer.c_str());
     _window->draw(commands);
-    commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.85, (HEIGHT_WIN * 0.20) + ((i + 1) * 50) + 100));
+    commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.9, (HEIGHT_WIN * 0.20) + ((i + 1) * 50) + 100));
     commands.setString(std::to_string(bestScore[i].valueScore));
     _window->draw(commands);
   }
