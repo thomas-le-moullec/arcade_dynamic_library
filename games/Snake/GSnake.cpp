@@ -124,7 +124,7 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
     //if (this->_score == this->_lvl * 50 + (this->_lvl - 1) * 50)
     //this->_lvl++;
     this->_score ++;
-    return;
+    return ;
   }
   if (type == CommandType::SHOOT && this->_statusGame == arcade::Status::RUNNING)
     this->_statusGame = arcade::Status::RUNNING;
