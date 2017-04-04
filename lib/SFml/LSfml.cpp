@@ -11,10 +11,11 @@ arcade::LSfml::LSfml()
     _window->close();
     exit(0);
   }
-  if (!_music.openFromFile(Ressources"Miami_Nights_1984_-_Accelerated.ogg")) {
+  if (!_music.openFromFile(Ressources"Push_It_To_The_Limit_scarface_.ogg")) {
   }
   _music.setVolume(100);
   _music.play();
+  _music.setLoop(true);
 }
 
 arcade::LSfml::~LSfml()
