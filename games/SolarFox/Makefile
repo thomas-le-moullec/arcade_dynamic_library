@@ -8,7 +8,7 @@ NAME				= ../lib_arcade_solarfox.so
 
 SRCS				=	GSolarFox.cpp
 
-CPPFLAGS   	=   -I ./../Includes/ -I ./../../interfaces -I ../../scoreboard/
+CPPFLAGS   	=   -I ./../Includes/ -I ./../../interfaces -I ../../scoreboard/ -I ../../Errors/
 
 CXXFLAGS	=		-W -Wall -Werror -Wextra -std=c++11
 

@@ -103,14 +103,14 @@ void   				arcade::Core::LoadGame(const std::string& lib)
   if (this->_handle_game != NULL)
     dlclose(this->_handle_game);
   this->_handle_game = dlopen(lib.c_str(), RTLD_LAZY);
+  arcade::IGame				*(*CreateGame)();
   if ((error = dlerror()) != NULL)
   {
     delete this->_graphic;
-    std::cout << error << std::endl;
-    exit(0);
+    throw RunTimeErrorCore(error);
   }
-  arcade::IGame				*(*CreateGame)();
-  CreateGame = (arcade::IGame *(*)(void))dlsym(this->_handle_game, "CreateGame");
+  if ((CreateGame = (arcade::IGame *(*)(void))dlsym(this->_handle_game, "CreateGame")) == NULL)
+    throw RunTimeErrorCore("Error in Dloader");
   this->_game = (*CreateGame)();
   this->_status = arcade::Status::RUNNING;
 }
@@ -127,14 +127,16 @@ void   				arcade::Core::LoadGraphic(const std::string& lib)
   if (this->_handle_graphic != NULL)
     dlclose(this->_handle_graphic);
   this->_handle_graphic = dlopen(lib.c_str(), RTLD_LAZY);
+  arcade::IGraphic				*(*CreateDisplayModule)();
   if ((error = dlerror()) != NULL)
   {
     //delete this->_graphi;
-    std::cout << error << std::endl;
-    exit(0);
+    throw RunTimeErrorCore(error);
   }
-  arcade::IGraphic				*(*CreateDisplayModule)();
-  CreateDisplayModule = (arcade::IGraphic *(*)(void))dlsym(this->_handle_graphic, "CreateDisplayModule");
+  if ((CreateDisplayModule = (arcade::IGraphic *(*)(void))dlsym(this->_handle_graphic, "CreateDisplayModule")) == NULL)
+  {
+    throw RunTimeErrorCore("Error in Dloader");
+  }
   this->_graphic = (*CreateDisplayModule)();
 }
 
@@ -145,7 +147,15 @@ void		arcade::Core::LoadPrevGraphic()
   if (this->_idxGraphicLib == -1)
     this->_idxGraphicLib = this->_graphicLibs.size() - 1;
   if (this->_scene == arcade::Scene::GAME)
-    this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+    {
+      try {
+        this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+      }
+      catch (RunTimeErrorCore const &stdErr) {
+        std::cerr << stdErr.what() << std::endl;
+        exit(-1);
+      }
+    }
 }
 
 void		arcade::Core::LoadNextGraphic()
@@ -155,7 +165,15 @@ void		arcade::Core::LoadNextGraphic()
   if (this->_idxGraphicLib == (int)this->_graphicLibs.size())
     this->_idxGraphicLib = 0;
   if (this->_scene == arcade::Scene::GAME)
-    this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+  {
+    try {
+      this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+    }
+    catch (RunTimeErrorCore const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
 }
 
 void		arcade::Core::LoadPrevGame()
@@ -163,7 +181,13 @@ void		arcade::Core::LoadPrevGame()
   this->_idxGamesLib--;
   if (this->_idxGamesLib == -1)
     this->_idxGamesLib = this->_gamesLibs.size() - 1;
-  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  try {
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  }
+  catch (RunTimeErrorCore const &stdErr) {
+    std::cerr << stdErr.what() << std::endl;
+    exit(-1);
+  }
 }
 
 void		arcade::Core::LoadNextGame()
@@ -171,12 +195,23 @@ void		arcade::Core::LoadNextGame()
   this->_idxGamesLib++;
   if (this->_idxGamesLib == (int)this->_gamesLibs.size())
     this->_idxGamesLib = 0;
-  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  try {
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  }
+  catch (RunTimeErrorCore const &stdErr) {
+    std::cerr << stdErr.what() << std::endl;
+  }
 }
 
 void		arcade::Core::Restart()
 {
-  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  try {
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  }
+  catch (RunTimeErrorCore const &stdErr) {
+    std::cerr << stdErr.what() << std::endl;
+    exit(-1);
+  }
 }
 
 void	  arcade::Core::Menu()
@@ -212,7 +247,13 @@ std::string	arcade::Core::takeGameName() const
 
 void		arcade::Core::loadLibAfterMenu()
 {
-  this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+  try {
+    this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+  }
+  catch (RunTimeErrorCore const &stdErr) {
+    std::cerr << stdErr.what() << std::endl;
+    exit(-1);
+  }
   this->_changeGraphicMenu = false;
 }
 
@@ -220,7 +261,13 @@ void									arcade::Core::RunArcade()
 {
   int									j = 0;
 
-  this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  try {
+    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+  }
+  catch (RunTimeErrorCore const &stdErr) {
+    std::cerr << stdErr.what() << std::endl;
+    exit(-1);
+  }
   while (this->_scene != arcade::Scene::QUIT)
   {
     this->_graphic->GetInput(this);
@@ -249,7 +296,13 @@ void		arcade::Core::NotifySceneGame(arcade::CommandType type)
   if (this->_status != arcade::Status::RUNNING && type == arcade::CommandType::SHOOT)
   {
     this->_status = arcade::Status::RUNNING;
-    LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    try {
+      this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    }
+    catch (RunTimeErrorCore const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
     this->_addScore = true;
   }
   this->_game->Update(type, false);
@@ -260,7 +313,13 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
   if (type == arcade::CommandType::SHOOT)
   {
     this->_scene = arcade::Scene::GAME;
-    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    try {
+      this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    }
+    catch (RunTimeErrorCore const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
     if (this->_checkSwitch == true)
     {
       this->_changeGraphicMenu = true;

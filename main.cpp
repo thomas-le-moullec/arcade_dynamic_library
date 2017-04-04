@@ -6,7 +6,13 @@ int							main(int ac, char **av)
 
   if (ac == 2)
   {
-    core->LoadGraphic(av[1]);
+    try {
+      core->LoadGraphic(av[1]);
+    }
+    catch (RunTimeErrorCore const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
     core->RunArcade();
     delete core;
   }
