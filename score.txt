@@ -61,3 +61,6 @@ solarfox:AAA:10
 solarfox:AAA:0
 solarfox:AAA:40
 snake:AAA:402
+snakos:AAA:15
+snakos:AAA:1066
+snake:AAA:767

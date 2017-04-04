@@ -8,7 +8,7 @@ NAME				= ../lib_arcade_snake.so
 
 SRCS				=	GSnake.cpp
 
-CPPFLAGS   	=   -I ./../Includes/ -I ./../../interfaces -I ../../scoreboard/
+CPPFLAGS   	=   -I ./../Includes/ -I ./../../interfaces -I ../../scoreboard/ -I ../../Errors/
 
 CXXFLAGS	=		-W -Wall -Werror -Wextra -std=c++11
 

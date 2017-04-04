@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <dlfcn.h>
 #include "ArcadeProtocol.hpp"
+#include "Errors.hpp"
 
 namespace arcade
 {

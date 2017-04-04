@@ -6,7 +6,7 @@ NAME_LIB_OPENGL		= ../lib_arcade_ncurses.so
 
 SRCS_LIB_OPENGL		=	./OpenGL.cpp
 
-CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/
+CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/ -I ../../Errors/
 
 CXXFLAGS					=		-W -Werror -Wextra -std=c++11
 
