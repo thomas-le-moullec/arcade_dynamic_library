@@ -23,3 +23,10 @@ snake:AAA:13
 solarfox:AAA:0
 snake:LEO:4501
 snake:LEO:2375
+solarfox:AAA:50
+solarfox:AAA:20
+solarfox:AAA:50
+solarfox:AAA:0
+solarfox:AAA:40
+solarfox:AAA:50
+solarfox:AAA:0
