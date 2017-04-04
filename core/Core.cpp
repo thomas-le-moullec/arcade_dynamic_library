@@ -296,9 +296,6 @@ void		arcade::Core::NotifySceneScoreboard(arcade::CommandType type)
 
 void		arcade::Core::NotifyScene(arcade::CommandType type)
 {
-  if (type == arcade::CommandType::ILLEGAL) {
-    std::cout << "We got a T" << std::endl;
-  }
   (this->*_notifyScene[this->_scene])(type);
 }
 
