@@ -8,7 +8,7 @@ SRCS_LIB_SFML			=	./LSfml.cpp
 
 CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/ -I ../../Errors/
 
-CXXFLAGS					=		-W -Werror -Wextra -std=c++11
+CXXFLAGS					=	 -W -Werror -Wextra -std=c++11
 
 OBJS_LIB_SFML			= $(SRCS_LIB_SFML:.cpp=.o)
 
@@ -18,7 +18,7 @@ $(NAME_LIB_SFML):
 	@echo "Compiling with Position Independent Code..."
 	@$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_SFML)
 	@echo "Creating a shared library from an object file..."
-	@$(CC) -shared -o $(NAME_LIB_SFML) *.o
+	@$(CC) -shared -o $(NAME_LIB_SFML) *.o -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 clean:
 	@echo "Cleaning object files ..."

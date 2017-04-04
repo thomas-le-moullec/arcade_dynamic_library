@@ -18,7 +18,7 @@ $(NAME_LIB_NCURSES):
 	@echo "Compiling with Position Independent Code..."
 	@$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_NCURSES)
 	@echo "Creating a shared library from an object file..."
-	@$(CC) -shared -o $(NAME_LIB_NCURSES) *.o
+	@$(CC) -shared -o $(NAME_LIB_NCURSES) *.o -lncurses
 
 clean:
 	@echo "Cleaning object files ..."

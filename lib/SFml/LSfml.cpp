@@ -298,7 +298,7 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
   _window->display();
 }
 
-void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::vector<arcade::Score> score)
+void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::vector<arcade::IScore *> score)
 {
   int									  y = 0;
   sf::Texture           texture;
@@ -329,18 +329,18 @@ void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::ve
   for (int i = 0; i < 20 && i < (int)score.size(); i++)
   {
     Scores.setPosition(sf::Vector2f(WIDTH_WIN * 0.30, (HEIGHT_WIN * 0.3) + ((i + 1) * 30)));
-    Scores.setString(score[i].namePlayer);
+    Scores.setString(score[i]->getName());
     Scores.setFont(_fontArial);
     _window->draw(Scores);
     Scores.setPosition(sf::Vector2f(WIDTH_WIN * 0.75, (HEIGHT_WIN * 0.3) + ((i + 1) * 30)));
-    Scores.setString(std::to_string(score[i].valueScore));
+    Scores.setString(std::to_string(score[i]->getScore()));
     Scores.setFont(_fontArial);
     _window->draw(Scores);
   }
   _window->display();
 }
 
-void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)
+void										arcade::LSfml::ShowScore(const arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
 {
   sf::Text              commands;
 
@@ -362,14 +362,14 @@ void										arcade::LSfml::ShowScore(const arcade::Score &currentScore, const 
 
   for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++) {
     commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.815, (HEIGHT_WIN * 0.20) + ((i + 1) * 50) + 100));
-    commands.setString(bestScore[i].namePlayer.c_str());
+    commands.setString(bestScore[i]->getName().c_str());
     _window->draw(commands);
     commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.9, (HEIGHT_WIN * 0.20) + ((i + 1) * 50) + 100));
-    commands.setString(std::to_string(bestScore[i].valueScore));
+    commands.setString(std::to_string(bestScore[i]->getScore()));
     _window->draw(commands);
   }
   commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.85, (HEIGHT_WIN * 0.20) + 350));
-  commands.setString(std::to_string(currentScore.valueScore));
+  commands.setString(std::to_string(currentScore->getScore()));
   _window->draw(commands);
   _window->display();
 }
