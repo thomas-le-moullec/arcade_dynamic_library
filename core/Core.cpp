@@ -189,7 +189,8 @@ void		arcade::Core::Quit()
     this->_scene = arcade::Scene::MENU;
   else
   {
-    this->_scoreBoard.writeScore();
+    //delete this->_scoreBoard;
+    //this->_scoreBoard.writeScore();
     this->_scene = arcade::Scene::QUIT;
   }
 }
@@ -237,7 +238,7 @@ void									arcade::Core::RunArcade()
     }
     if (this->_scene == arcade::Scene::GAME && this->_status != arcade::Status::RUNNING && this->_addScore)
     {
-      this->_scoreBoard.addScore(this->takeGameName(), this->_player.name, this->_game->GetScore());
+      this->_scoreBoard.PostScore(this->takeGameName(), this->_player.name, this->_game->GetScore());
       this->_addScore = false;
     }
   }
@@ -304,19 +305,16 @@ void		arcade::Core::NotifyCore(arcade::CoreCommand type)
   this->_coreCmd = type;
 }
 
-void						arcade::Core::ShowSceneGame()
+void							arcade::Core::ShowSceneGame()
 {
-  arcade::Score	score;
+  arcade::IScore	*score = new arcade::Score("", "", this->_game->GetScore());
 
   if (this->_status != arcade::Status::PAUSE)
     this->_status = this->_game->GetStatus();
   if (this->_status == arcade::Status::RUNNING || this->_status == arcade::Status::PAUSE)
   {
     this->_graphic->ShowGame(this->_game->GetPlayer(false), this->_game->GetMap(false), this->_game->GetAssets());
-    score.nameGame = "";
-    score.namePlayer = "";
-    score.valueScore = this->_game->GetScore();
-    this->_graphic->ShowScore(score, this->_scoreBoard.getBestScores(this->takeGameName(), 3));
+    this->_graphic->ShowScore(score, this->_scoreBoard.GetBestScores(this->takeGameName(), 3));
   }
   else
   {
@@ -331,5 +329,5 @@ void		arcade::Core::ShowSceneMenu()
 
 void		arcade::Core::ShowSceneScoreboard()
 {
-  this->_graphic->ShowScoreboard(this->takeGameName(), this->_scoreBoard.getBestScores(this->takeGameName(), 20));
+  this->_graphic->ShowScoreboard(this->takeGameName(), this->_scoreBoard.GetBestScores(this->takeGameName(), 20));
 }

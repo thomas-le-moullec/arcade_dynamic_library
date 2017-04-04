@@ -1,5 +1,5 @@
-#ifndef SCOREBOARD_H_
-#define SCOREBOARD_H_
+#ifndef SCOREBOARD_HPP_
+#define SCOREBOARD_HPP_
 
 #include <iostream>
 #include <map>
@@ -8,35 +8,31 @@
 #include <string>
 #include <stdlib.h>
 #include <algorithm>
+#include "Score.hpp"
 
 #define SB_FILENAME "score.txt"
 
 namespace arcade
 {
-  struct Score
-  {
-    std::string		nameGame;
-    std::string		namePlayer;
-    unsigned int	valueScore;
-  };
-
-  class ScoreBoard
+  class ScoreBoard : public IScoreBoard
   {
   public:
     ScoreBoard(const std::string& filename = SB_FILENAME);
-    ~ScoreBoard();
-    void												addScore(std::string, std::string, unsigned int);
-    void												writeScore();
-    std::vector<arcade::Score>	&getBestScores(const std::string&, int size = 10);
-  private:
-    std::vector<Score>					_board;
-    std::vector<arcade::Score> 	_new_score;
-    std::fstream								_fileIn;
-    std::ofstream								_fileOut;
-    std::string									_filename;
+    virtual ~ScoreBoard();
+    virtual void										PostScore(const std::string&, const std::string&, unsigned int);
+    virtual void										PostScore(IScore *);
+    virtual std::vector<IScore *>   &GetBestScores(const std::string&, size_t);
+    virtual void										GetFileBestScores();
 
-    void												sort();
+  private:
+    std::vector<IScore *>					_board;
+    std::vector<arcade::IScore *>	_new_score;
+    std::fstream									_fileIn;
+    std::ofstream									_fileOut;
+    std::string										_filename;
+
     void												separateInfoScore(std::string);
+    void												writeScore();
   };
 };
 

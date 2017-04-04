@@ -13,6 +13,7 @@
 #include "IGraphic.hpp"
 #include "IGame.hpp"
 #include "ScoreBoard.hpp"
+#include "Score.hpp"
 
 #define	 SIZE_PATH 17
 
@@ -48,13 +49,12 @@ namespace arcade
       void						NotifySceneScoreboard(CommandType);
 
     private:
+      IGame																		*_game;
+      IGraphic																*_graphic;
       arcade::Scene														_scene;
       arcade::Status													_status;
       arcade::ScoreBoard											_scoreBoard;
-      IGame																		*_game;
-      IGraphic																*_graphic;
-      void																		*_handle_game;
-      void																		*_handle_graphic;
+      arcade::playerName											_player;
       arcade::CoreCommand											_coreCmd;
       std::map<arcade::CoreCommand, coreFct>	_mapCore;
       std::map<arcade::Scene, showScene>			_mapShowScene;
@@ -65,8 +65,9 @@ namespace arcade
       int																			_idxGamesLib;
       bool																		_changeGraphicMenu;
       bool																		_addScore;
-      arcade::playerName											_player;
       bool																		_checkSwitch;
+      void																		*_handle_game;
+      void																		*_handle_graphic;
 
       void						initMapCore();
       void						initMapShowScene();
@@ -74,7 +75,6 @@ namespace arcade
       void						getIndexLib(bool, const std::string &);
       void						loadLibAfterMenu();
       std::string			takeGameName() const;
-
       void						takeLibInDir(const char *, int);
   };
 };

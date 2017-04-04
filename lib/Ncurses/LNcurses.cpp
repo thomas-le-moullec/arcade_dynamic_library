@@ -246,7 +246,7 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int
   (void)gamesLibs;
 }
 
-void									arcade::LNcurses::ShowScoreboard(const std::string &game, std::vector<arcade::Score> score)
+void									arcade::LNcurses::ShowScoreboard(const std::string &game, std::vector<arcade::IScore *> score)
 {
   int									y = 0;
 
@@ -257,14 +257,14 @@ void									arcade::LNcurses::ShowScoreboard(const std::string &game, std::vect
   mvprintw(MARGIN_Y / 3, MARGIN_X - 13, "Top 20 des meilleurs scores");
   for (int i = 0; i < 20 && i < (int)score.size(); i++)
   {
-    mvprintw(MARGIN_Y - 5 + y, MARGIN_X - 8, "%d. %s", i, score[i].namePlayer.c_str());
-    mvprintw(MARGIN_Y - 5 + y++, MARGIN_X + 3, "%d", score[i].valueScore);
+    mvprintw(MARGIN_Y - 5 + y, MARGIN_X - 8, "%d. %s", i, score[i]->getName().c_str());
+    mvprintw(MARGIN_Y - 5 + y++, MARGIN_X + 3, "%d", score[i]->getScore());
   }
   attroff(A_REVERSE);
   refresh();
 }
 
-void										arcade::LNcurses::ShowScore(const arcade::Score &currentScore, const std::vector<arcade::Score> &bestScore)
+void										arcade::LNcurses::ShowScore(const arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
 {
   int										y = MARGIN_Y - (this->_heigth_map / 2);
   int										x = MARGIN_X + this->_width_map + 3;
@@ -274,12 +274,12 @@ void										arcade::LNcurses::ShowScore(const arcade::Score &currentScore, con
   attroff(A_REVERSE);
   y++;
   for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++)
-    mvprintw(y++, x, "%s:%u", bestScore[i].namePlayer.c_str(), bestScore[i].valueScore);
+    mvprintw(y++, x, "%s:%u", bestScore[i]->getName().c_str(), bestScore[i]->getScore());
   y++;
   attron(A_REVERSE);
   mvprintw(y++, x, "Score actuel");
   attroff(A_REVERSE);
-  mvprintw(y++, x, "%u", currentScore.valueScore);
+  mvprintw(y++, x, "%u", currentScore->getScore());
   refresh();
 }
 
