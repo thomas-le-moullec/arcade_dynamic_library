@@ -1,5 +1,4 @@
 #include "LSfml.hpp"
-#include <sstream>
 
 arcade::LSfml::LSfml()
 {
@@ -7,10 +6,15 @@ arcade::LSfml::LSfml()
   setWindow(WIDTH_WIN, HEIGHT_WIN, PIXELS_WIN, isFullScreen());
   initGameInputs();
   initCoreInputs();
-  if (!_fontMasque.loadFromFile("MASQUE__.ttf") || !_fontArial.loadFromFile("arial.ttf")) {
+  if (!_fontMasque.loadFromFile(Ressources"MASQUE__.ttf") ||
+      !_fontArial.loadFromFile(Ressources"arial.ttf")) {
     _window->close();
     exit(0);
   }
+  if (!_music.openFromFile(Ressources"Miami_Nights_1984_-_Accelerated.ogg")) {
+  }
+  _music.setVolume(100);
+  _music.play();
 }
 
 arcade::LSfml::~LSfml()
@@ -174,7 +178,7 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
 
     _window->clear();
     if (initialisation) {
-      if (!_textureBackgroundGame.loadFromFile("backgroundGame.jpg")) {
+      if (!_textureBackgroundGame.loadFromFile(Ressources"backgroundGame.jpg")) {
       }
       initialisation = false;
       background.setTexture(&_textureBackgroundGame);
@@ -217,7 +221,7 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
 
   (void)button;
   _window->clear();
-  if (!texture.loadFromFile("backgroundMenu.gif")) {
+  if (!texture.loadFromFile(Ressources"backgroundMenu.gif")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);
@@ -282,7 +286,7 @@ void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::ve
   sf::Text              Scores;
 
   _window->clear();
-  if (!texture.loadFromFile("Scoreboard.gif")) {
+  if (!texture.loadFromFile(Ressources"Scoreboard.gif")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);
@@ -361,10 +365,10 @@ void										arcade::LSfml::PrintGameOver(arcade::Status status)
   sf::Texture           texture;
 
   _window->clear();
-  if (status == arcade::Status::WIN && !texture.loadFromFile("win.jpg"))
+  if (status == arcade::Status::WIN && !texture.loadFromFile(Ressources"win.jpg"))
   {
   }
-  if (status == arcade::Status::LOSE && !texture.loadFromFile("lose.jpg"))
+  if (status == arcade::Status::LOSE && !texture.loadFromFile(Ressources"lose.jpg"))
   {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));

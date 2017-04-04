@@ -4,10 +4,15 @@
 #include "IGraphic.hpp"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <sstream>
+#include <SFML/Audio.hpp>
 
 #define WIDTH_WIN 1200
 #define HEIGHT_WIN 720
 #define PIXELS_WIN 24
+#define SnakeRessources "./ressources/Snake"
+#define SolarFox "./ressources/SolarFox"
+#define Ressources "./ressources/"
 
 namespace arcade
 {
@@ -37,6 +42,7 @@ namespace arcade
       sf::RenderWindow                                   *_window;
       sf::Event                                           _event;
       bool                                                _fullScreen;
+      sf::Music                                           _music;
       std::map<arcade::TileType, sf::RectangleShape>			_map;
       sf::RectangleShape                                  *_player;
       std::map<arcade::TileType, sf::Texture>			        _mapTexture;

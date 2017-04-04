@@ -12,7 +12,7 @@ RM								=		rm -rf
 
 CPPFLAGS					=		-I ./interfaces/ -I ./core/ -I ./scoreboard/
 
-CXXFLAGS					=		-W -Wall -Wextra -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system -lncurses -ldl
+CXXFLAGS					=		-W -Wall -Wextra -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lncurses -ldl
 
 SRCS							=		main.cpp										\
 											core/Core.cpp								\
