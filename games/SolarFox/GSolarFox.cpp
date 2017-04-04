@@ -37,10 +37,10 @@ void											arcade::GSolarFox::initPlayer()
 
 void											arcade::GSolarFox::initEnemies()
 {
-  this->addEnemy(2, 0, CommandType::GO_RIGHT);
-  this->addEnemy(0, HEIGHT_MAP - 3, CommandType::GO_UP);
-  this->addEnemy(WIDTH_MAP - 3, HEIGHT_MAP - 1, CommandType::GO_LEFT);
-  this->addEnemy(WIDTH_MAP - 1, 2, CommandType::GO_DOWN);
+  this->addEnemy(2, 1, CommandType::GO_RIGHT);
+  this->addEnemy(1, HEIGHT_MAP - 3, CommandType::GO_UP);
+  this->addEnemy(WIDTH_MAP - 3, HEIGHT_MAP - 2, CommandType::GO_LEFT);
+  this->addEnemy(WIDTH_MAP - 2, 2, CommandType::GO_DOWN);
 }
 
 void											arcade::GSolarFox::initAssets()
@@ -277,6 +277,7 @@ void											arcade::GSolarFox::moveEnemies()
   this->modifyMapActors(this->_enemies, TileType::EMPTY);
   for (int i = 0; i < 4; i++)
   {
+    this->_map[this->_enemies[i].pos.y * WIDTH_MAP + this->_enemies[i].pos.x] = arcade::TileType::BLOCK;
     if (this->_enemies[i].dir == CommandType::GO_DOWN)
       this->_enemies[i].pos.y++;
     else if (this->_enemies[i].dir == CommandType::GO_UP)
@@ -327,12 +328,12 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
   {
     if (this->_playerShoot.lifes > 0)
       this->moveMyShoot();
-    if (this->_cmpt % 3 < 2 || debug == true)
+    this->move();
+    this->moveEnemies();
+    this->moveShoot();
+/*    if (this->_cmpt % 3 < 2 || debug == true)
     {
-      this->move();
-      this->moveEnemies();
-      this->moveShoot();
-    }
+    }*/
     if (this->_powerUp.size() == 0)
       this->gameEnd(arcade::Status::WIN);
     this->_cmpt++;
