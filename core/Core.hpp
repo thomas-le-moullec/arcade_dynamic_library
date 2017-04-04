@@ -66,6 +66,7 @@ namespace arcade
       bool																		_changeGraphicMenu;
       bool																		_addScore;
       arcade::playerName											_player;
+      bool																		_checkSwitch;
 
       void						initMapCore();
       void						initMapShowScene();

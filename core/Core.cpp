@@ -19,6 +19,7 @@ arcade::Core::Core()
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
   this->_player.name = "AAA";
+  this->_checkSwitch = false;
 }
 
 arcade::Core::~Core()
@@ -139,6 +140,7 @@ void   				arcade::Core::LoadGraphic(const std::string& lib)
 
 void		arcade::Core::LoadPrevGraphic()
 {
+  this->_checkSwitch = true;
   this->_idxGraphicLib--;
   if (this->_idxGraphicLib == -1)
     this->_idxGraphicLib = this->_graphicLibs.size() - 1;
@@ -148,6 +150,7 @@ void		arcade::Core::LoadPrevGraphic()
 
 void		arcade::Core::LoadNextGraphic()
 {
+  this->_checkSwitch = true;
   this->_idxGraphicLib++;
   if (this->_idxGraphicLib == (int)this->_graphicLibs.size())
     this->_idxGraphicLib = 0;
@@ -257,7 +260,11 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
   {
     this->_scene = arcade::Scene::GAME;
     this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
-    this->_changeGraphicMenu = true;
+    if (this->_checkSwitch == true)
+    {
+      this->_changeGraphicMenu = true;
+      this->_checkSwitch = false;
+    }
   }
   else if (type == arcade::CommandType::GO_RIGHT)
     this->_player.idx++;
