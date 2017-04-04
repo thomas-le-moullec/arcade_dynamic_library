@@ -10,9 +10,9 @@
 #define WIDTH_WIN 1200
 #define HEIGHT_WIN 720
 #define PIXELS_WIN 24
-#define SnakeRessources "./ressources/Snake"
-#define SolarFox "./ressources/SolarFox"
-#define Ressources "./ressources/"
+#define RESSOURCES "./ressources/"
+#define RESSOURCES_SOUNDS "./ressources/Sounds/"
+#define RESSOURCES_FONTS "./ressources/Fonts/"
 
 namespace arcade
 {
@@ -39,6 +39,10 @@ namespace arcade
       void                                               setColor(const unsigned int &, arcade::TileType, sf::RectangleShape);
       void                                               print_commands() const;
       std::string										                     cutName(std::string &, int) const;
+      void                                               loadSounds();
+      void                                               playSound(arcade::SoundType type);
+      std::map<arcade::SoundType, sf::SoundBuffer>       _sounds;
+      sf::Sound                                          _sound;
       sf::RenderWindow                                   *_window;
       sf::Event                                           _event;
       bool                                                _fullScreen;
@@ -56,6 +60,5 @@ namespace arcade
       sf::Font                                            _fontArial;
   };
 };
-
 
 #endif

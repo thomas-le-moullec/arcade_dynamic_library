@@ -27,6 +27,7 @@ namespace arcade
   {
     arcade::Color       c_player;
     arcade::Color       c_map[8];
+    arcade::SoundType   sound;
   };
 
   class IGraphic

@@ -41,6 +41,7 @@ solarfox:AAA:0
 solarfox:AAA:20
 solarfox:CCD:50
 solarfox:DBZ:50
+<<<<<<< HEAD
 snake:LEO:269
 snake:AAA:164
 solarfox:AAA:40
@@ -56,3 +57,24 @@ solarfox:AAA:50
 solarfox:AAA:10
 solarfox:AAA:20
 solarfox:AAA:30
+=======
+snake:AAA:8
+snake:AAA:15
+snake:AAA:8
+snake:AAA:34
+snake:AAA:23
+snake:AAA:425
+snake:AAA:647
+snake:AAA:985
+snake:AAA:241
+solarfox:AAA:0
+snake:AAA:332
+snake:AAA:639
+solarfox:AAA:10
+solarfox:AAA:10
+snake:AAA:159
+solarfox:AAA:40
+solarfox:AAA:10
+solarfox:AAA:0
+solarfox:AAA:40
+>>>>>>> 942b977d31f1197d01c7392ef9370403dcfb4f96

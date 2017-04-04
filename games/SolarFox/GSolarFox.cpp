@@ -174,6 +174,7 @@ void											arcade::GSolarFox::moveMyShoot()
 void											arcade::GSolarFox::initMyShoot()
 {
   this->_playerShoot.lifes = RANGE;
+  _assets.sound = arcade::SoundType::SHOOT;
   if (this->_player.dir == CommandType::GO_DOWN)
     this->addMyShoot(this->_player.pos.x, this->_player.pos.y + 1, CommandType::GO_DOWN);
   else if (this->_player.dir == CommandType::GO_UP)
@@ -312,6 +313,7 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
 {
   (void)type;
   (void)debug;
+  _assets.sound = arcade::SoundType::NOTHING;
   if (type == CommandType::WHERE_AM_I)
     this->GetPlayer(debug);
   if (type == CommandType::GET_MAP)
