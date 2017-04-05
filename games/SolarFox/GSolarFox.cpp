@@ -52,6 +52,13 @@ void											arcade::GSolarFox::initAssets()
   _assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].color = 0xa40061FF;
   _assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].color = 0xd9f7f7FF;
   _assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].color = 0xffc5e4FF;
+  _assets.loadMap = true;
+  _assets.t_map = "SolarFoxMap.png";
+  _assets.loadPlayer = true;
+  _assets.t_player= "SolarFoxPlayer.png";
+  _assets.loadBg = true;
+  _assets.t_bg = "SolarFoxBackgroundGame.jpg";
+  _assets.dir = arcade::CommandType::GO_RIGHT;
 }
 
 void											arcade::GSolarFox::initPowerUp()
@@ -411,8 +418,9 @@ bool															arcade::GSolarFox::IsGameOver() const
   return false;
 }
 
-const arcade::Assets                  &arcade::GSolarFox::GetAssets() const
+arcade::Assets                  &arcade::GSolarFox::GetAssets()
 {
+  _assets.dir = _player.dir;
   return _assets;
 }
 

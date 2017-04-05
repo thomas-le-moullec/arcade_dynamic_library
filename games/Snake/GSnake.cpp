@@ -55,6 +55,13 @@ void											arcade::GSnake::initAssets()
   _assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].color = 0xf5f5dcFF;
   _assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].color = 0x5e5d62FF;
   _assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].color = 0xa8353aFF;
+  _assets.loadMap = true;
+  _assets.t_map = "SnakeMap.png";
+  _assets.loadPlayer = true;
+  _assets.t_player= "SnakePlayer.png";
+  _assets.loadBg = true;
+  _assets.t_bg = "SnakeBackgroundGame.jpg";
+  _assets.dir = arcade::CommandType::GO_RIGHT;
 }
 
 void                      arcade::GSnake::increaseSnake(int x, int y)
@@ -210,8 +217,9 @@ bool															 arcade::GSnake::snakeBitesItself() const
   return false;
 }
 
-const arcade::Assets    &arcade::GSnake::GetAssets() const
+arcade::Assets    &arcade::GSnake::GetAssets()
 {
+  _assets.dir = _dir[0];
   return _assets;
 }
 

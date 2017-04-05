@@ -14,7 +14,7 @@ namespace arcade
     public:
       LNcurses();
       virtual ~LNcurses();
-      virtual void									ShowGame(WhereAmI *, GetMap *, const Assets &);
+      virtual void									ShowGame(WhereAmI *, GetMap *, Assets &);
       virtual void									ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int, Button, const arcade::playerName &);
       virtual void									GetInput(ICore *);
       virtual void					        PrintGameOver(arcade::Status);

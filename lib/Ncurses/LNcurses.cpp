@@ -108,7 +108,7 @@ void		arcade::LNcurses::printCmd(arcade::GetMap *map)
   mvprintw(y++, x, "9 - Quitter l'arcade");
 }
 
-void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, const Assets &assets)
+void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, Assets &assets)
 {
   int		x;
   int		y = 0;

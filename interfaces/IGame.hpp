@@ -15,7 +15,7 @@ namespace arcade
       virtual struct WhereAmI				*GetPlayer(bool) const = 0;
       virtual bool									IsGameOver() const = 0;
       virtual arcade::Status				GetStatus() const = 0;
-      virtual const arcade::Assets  &GetAssets() const = 0;
+      virtual arcade::Assets        &GetAssets() = 0;
       virtual unsigned int					GetScore() const = 0;
   };
 };

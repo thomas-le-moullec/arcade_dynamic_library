@@ -61,11 +61,9 @@ solarfox:AAA:10
 solarfox:AAA:0
 solarfox:AAA:40
 snake:AAA:402
-<<<<<<< HEAD
 snakos:AAA:15
 snakos:AAA:1066
 snake:AAA:767
-=======
 snake:AAA:776
 snake:AAA:124
 snake:AAA:433
@@ -75,4 +73,26 @@ snake:AAA:6614
 snake:AAA:2386
 snake:AAA:2992
 solo:AAA:503
->>>>>>> 279363c8ab1536fc5d3d4c58ea5487df1b698c4e
+solarfox:AAA:40
+solarfox:AAA:50
+solarfox:AAA:20
+snake:AAA:120
+solarfox:BAA:0
+snake:BAA:370
+snake:AAA:476
+pacman:AAA:2160
+snake:AAA:17
+snake:AAA:8
+snake:AAA:1085
+pacman:AAA:2460
+pacman:AAA:2460
+pacman:AAA:1220
+pacman:AAA:470
+pacman:AAA:170
+solarfox:AAA:0
+solarfox:AAA:50
+snake:AAA:8
+snake:AAA:351
+snake:AAA:150
+snake:AAA:158
+snake:AAA:276

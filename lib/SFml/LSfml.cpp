@@ -12,6 +12,9 @@ arcade::LSfml::LSfml()
     exit(0);
   }
   loadSounds();
+  _backgroundTexture = NULL;
+  _playerTexture = NULL;
+  _mapTexture = NULL;
 }
 
 arcade::LSfml::~LSfml()
@@ -29,6 +32,35 @@ void    arcade::LSfml::loadSounds()
 
   _sounds[arcade::SoundType::EATAPPLE].loadFromFile(RESSOURCES_SOUNDS"eatApple.wav");
   _sounds[arcade::SoundType::SHOOT].loadFromFile(RESSOURCES_SOUNDS"shoot.wav");
+}
+
+void    arcade::LSfml::loadTextures(Assets &assets)
+{
+  if (assets.loadMap) {
+    if ((_mapTexture = new sf::Texture) && !_mapTexture->loadFromFile(RESSOURCES_TEXTURES+assets.t_map))
+      _mapTexture = NULL;
+    else
+      assets.loadMap = false;
+  }
+  if (assets.loadPlayer) {
+    if ((_playerTexture= new sf::Texture) && !_playerTexture->loadFromFile(RESSOURCES_TEXTURES+assets.t_player))
+      _playerTexture = NULL;
+    else
+      assets.loadPlayer = false;
+  }
+  if (assets.loadBg) {
+    if ((_backgroundTexture = new sf::Texture) && !_backgroundTexture->loadFromFile(RESSOURCES_TEXTURES+assets.t_bg))
+    {
+      if (!_backgroundTexture->loadFromFile(RESSOURCES"defaultGameBackground.jpg"))
+      {
+        _backgroundTexture = NULL;
+      }
+      else
+        assets.loadBg = false;
+    }
+    else
+      assets.loadBg = false;
+  }
 }
 
 void    arcade::LSfml::initGameInputs()
@@ -104,17 +136,19 @@ std::string	arcade::LSfml::cutName(std::string &libName, int size_path) const
 
 void                  arcade::LSfml::setColor(const unsigned int &color, arcade::TileType tile, sf::RectangleShape rectangle)
 {
-  sf::Texture         texture;
+  unsigned int          textureMapSize;
 
-  _mapTexture[tile] = texture;
-  //if (!_mapTexture[arcade::TileType::EMPTY].loadFromFile("Errorplancher.png")) //need a map of tiletype and .png
   rectangle.setFillColor(sf::Color(color));
-  //else
-    //rectangle.setTexture(&_mapTexture[tile]);
   _map[tile] = rectangle;
+  if (_mapTexture != NULL) {
+    textureMapSize = _mapTexture->getSize().y;
+    _map[tile].setFillColor(sf::Color::White);
+    _map[tile].setTexture(_mapTexture);
+    _map[tile].setTextureRect(sf::IntRect(textureMapSize * static_cast<int>(tile), 0, textureMapSize, textureMapSize));
+  }
 }
 
-void                  arcade::LSfml::initMap(int height, int width, const Assets &assets)
+void                  arcade::LSfml::initMap(int height, int width, Assets &assets)
 {
   int                 idx(0);
   sf::RectangleShape  rectangle(sf::Vector2f((WIDTH_WIN * 0.60) / width, (HEIGHT_WIN * 0.60) / height));//add value to map->width et map->height
@@ -184,29 +218,30 @@ void arcade::LSfml::playSound(arcade::SoundType type)
   _sound.play();
 }
 
-void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, const Assets &assets)
+void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, Assets &assets)
 {
-    unsigned int x;
-    unsigned int y;
-    int          i;
-    static bool  initialisation = true; //Réinitialiser la map dans le cas ou il y a eu des changements d'assets, de jeu etc.
-    static sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
+    unsigned int          x;
+    unsigned int          y;
+    int                   i;
+    static                sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
+    unsigned int          texturePlayerSize;
 
     _window->clear();
-    if (assets.sound != arcade::SoundType::NOTHING) {
+    if (assets.sound != arcade::SoundType::NOTHING)
       playSound(assets.sound);
-    }
-    if (initialisation) {
-      if (!_textureBackgroundGame.loadFromFile(RESSOURCES"backgroundGame.jpg")) {
-      }
-      initialisation = false;
-      background.setTexture(&_textureBackgroundGame);
-    }
-    _window->draw(background);
     _player = new sf::RectangleShape(sf::Vector2f((WIDTH_WIN * 0.60) / map->width, (HEIGHT_WIN * 0.60) / map->height)); //add value to map->width et map->height
     _player->setFillColor(sf::Color(assets.c_player.color));
+    if (_playerTexture != NULL) {
+      texturePlayerSize = _playerTexture->getSize().y;
+      _player->setFillColor(sf::Color::White);
+      _player->setTexture(_playerTexture);
+      _player->setTextureRect(sf::IntRect(texturePlayerSize * (static_cast<int>(assets.dir) - 2), 0, texturePlayerSize, texturePlayerSize));
+    }
+    loadTextures(assets);
     initMap(map->height, map->width, assets);
-
+    if (_backgroundTexture != NULL)
+      background.setTexture(_backgroundTexture);
+    _window->draw(background);
     y = 0;
     i = 0;
     while (y < map->height) {
@@ -226,7 +261,6 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, con
       y++;
     }
     print_commands();
-    //_window->display();
 }
 
 void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
@@ -278,7 +312,6 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
     }
     _window->draw(graphics);
   }
-  //functions !
   for (unsigned int idx = 0; idx < gamesLibs.size(); idx++){
     games.setString(cutName(gamesLibs[idx], 17));
     games.setCharacterSize(12);
@@ -294,7 +327,6 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
     }
     _window->draw(games);
   }
-  //_window->draw(title);
   _window->display();
 }
 
