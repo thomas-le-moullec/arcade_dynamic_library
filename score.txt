@@ -61,11 +61,9 @@ solarfox:AAA:10
 solarfox:AAA:0
 solarfox:AAA:40
 snake:AAA:402
-<<<<<<< HEAD
 snakos:AAA:15
 snakos:AAA:1066
 snake:AAA:767
-=======
 snake:AAA:776
 snake:AAA:124
 snake:AAA:433
@@ -75,7 +73,6 @@ snake:AAA:6614
 snake:AAA:2386
 snake:AAA:2992
 solo:AAA:503
-<<<<<<< HEAD
 snake:EBA:129
 snake:EBA:1117
 snake:EBA:867
@@ -93,6 +90,4 @@ snake:AAA:1376
 snake:AAA:760
 snake:AAA:1088
 snake:AAA:1842
-=======
->>>>>>> 279363c8ab1536fc5d3d4c58ea5487df1b698c4e
->>>>>>> 42497dada006304c63ed40ed4b5bb7d3cd7e1edc
+snake:AAA:824
