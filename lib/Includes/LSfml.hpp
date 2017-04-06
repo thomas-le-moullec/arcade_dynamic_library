@@ -7,14 +7,6 @@
 #include <sstream>
 #include <SFML/Audio.hpp>
 
-#define WIDTH_WIN 1200
-#define HEIGHT_WIN 720
-#define PIXELS_WIN 24
-#define RESSOURCES "./ressources/"
-#define RESSOURCES_SOUNDS "./ressources/Sounds/"
-#define RESSOURCES_FONTS "./ressources/Fonts/"
-#define RESSOURCES_TEXTURES "./ressources/Textures/"
-
 namespace arcade
 {
   class LSfml : public IGraphic
@@ -56,9 +48,15 @@ namespace arcade
       sf::RectangleShape                                  *_player;
       std::map<sf::Keyboard::Key, arcade::CommandType>    _game_input;
       std::map<sf::Keyboard::Key, arcade::CoreCommand>    _core_input;
-      //sf::Texture                                         _textureBackgroundGame;
       sf::Font                                            _fontMasque;
       sf::Font                                            _fontArial;
+      static const unsigned int                           WIDTH_WIN;
+      static const unsigned int                           HEIGHT_WIN;
+      static const unsigned int                           PIXELS_WIN;
+      static const std::string                            RESSOURCES;
+      static const std::string                            RESSOURCES_SOUNDS;
+      static const std::string                            RESSOURCES_FONTS;
+      static const std::string                            RESSOURCES_TEXTURES;
   };
 };
 

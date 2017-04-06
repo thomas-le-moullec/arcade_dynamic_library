@@ -21,11 +21,13 @@ namespace arcade
     NOTHING       = 8
   };
 
-  enum class SoundType : uint16_t
+  enum class                    SoundType : uint16_t
   {
-    NOTHING = 0,
-    EATAPPLE = 1,
-    SHOOT = 2
+    NOTHING = 0,                        // No sound
+    EATAPPLE = 1,                       // Play a "Nam nam nam" sound
+    SHOOT = 2,                          // Play a "Pew pew pew" sound
+    WAKA = 3,                           // Play a "Waka Waka" sound
+    INTRO_PACMAN = 4,                   // Play a "Toulitoutoulitoutou" sound
   };
 
   enum class			Scene : uint16_t
