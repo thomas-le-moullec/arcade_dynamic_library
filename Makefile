@@ -22,14 +22,11 @@ SRCS							=		main.cpp										\
 
 OBJS							=		$(SRCS:.cpp=.o)
 
-
-# A MODIFIER !!!!!
-
-ball:
+all:
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
 
-all:						  $(NAME)
+full:						  $(NAME)
 									$(MAKE) lib/Ncurses
 									$(MAKE) lib/OpenGL
 									$(MAKE) lib/SFml
