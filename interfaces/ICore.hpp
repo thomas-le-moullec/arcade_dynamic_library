@@ -10,15 +10,15 @@ namespace arcade
 {
   enum class			CoreCommand : uint16_t
   {
-    PREV_GRAPHIC  = 0,
-    NEXT_GRAPHIC  = 1,
-    PREV_GAME	    = 2,
-    NEXT_GAME	    = 3,
-    PAUSE	        = 4,
-    RESTART       = 5,
-    MENU          = 6,
-    ESCAPE        = 7,
-    NOTHING       = 8
+    PREV_GRAPHIC  = 0, 		// Load the previous graphic library
+    NEXT_GRAPHIC  = 1,    // Load the next graphic library
+    PREV_GAME	    = 2,		// Load the previous game
+    NEXT_GAME	    = 3,		// Load the next game
+    PAUSE	        = 4,		// Pause the game
+    RESTART       = 5,		// Restart the game
+    MENU          = 6,		// Back to the Menu
+    ESCAPE        = 7,    // Quit the arcade
+    NOTHING       = 8			// Do nothing
   };
 
   enum class                    SoundType : uint16_t
@@ -40,11 +40,10 @@ namespace arcade
 
   enum class			Status : uint16_t
   {
-    RUNNING = 0,
-    WIN = 1,
-    LOSE = 2,
-    PAUSE = 3,
-    SCORE = 4,
+    RUNNING = 0,					// The game is running
+    WIN = 1,							// The game is over, the player won
+    LOSE = 2,							// The game is over, the player lost
+    PAUSE = 3,						// The game is paused
   };
 
   enum class      Button : uint16_t
@@ -59,8 +58,8 @@ namespace arcade
 
   struct playerName
   {
-    std::string 	name;
-    unsigned int	idx;
+    std::string 	name;			// Name of the player
+    unsigned int	idx;			// Index of the selected letter
   };
 
   class ICore

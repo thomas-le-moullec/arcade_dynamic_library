@@ -25,12 +25,15 @@ namespace arcade
     private:
       void 													setupOpengl(int, int);
       void 													handle_key_down(SDL_keysym *, ICore *);
-      void													drawSquare(float, float, std::vector<float>);
+      void													drawSquare(float, float, std::vector<float>, float);
       bool													isOnMap(arcade::WhereAmI *, int, int) const;
       void													initMapColor();
       void													initMapInputGame();
       void													initMapInputCore();
       void													fillColor(float, float, float);
+      void								  				drawText(char, float, float, std::vector<float>);
+      void													putStrOpenGl(const char *, float, float, std::vector<float>);
+      std::string										cutName(std::string &, int) const;
 
       std::vector<float>																					_rgb;
       std::map<arcade::TileType, std::vector<float>>							_colors;

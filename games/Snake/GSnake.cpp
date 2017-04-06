@@ -58,7 +58,7 @@ void											arcade::GSnake::initAssets()
   _assets.loadMap = true;
   _assets.t_map = "SnakeMap.png";
   _assets.loadPlayer = true;
-  _assets.t_player= "SnakePlayer.png";
+  _assets.t_player= "snake_player.png";
   _assets.loadBg = true;
   _assets.t_bg = "SnakeBackgroundGame.jpg";
   _assets.dir = arcade::CommandType::GO_RIGHT;
