@@ -13,6 +13,7 @@
 #define RESSOURCES "./ressources/"
 #define RESSOURCES_SOUNDS "./ressources/Sounds/"
 #define RESSOURCES_FONTS "./ressources/Fonts/"
+#define RESSOURCES_TEXTURES "./ressources/Textures/"
 
 namespace arcade
 {
@@ -21,7 +22,7 @@ namespace arcade
     public:
       LSfml();
       virtual ~LSfml();
-      virtual void		                                   ShowGame(WhereAmI *, GetMap *, const Assets &);
+      virtual void		                                   ShowGame(WhereAmI *, GetMap *, Assets &);
       virtual void				                               GetInput(ICore *);
       virtual void					                             PrintGameOver(arcade::Status);
       virtual void																		   ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int, Button, const arcade::playerName &);
@@ -30,7 +31,7 @@ namespace arcade
 
     private:
       bool													                     isOnMap(WhereAmI *, int, int) const;
-      void                                               initMap(int, int, const Assets &);
+      void                                               initMap(int, int, Assets &);
       void                                               setFullScreen(bool);
       bool                                               isFullScreen();
       void                                               setWindow(unsigned int, unsigned int, unsigned int, bool);
@@ -40,22 +41,22 @@ namespace arcade
       void                                               print_commands() const;
       std::string										                     cutName(std::string &, int) const;
       void                                               loadSounds();
+      void                                               loadTextures(Assets &);
       void                                               playSound(arcade::SoundType type);
       std::map<arcade::SoundType, sf::SoundBuffer>       _sounds;
       sf::Sound                                          _sound;
       sf::RenderWindow                                   *_window;
       sf::Event                                           _event;
+      sf::Texture                                         *_playerTexture;
+      sf::Texture                                         *_mapTexture;
+      sf::Texture                                         *_backgroundTexture;
       bool                                                _fullScreen;
       sf::Music                                           _music;
       std::map<arcade::TileType, sf::RectangleShape>			_map;
       sf::RectangleShape                                  *_player;
-      std::map<arcade::TileType, sf::Texture>			        _mapTexture;
       std::map<sf::Keyboard::Key, arcade::CommandType>    _game_input;
       std::map<sf::Keyboard::Key, arcade::CoreCommand>    _core_input;
-      sf::Texture                                         _textureEmpty;
-      sf::Texture                                         _textureBlock;
-      sf::Texture                                         _texturePower;
-      sf::Texture                                         _textureBackgroundGame;
+      //sf::Texture                                         _textureBackgroundGame;
       sf::Font                                            _fontMasque;
       sf::Font                                            _fontArial;
   };
