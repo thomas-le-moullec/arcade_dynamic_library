@@ -6,7 +6,7 @@ arcade::LSfml::LSfml()
   setWindow(WIDTH_WIN, HEIGHT_WIN, PIXELS_WIN, isFullScreen());
   initGameInputs();
   initCoreInputs();
-  if (!_fontMasque.loadFromFile(RESSOURCES_FONTS"MASQUE__.ttf") ||
+  if (!_fontMasque.loadFromFile(RESSOURCES_FONTS"MASQUE__.ttf") || 
       !_fontArial.loadFromFile(RESSOURCES_FONTS"arial.ttf")) {
     _window->close();
     exit(0);

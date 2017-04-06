@@ -2,7 +2,7 @@ CC								= g++
 
 RM								= rm -rf
 
-NAME_LIB_OPENGL		= ../lib_arcade_ncurses.so
+NAME_LIB_OPENGL		= ../lib_arcade_opengl.so
 
 SRCS_LIB_OPENGL		=	./OpenGL.cpp
 
@@ -18,7 +18,7 @@ $(NAME_LIB_OPENGL):
 	@echo "Compiling with Position Independent Code..."
 	@$(CC) -c $(CXXFLAGS) $(CPPFLAGS) -fpic $(SRCS_LIB_OPENGL)
 	@echo "Creating a shared library from an object file..."
-	@$(CC) -shared -o $(NAME_LIB_OPENGL) *.o
+	@$(CC) -shared -o $(NAME_LIB_OPENGL) *.o -lGL -lSDL -lSDL_ttf -lGLU
 
 clean:
 	@echo "Cleaning object files ..."

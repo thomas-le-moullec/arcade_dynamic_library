@@ -22,12 +22,16 @@ SRCS							=		main.cpp										\
 
 OBJS							=		$(SRCS:.cpp=.o)
 
-all:
+
+# A MODIFIER !!!!!
+
+ball:
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
 
-ball:						  $(NAME)
+all:						  $(NAME)
 									$(MAKE) lib/Ncurses
+									$(MAKE) lib/OpenGL
 									$(MAKE) lib/SFml
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
@@ -36,6 +40,7 @@ arcade:						$(NAME)
 
 libs:
 									$(MAKE) lib/Ncurses
+									$(MAKE) lib/OpenGL
 									$(MAKE) lib/SFml
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
@@ -48,6 +53,7 @@ clean:
 									@echo "Cleaning object files ..."
 									$(RM) $(OBJS)
 									@$(CLEAN) lib/Ncurses
+									@$(CLEAN) lib/OpenGL
 									@$(CLEAN) lib/SFml
 									@$(CLEAN) games/Snake
 									@$(CLEAN) games/SolarFox
@@ -57,6 +63,7 @@ fclean: 					clean
 									@echo "Cleaning files ..."
 									$(RM) $(NAME)
 									@$(FCLEAN) lib/Ncurses
+									@$(FCLEAN) lib/OpenGL
 									@$(FCLEAN) lib/SFml
 									@$(FCLEAN) games/Snake
 									@$(FCLEAN) games/SolarFox
