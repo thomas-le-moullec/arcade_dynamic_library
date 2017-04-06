@@ -55,7 +55,7 @@ void											arcade::GSolarFox::initAssets()
   _assets.loadMap = true;
   _assets.t_map = "SolarFoxMap.png";
   _assets.loadPlayer = true;
-  _assets.t_player= "SolarFoxPlayer.png";
+  _assets.t_player= "SpaceShip.png";
   _assets.loadBg = true;
   _assets.t_bg = "SolarFoxBackgroundGame.jpg";
   _assets.dir = arcade::CommandType::GO_RIGHT;

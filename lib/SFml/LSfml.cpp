@@ -6,7 +6,7 @@ arcade::LSfml::LSfml()
   setWindow(WIDTH_WIN, HEIGHT_WIN, PIXELS_WIN, isFullScreen());
   initGameInputs();
   initCoreInputs();
-  if (!_fontMasque.loadFromFile(RESSOURCES_FONTS"MASQUE__.ttf") || 
+  if (!_fontMasque.loadFromFile(RESSOURCES_FONTS"MASQUE__.ttf") ||
       !_fontArial.loadFromFile(RESSOURCES_FONTS"arial.ttf")) {
     _window->close();
     exit(0);
@@ -39,14 +39,12 @@ void    arcade::LSfml::loadTextures(Assets &assets)
   if (assets.loadMap) {
     if ((_mapTexture = new sf::Texture) && !_mapTexture->loadFromFile(RESSOURCES_TEXTURES+assets.t_map))
       _mapTexture = NULL;
-    else
-      assets.loadMap = false;
+    assets.loadMap = false;
   }
   if (assets.loadPlayer) {
     if ((_playerTexture= new sf::Texture) && !_playerTexture->loadFromFile(RESSOURCES_TEXTURES+assets.t_player))
       _playerTexture = NULL;
-    else
-      assets.loadPlayer = false;
+    assets.loadPlayer = false;
   }
   if (assets.loadBg) {
     if ((_backgroundTexture = new sf::Texture) && !_backgroundTexture->loadFromFile(RESSOURCES_TEXTURES+assets.t_bg))
@@ -55,11 +53,9 @@ void    arcade::LSfml::loadTextures(Assets &assets)
       {
         _backgroundTexture = NULL;
       }
-      else
-        assets.loadBg = false;
-    }
-    else
       assets.loadBg = false;
+    }
+    assets.loadBg = false;
   }
 }
 

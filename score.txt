@@ -135,3 +135,17 @@ solarfox:AAA:0
 solarfox:AAA:0
 solarfox:AAA:50
 pacman:AAA:2460
+solarfox:AAA:0
+snake:AAA:436
+solarfox:AAA:20
+solarfox:AAA:20
+solarfox:AAA:10
+solarfox:AAA:0
+solarfox:AAA:0
+solarfox:AAA:0
+solarfox:AAA:40
+solarfox:AAA:0
+solarfox:AAA:40
+solarfox:AAA:0
+solarfox:AAA:50
+pacman:AAA:2460
