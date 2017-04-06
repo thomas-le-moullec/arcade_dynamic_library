@@ -1,7 +1,7 @@
 #include "OpenGL.hpp"
 
 SDL_Surface *text();
-void			renderText(std::string, SDL_Color, int, int, TTF_Font *);
+void				renderText(std::string, SDL_Color, int, int, TTF_Font *);
 
 arcade::OpenGL::OpenGL()
 {
@@ -132,9 +132,9 @@ bool									arcade::OpenGL::isOnMap(arcade::WhereAmI *player, int i, int width)
   return false;
 }
 
-void									arcade::OpenGL::ShowGame(WhereAmI *player, GetMap *map, const Assets &assets)
+void									arcade::OpenGL::ShowGame(WhereAmI *player, GetMap *map, Assets &assets)
 {
-/*
+
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   for (float y = 0; y < map->height; y++)
   {
@@ -148,7 +148,7 @@ void									arcade::OpenGL::ShowGame(WhereAmI *player, GetMap *map, const Asset
   }
   glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 10, 10, 0, GL_RGB, GL_UNSIGNED_BYTE, text());
   glEnd( );
-  SDL_GL_SwapBuffers( );*/
+  SDL_GL_SwapBuffers( );
 
 (void)player;
 (void)map;
@@ -221,7 +221,7 @@ void									arcade::OpenGL::ShowScore(const arcade::IScore *currentScore, const
   //InitEverything();
   //std::cout << "Attention ! ca va segfault" << std::endl;
   //std::cout << "PUTA" << std::endl;
-  TTF_Font* font = TTF_OpenFont("./ressources/Fonts/arial.ttf", 50);
+  /*TTF_Font* font = TTF_OpenFont("./ressources/Fonts/arial.ttf", 50);
   SDL_Color col;
   SDL_Rect rect;
 
@@ -230,7 +230,7 @@ void									arcade::OpenGL::ShowScore(const arcade::IScore *currentScore, const
   col.r = 255;
   col.g = 255;
   col.b = 255;
-  renderText("TOTO", font, col, &rect);
+  renderText("TOTO", font, col, &rect);*/
 
   (void)currentScore;
   (void)bestScore;

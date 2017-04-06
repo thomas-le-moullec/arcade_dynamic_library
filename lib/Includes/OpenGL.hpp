@@ -14,7 +14,7 @@ namespace arcade
     public:
       OpenGL();
       virtual ~OpenGL();
-      virtual void									ShowGame(WhereAmI *, GetMap *, const Assets &);
+      virtual void									ShowGame(WhereAmI *, GetMap *, Assets &);
       virtual void									ShowMenu(std::vector<std::string>, int, std::vector<std::string>, int, arcade::Button, const arcade::playerName &);
       virtual void									GetInput(ICore *);
       virtual void					        PrintGameOver(arcade::Status);
