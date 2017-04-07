@@ -27,8 +27,7 @@ all:
 									$(MAKE) games/SolarFox
 									$(MAKE) games/Centiped
 
-full:
-									$(NAME)
+full:							$(NAME)
 									$(MAKE) lib/Ncurses
 									$(MAKE) lib/OpenGL
 									$(MAKE) lib/SFml
