@@ -1,6 +1,8 @@
 #include "LNcurses.hpp"
 #include <stdio.h>
 
+const std::string arcade::LNcurses::RESSOURCES_ASCII = "./ressources/ascii_files/";
+
 arcade::LNcurses::LNcurses()
 {
   this->initWindow();
@@ -213,7 +215,7 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int
 
   (void)button;
   clear();
-  if (!this->printFile("ascii_files/menu.txt", -10))
+  if (!this->printFile((RESSOURCES_ASCII + "menu.txt").c_str(), -10))
     mvprintw(MARGIN_Y - 3, MARGIN_X - 2, "ARCADE");
   for (unsigned int i = 0; i < 3; i++)
   {
@@ -289,12 +291,12 @@ void										arcade::LNcurses::PrintGameOver(arcade::Status status)
   clear();
   if (status == arcade::Status::LOSE)
   {
-    if (!this->printFile("./ascii_files/game_over.txt", 0))
+    if (!this->printFile((RESSOURCES_ASCII + "game_over.txt").c_str(), 0))
       mvprintw(MARGIN_Y, MARGIN_X - 4, "Game Over");
   }
   else
   {
-    if (!this->printFile("./ascii_files/win.txt", 0))
+    if (!this->printFile((RESSOURCES_ASCII + "win.txt").c_str(), 0))
       mvprintw(MARGIN_Y, MARGIN_X - 1, "Win");
   }
   refresh();

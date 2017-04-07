@@ -1,4 +1,7 @@
 #include "OpenGL.hpp"
+#include <stdio.h>
+
+const std::string arcade::OpenGL::RESSOURCES_ASCII = "./ressources/ascii_files/";
 
 arcade::OpenGL::OpenGL()
 {
@@ -25,9 +28,9 @@ arcade::OpenGL::OpenGL()
   if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 )
     exit(-1);
   this->setupOpengl( width, height );
-  this->initMapColor();
   this->initMapInputGame();
   this->initMapInputCore();
+  this->initMapColor();
   TTF_Init();
 }
 
@@ -61,6 +64,27 @@ void									arcade::OpenGL::initMapColor()
   this->fillColor(0, 1, 0);
   this->_colors[arcade::TileType::POWERUP] = this->_rgb;
   this->fillColor(1, 1, 1);
+  this->_colors[arcade::TileType::OBSTACLE] = this->_rgb;
+}
+
+void									arcade::OpenGL::initMapColor(Assets &assets)
+{
+  //printf("%d * (1/255) => %f\n", assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r, assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r * (1.0 / 255.0));
+  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.b * (1.0 / 255.0));
+  this->_colors[arcade::TileType::EMPTY] = this->_rgb;
+  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.b * (1.0 / 255.0));
+  this->_colors[arcade::TileType::BLOCK] = this->_rgb;
+  this->fillColor(assets.c_player.val.r * (1.0 / 255.0), assets.c_player.val.v * (1.0 / 255.0), assets.c_player.val.b * (1.0 / 255.0));
+  this->_colors[arcade::TileType::OTHER] = this->_rgb;
+  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.b * (1.0 / 255.0));
+  this->_colors[arcade::TileType::MY_SHOOT] = this->_rgb;
+  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.b * (1.0 / 255.0));
+  this->_colors[arcade::TileType::EVIL_DUDE] = this->_rgb;
+  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.b * (1.0 / 255.0));
+  this->_colors[arcade::TileType::EVIL_SHOOT] = this->_rgb;
+  this->fillColor(static_cast<float>(assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r) * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.b * (1.0 / 255.0));
+  this->_colors[arcade::TileType::POWERUP] = this->_rgb;
+  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.b * (1.0 / 255.0));
   this->_colors[arcade::TileType::OBSTACLE] = this->_rgb;
 }
 
@@ -123,6 +147,12 @@ bool									arcade::OpenGL::isOnMap(arcade::WhereAmI *player, int i, int width)
 
 void									arcade::OpenGL::ShowGame(WhereAmI *player, GetMap *map, Assets &assets)
 {
+//  static bool         initialisation = false;
+
+  //if (initialisation == false) {
+  this->initMapColor(assets);
+//    initialisation = true;
+//  }
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   for (float y = 0; y < map->height; y++)
   {
@@ -134,7 +164,7 @@ void									arcade::OpenGL::ShowGame(WhereAmI *player, GetMap *map, Assets &ass
         this->drawSquare(-2 + x / (map->width / 3), -2 + y / (map->height / 3), _colors[map->tile[(int)y * map->width + (int)x]], 0.1);
     }
   }
-  (void)assets;
+  //(void)assets;
 }
 
 void								  arcade::OpenGL::drawText(char c, float x, float y, std::vector<float> rgb)
@@ -144,7 +174,7 @@ void								  arcade::OpenGL::drawText(char c, float x, float y, std::vector<flo
     float							idx = 0;
     float							idxY = 7;
 
-    file.open("./alphabet.txt");
+    file.open(RESSOURCES_ASCII + "alphabet.txt");
     if (file)
     {
       getline(file, str);
@@ -168,7 +198,7 @@ void								  arcade::OpenGL::drawNumber(int nb, float x, float y, std::vector<f
     float							idx = 0;
     float							idxY = 7;
 
-    file.open("./numbers.txt");
+    file.open(RESSOURCES_ASCII + "./numbers.txt");
     if (file)
     {
       getline(file, str);
