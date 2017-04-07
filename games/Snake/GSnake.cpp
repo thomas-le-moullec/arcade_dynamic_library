@@ -1,4 +1,5 @@
 #include "GSnake.hpp"
+#include <stdio.h>
 
 arcade::GSnake::GSnake()
 {
@@ -38,13 +39,25 @@ void											arcade::GSnake::dropApple()
 
 void											arcade::GSnake::initMap()
 {
+  unsigned int obstacles;
+
+  srand(time(NULL));
+  obstacles = ((WIDTH_MAP * HEIGHT_MAP) / 64);
   for (int i = 0; i < HEIGHT_MAP * WIDTH_MAP; i++)
   {
     if (i < WIDTH_MAP || i >= HEIGHT_MAP * (WIDTH_MAP - 1) ||
         i % WIDTH_MAP == 0 || i % WIDTH_MAP == WIDTH_MAP - 1)
       this->_map[i] = TileType::BLOCK;
     else
-      this->_map[i] = TileType::EMPTY;
+      {
+        if (obstacles > 0 && (rand() % (WIDTH_MAP * (HEIGHT_MAP / 8))) == 0 && (i != 0 && this->_map[i - 1] != TileType::OBSTACLE) && (i / HEIGHT_MAP) != (HEIGHT_MAP / 2))
+        {
+          this->_map[i] = TileType::OBSTACLE;
+          obstacles--;
+        }
+        else
+          this->_map[i] = TileType::EMPTY;
+      }
   }
   this->dropApple();
 }
@@ -55,6 +68,7 @@ void											arcade::GSnake::initAssets()
   _assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].color = 0xf5f5dcFF;
   _assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].color = 0x5e5d62FF;
   _assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].color = 0xa8353aFF;
+  _assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].color = 0xAF70A4FF;
   _assets.loadMap = true;
   _assets.t_map = "SnakeMap.png";
   _assets.loadPlayer = true;
@@ -100,8 +114,8 @@ void                      arcade::GSnake::move()
     this->dropApple();
     _assets.sound = arcade::SoundType::EATAPPLE;
   }
-  if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
-      this->snakeBitesItself() == true)
+  if ((this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK) ||
+      this->snakeBitesItself() == true || (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::OBSTACLE))
     this->gameEnd(arcade::Status::LOSE);
 }
 

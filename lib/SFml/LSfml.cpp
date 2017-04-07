@@ -14,8 +14,13 @@ arcade::LSfml::LSfml()
   setWindow(WIDTH_WIN, HEIGHT_WIN, PIXELS_WIN, isFullScreen());
   initGameInputs();
   initCoreInputs();
-  if (!_fontMasque.loadFromFile(RESSOURCES_FONTS + "MASQUE__.ttf") ||
-      !_fontArial.loadFromFile(RESSOURCES_FONTS + "arial.ttf")) {
+  if (!_fontMasque.loadFromFile(RESSOURCES_FONTS + "Masque.ttf")) {
+    if (!_fontMasque.loadFromFile(RESSOURCES_FONTS + "arial.ttf")) {
+      _window->close();
+      exit(0);
+    }
+  }
+  if (!_fontArial.loadFromFile(RESSOURCES_FONTS + "arial.ttf")) {
     _window->close();
     exit(0);
   }
@@ -217,6 +222,14 @@ bool		arcade::LSfml::isOnMap(arcade::WhereAmI *player, int i, int width) const
   return false;
 }
 
+bool		arcade::LSfml::isHeadPlayer(arcade::WhereAmI *player, int i, int width) const
+{
+  for (int pos = 0; pos < player->lenght; pos++)
+    if (player->position[pos].x + player->position[pos].y * width == i && pos == 0)
+      return true;
+  return false;
+}
+
 void arcade::LSfml::playSound(arcade::SoundType type)
 {
   _sound.setBuffer(_sounds[type]);
@@ -234,19 +247,13 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, Ass
 
     _window->clear();
     if (assets.sound != arcade::SoundType::NOTHING && \
-        _sound.getStatus() != sf::SoundSource::P\
-laying)
+        _sound.getStatus() != sf::SoundSource::Playing)
       playSound(assets.sound);
-    _player = new sf::RectangleShape(sf::Vector2f((WIDTH_WIN * 0.60) / map->width, (HEIGHT_WIN * 0.60) / map->height)); //add value to map->width et map->height
-    _player->setFillColor(sf::Color(assets.c_player.color));
-    if (_playerTexture != NULL) {
-      texturePlayerSize = _playerTexture->getSize().y;
-      _player->setFillColor(sf::Color::White);
-      _player->setTexture(_playerTexture);
-      _player->setTextureRect(sf::IntRect(texturePlayerSize * (static_cast<int>(assets.dir) - 2), 0, texturePlayerSize, texturePlayerSize));
-    }
     loadTextures(assets);
     initMap(map->height, map->width, assets);
+    if (_playerTexture != NULL) {
+      texturePlayerSize = _playerTexture->getSize().y;
+    }
     if (_backgroundTexture != NULL)
       background.setTexture(_backgroundTexture);
     _window->draw(background);
@@ -255,8 +262,15 @@ laying)
     while (y < map->height) {
       x = 0;
       while (x < map->width && i < map->width * map->height) {
+        _player = new sf::RectangleShape(sf::Vector2f((WIDTH_WIN * 0.60) / map->width, (HEIGHT_WIN * 0.60) / map->height)); //add value to map->width et map->height
+        _player->setFillColor(sf::Color(assets.c_player.color));
         if (this->isOnMap(player, i, map->width) == true) {
           _player->setPosition((WIDTH_WIN * 0.20) + (x * ((WIDTH_WIN * 0.60)/ map->width)), (HEIGHT_WIN * 0.20) + (y * ((HEIGHT_WIN * 0.60) / map->height)));
+          if (isHeadPlayer(player, i, map->width) == true) {
+            _player->setFillColor(sf::Color::White);
+            _player->setTexture(_playerTexture);
+            _player->setTextureRect(sf::IntRect(texturePlayerSize * (static_cast<int>(assets.dir) - 2), 0, texturePlayerSize, texturePlayerSize));
+          }
           _window->draw(*_player);
         }
         else {

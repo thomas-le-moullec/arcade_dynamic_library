@@ -23,6 +23,7 @@ namespace arcade
 
     private:
       bool													                     isOnMap(WhereAmI *, int, int) const;
+      bool													                     isHeadPlayer(WhereAmI *, int, int) const;
       void                                               initMap(int, int, Assets &);
       void                                               setFullScreen(bool);
       bool                                               isFullScreen();
