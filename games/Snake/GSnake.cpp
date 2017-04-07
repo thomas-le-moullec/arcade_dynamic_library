@@ -131,9 +131,25 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
 {
   _assets.sound = arcade::SoundType::NOTHING;
   if (type == CommandType::WHERE_AM_I)
-    this->GetPlayer(debug);
+  {
+    try {
+      this->GetPlayer(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
   if (type == CommandType::GET_MAP)
-    this->GetMap(debug);
+  {
+    try {
+      this->GetMap(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
   if ((type == CommandType::GO_UP && this->checkDir(CommandType::GO_DOWN)) ||
       (type == CommandType::GO_DOWN && this->checkDir(CommandType::GO_UP)) ||
       (type == CommandType::GO_LEFT && this->checkDir(CommandType::GO_RIGHT)) ||
@@ -161,7 +177,7 @@ struct arcade::GetMap	  					*arcade::GSnake::GetMap(bool debug) const
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
   if ((map = new arcade::GetMap[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Map Failed !");
   map->type = CommandType::GET_MAP;
   map->width = WIDTH_MAP;
   map->height = HEIGHT_MAP;
@@ -184,7 +200,7 @@ struct arcade::WhereAmI	     			*arcade::GSnake::GetPlayer(bool debug) const
 
   size = sizeof(*player) + (this->_player.size() * sizeof(Position));
   if ((player = new arcade::WhereAmI[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Player Failed !");
   player->type = CommandType::WHERE_AM_I;
   player->lenght = this->_player.size();
   for (unsigned int i = 0; i < this->_player.size(); i++)

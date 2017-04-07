@@ -148,6 +148,26 @@ void											arcade::GCentiped::moveEnemies()
 void	    							  arcade::GCentiped::Update(CommandType type, bool debug)
 {
   this->moveEnemies();
+  /*if (type == CommandType::WHERE_AM_I)
+  {
+    try {
+      this->GetPlayer(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
+  if (type == CommandType::GET_MAP)
+  {
+    try {
+      this->GetMap(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }*/
 	(void)type;
 	(void)debug;
 }
@@ -160,7 +180,7 @@ struct arcade::GetMap	  					*arcade::GCentiped::GetMap(bool debug) const
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
   if ((map = new arcade::GetMap[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Map Failed !");
   map->type = CommandType::GET_MAP;
   map->width = WIDTH_MAP;
   map->height = HEIGHT_MAP;
@@ -183,7 +203,7 @@ struct arcade::WhereAmI	     			*arcade::GCentiped::GetPlayer(bool debug) const
 
   size = sizeof(*player) + (sizeof(Position));
   if ((player = new arcade::WhereAmI[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Player Failed !");
   player->type = CommandType::WHERE_AM_I;
   player->lenght = 1;
   player->position[0] = this->_player.pos;

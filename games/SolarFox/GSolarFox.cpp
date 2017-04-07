@@ -322,9 +322,25 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
   (void)debug;
   _assets.sound = arcade::SoundType::NOTHING;
   if (type == CommandType::WHERE_AM_I)
-    this->GetPlayer(debug);
+  {
+    try {
+      this->GetPlayer(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
   if (type == CommandType::GET_MAP)
-    this->GetMap(debug);
+  {
+    try {
+      this->GetMap(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
   if ((debug == true && (type == CommandType::GO_UP || type == CommandType::GO_DOWN || type == CommandType::GO_RIGHT || type == CommandType::GO_LEFT))
       || ((type == CommandType::GO_UP && this->_player.dir != CommandType::GO_DOWN) ||
       (type == CommandType::GO_DOWN && this->_player.dir != CommandType::GO_UP) ||
@@ -360,7 +376,7 @@ struct arcade::GetMap	  					*arcade::GSolarFox::GetMap(bool debug) const
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
   if ((map = new arcade::GetMap[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Map Failed !");
   map->type = CommandType::GET_MAP;
   map->width = WIDTH_MAP;
   map->height = HEIGHT_MAP;
@@ -383,7 +399,7 @@ struct arcade::WhereAmI	     			*arcade::GSolarFox::GetPlayer(bool debug) const
 
   size = sizeof(*player) + (sizeof(Position));
   if ((player = new arcade::WhereAmI[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Player Failed !");
   player->type = CommandType::WHERE_AM_I;
   player->lenght = 1;
   player->position[0] = this->_player.pos;
