@@ -9,17 +9,10 @@ arcade::OpenGL::OpenGL()
   int flags = 0;
 
   if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-  {
-      fprintf( stderr, "Video initialization failed: %s\n", SDL_GetError());
-      exit(-1);
-  }
+    exit(-1);
   info = SDL_GetVideoInfo( );
   if(!info)
-   {
-      fprintf( stderr, "Video query failed: %s\n",
-      SDL_GetError( ) );
-      exit(-1);
-  }
+    exit(-1);
   width = 1600;
   height = 900;
   bpp = info->vfmt->BitsPerPixel;
@@ -30,10 +23,7 @@ arcade::OpenGL::OpenGL()
   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
   flags = SDL_OPENGL;// | SDL_FULLSCREEN;
   if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 )
-  {
-      fprintf(stderr, "Video mode set failed: %s\n", SDL_GetError());
-      exit(-1);
-  }
+    exit(-1);
   this->setupOpengl( width, height );
   this->initMapColor();
   this->initMapInputGame();
@@ -144,8 +134,6 @@ void									arcade::OpenGL::ShowGame(WhereAmI *player, GetMap *map, Assets &ass
         this->drawSquare(-2 + x / (map->width / 3), -2 + y / (map->height / 3), _colors[map->tile[(int)y * map->width + (int)x]], 0.1);
     }
   }
-  glEnd( );
-  SDL_GL_SwapBuffers( );
   (void)assets;
 }
 
@@ -153,8 +141,8 @@ void								  arcade::OpenGL::drawText(char c, float x, float y, std::vector<flo
 {
     std::fstream			file;
     std::string				str;
-    float								idx = 0;
-    float								idx2 = 7;
+    float							idx = 0;
+    float							idxY = 7;
 
     file.open("./alphabet.txt");
     if (file)
@@ -164,10 +152,36 @@ void								  arcade::OpenGL::drawText(char c, float x, float y, std::vector<flo
       {
         for (unsigned int i = 0; i < str.length(); i++)
           if (str[i] == '1' && ((idx >= (c - 65) * 7 * 2 && idx <= (c - 65) * 7 * 2 + 6) || (idx >= (c - 97) * 7 * 2 && idx <= (c - 97) * 7 * 2 + 6)))
-            this->drawSquare(x + (float)i / 60, (y + idx2) / 40, rgb, 0.01);
+            this->drawSquare(x + (float)i / 60, (y + idxY) / 40, rgb, 0.01);
         getline(file, str);
         if ((idx >= (c - 65) * 7 * 2 && idx <= (c - 65) * 7 * 2 + 6) || (idx >= (c - 97) * 7 * 2 && idx <= (c - 97) * 7 * 2 + 6))
-          idx2--;
+          idxY--;
+        idx++;
+      }
+    }
+}
+
+void								  arcade::OpenGL::drawNumber(int nb, float x, float y, std::vector<float> rgb)
+{
+    std::fstream			file;
+    std::string				str;
+    float							idx = 0;
+    float							idxY = 7;
+
+    file.open("./numbers.txt");
+    if (file)
+    {
+      getline(file, str);
+      while(!file.eof())
+      {
+        for (unsigned int i = 0; i < str.length(); i++)
+        {
+          if (str[i] == '1' && ((idx >= (nb) * 7 * 2 && idx <= nb * 7 * 2 + 6)))
+            this->drawSquare(x + (float)i / 60, (y + idxY) / 40, rgb, 0.01);
+        }
+        getline(file, str);
+        if (idx >= nb * 7 * 2 && idx <= nb * 7 * 2 + 6)
+          idxY--;
         idx++;
       }
     }
@@ -186,6 +200,22 @@ void									arcade::OpenGL::putStrOpenGl(const char *str, float x, float y, std
     }
     if ((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z'))
       drawText(str[i], x + (float)idx / 5, y, rgb);
+    idx++;
+  }
+}
+
+void									arcade::OpenGL::putNbrOpenGl(int nb, float x, float y, std::vector<float> rgb)
+{
+  int   a = 1;
+  int		idx = 0;
+
+  while (nb / a > 10)
+    a *= 10;
+  while (a)
+  {
+    drawNumber((nb / a), x + (float)idx / 5, y, rgb);
+    nb %= a;
+    a /= 10;
     idx++;
   }
 }
@@ -215,7 +245,7 @@ void									arcade::OpenGL::ShowMenu(std::vector<std::string> gamesLibs, int id
     y += 10;
   }
   y = 0;
-  for(unsigned int i = 0; i < graphicsLibs.size(); i++)
+  for(unsigned int i = 0; i < gamesLibs.size(); i++)
   {
     if ((int)i == idxGame)
       this->putStrOpenGl(this->cutName(gamesLibs[i], 17).c_str(), 2, 2 - y, this->_colors[arcade::TileType::EVIL_DUDE]);
@@ -223,8 +253,6 @@ void									arcade::OpenGL::ShowMenu(std::vector<std::string> gamesLibs, int id
       this->putStrOpenGl(this->cutName(gamesLibs[i], 17).c_str(), 2, 2 - y, this->_colors[arcade::TileType::BLOCK]);
     y += 10;
   }
-  (void)idxGame;
-  (void)idxGraphic;
   (void)button;
   (void)player;
   glEnd( );
@@ -287,8 +315,18 @@ void	renderText(const char *text, TTF_Font *font, SDL_Color color, SDL_Rect *loc
 
 void									arcade::OpenGL::ShowScore(const arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
 {
+  this->putStrOpenGl("Meilleurs Scores", 1.5, 40, this->_colors[arcade::TileType::EVIL_DUDE]);
+  for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++)
+  {
+    this->putStrOpenGl(bestScore[i]->getName().c_str(), 1.5, 30 - i * 10, this->_colors[arcade::TileType::MY_SHOOT]);
+    this->putNbrOpenGl((int)(bestScore[i]->getScore()), 3, 30 - i * 10, this->_colors[arcade::TileType::BLOCK]);
+  }
+  this->putStrOpenGl("Score actuel", 1.5, 0, this->_colors[arcade::TileType::EVIL_DUDE]);
+  this->putNbrOpenGl((int)(currentScore->getScore()), 1.5, -10,  this->_colors[arcade::TileType::BLOCK]);
   (void)currentScore;
   (void)bestScore;
+  glEnd( );
+  SDL_GL_SwapBuffers( );
 }
 
 extern "C" arcade::IGraphic*		CreateDisplayModule()

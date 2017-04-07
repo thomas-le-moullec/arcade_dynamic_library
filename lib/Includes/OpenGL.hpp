@@ -26,13 +26,15 @@ namespace arcade
       void 													setupOpengl(int, int);
       void 													handle_key_down(SDL_keysym *, ICore *);
       void													drawSquare(float, float, std::vector<float>, float);
+      void								  				drawNumber(int, float, float, std::vector<float>);
+      void								  				drawText(char, float, float, std::vector<float>);
       bool													isOnMap(arcade::WhereAmI *, int, int) const;
       void													initMapColor();
       void													initMapInputGame();
       void													initMapInputCore();
       void													fillColor(float, float, float);
-      void								  				drawText(char, float, float, std::vector<float>);
       void													putStrOpenGl(const char *, float, float, std::vector<float>);
+      void													putNbrOpenGl(int, float, float, std::vector<float>);
       std::string										cutName(std::string &, int) const;
 
       std::vector<float>																					_rgb;
@@ -40,8 +42,6 @@ namespace arcade
       std::map<int, arcade::CommandType>													input_game;
       std::map<int, arcade::CoreCommand>													input_core;
       float																												_angle;
-      //TTF_Font																										_font;
-      //SDL_Surface																									*_surface;
     };
 };
 

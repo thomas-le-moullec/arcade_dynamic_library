@@ -251,7 +251,6 @@ void									arcade::LNcurses::ShowScoreboard(const std::string &game, std::vect
   int									y = 0;
 
 	clear();
-  //while(1);
   attron(A_REVERSE);
   mvprintw(MARGIN_Y / 4, MARGIN_X - (game.length() / 2) - 2, "[ %s ]", game.c_str());
   mvprintw(MARGIN_Y / 3, MARGIN_X - 13, "Top 20 des meilleurs scores");
