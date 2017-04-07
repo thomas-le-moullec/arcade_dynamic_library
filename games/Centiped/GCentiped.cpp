@@ -43,7 +43,7 @@ void											arcade::GCentiped::initEnemies()
 {
   std::vector<arcade::Actor>	enemy;
 
-  for (int i = 15; i > 0; i--)
+  for (int i = 1; i < 5; i++)
     this->addBodyEnemy(&enemy, i, 1, CommandType::GO_RIGHT, CommandType::GO_DOWN);
   this->addEnemy(enemy);
 }
@@ -61,31 +61,45 @@ void											arcade::GCentiped::addBodyEnemy(std::vector<arcade::Actor> *enemy
   bodyEnemy.pos.y = y;
   bodyEnemy.dirX = dirX;
   bodyEnemy.dirY = dirY;
-  enemy->insert(enemy->end(), bodyEnemy);
+  enemy->insert(enemy->begin(), bodyEnemy);
   this->_map[y * WIDTH_MAP + x] = TileType::EVIL_DUDE;
 }
 
 void													arcade::GCentiped::cutCenti(int i, int j)
 {
-/*  std::vector<arcade::Actor>	enemy;
+  std::vector<arcade::Actor>	enemy;
+  unsigned int 								tmp;
 
   std::cout << j << std::endl;
+  this->_map[this->_enemies[i][j].pos.y * WIDTH_MAP + this->_enemies[i][j].pos.x] = arcade::TileType::EMPTY;
   if (this->_enemies[i][0].dirX == arcade::CommandType::GO_LEFT)
-    for (unsigned int y = j; y < this->_enemies[i].size(); y++)
-      this->addBodyEnemy(&enemy, this->_enemies[i][0].pos.x, this->_enemies[i][0].pos.y, arcade::CommandType::GO_RIGHT, this->_enemies[i][0].dirY);
-  else
-    for (unsigned int y = 0; y < (unsigned int)j; y++)
-      this->addBodyEnemy(&enemy, this->_enemies[i][0].pos.x, this->_enemies[i][0].pos.y, arcade::CommandType::GO_LEFT, this->_enemies[i][0].dirY);
-  for (int y = 0; y <= j; y++)
   {
-    this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x + 1] = arcade::TileType::EMPTY;
-    if (this->_enemies[i][0].dirX == arcade::CommandType::GO_RIGHT)
+    for (unsigned int y = 0; y < (unsigned int)j; y++)
+      this->addBodyEnemy(&enemy, this->_enemies[i][y].pos.x, this->_enemies[i][y].pos.y, arcade::CommandType::GO_RIGHT, this->_enemies[i][y].dirY);
+    for (unsigned int y = 0; y <= (unsigned int)j; y++)
       this->_enemies[i].erase(this->_enemies[i].begin());
-    else
+  }
+  else
+  {
+    std::cout << "-----> RIGHT" << std::endl;
+    for (unsigned int y = j + 1; y < this->_enemies[i].size(); y++)
+    {
+
+      std::cout << " ,,y " << y << std::endl;
+      this->addBodyEnemy(&enemy, this->_enemies[i][y].pos.x, this->_enemies[i][y].pos.y, arcade::CommandType::GO_LEFT, this->_enemies[i][y].dirY);
+    }
+    tmp = this->_enemies[i].size();
+    for (unsigned int y = j; y < tmp; y++)
+    {
+      std::cout << " ..y " << y << std::endl;
       this->_enemies[i].erase(this->_enemies[i].end() - 1);
+    }
 
   }
-  this->addEnemy(enemy);*/
+  this->addEnemy(enemy);
+  std::cout << "****" << this->_enemies[0].size() << std::endl;
+  std::cout << "**cc**" << this->_enemies[1].size() << std::endl;
+
   (void)i;
   (void)j;
 }
@@ -94,12 +108,14 @@ void											arcade::GCentiped::execMove(int i)
 {
   int											j = (int)this->_enemies[i].size() - 1;
 
+  std::cout << " y " << this->_enemies[i][j].pos.y  << " x " << this->_enemies[i][j].pos.x  << std::endl;
   this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x] = arcade::TileType::EVIL_DUDE;
   this->_map[this->_enemies[i][j].pos.y * WIDTH_MAP + this->_enemies[i][j].pos.x] = arcade::TileType::EMPTY;
 }
 
 void											arcade::GCentiped::moveEnemies()
 {
+bool toto = true;
   for (unsigned int i = 0; i < this->_enemies.size(); i++)
   {
     std::cout << " i vaut " << i <<  std::endl;
@@ -108,7 +124,6 @@ void											arcade::GCentiped::moveEnemies()
       if (this->_enemies[i][0].dirX == arcade::CommandType::GO_RIGHT && this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x + 1] == arcade::TileType::EMPTY)
       {
         std::cout << " RIGHT " << i <<  std::endl;
-
         this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x + 1, this->_enemies[i][0].pos.y, arcade::CommandType::GO_RIGHT, this->_enemies[i][0].dirY);
         this->execMove(i);
         this->_enemies[i].erase(this->_enemies[i].end() - 1);
@@ -116,32 +131,35 @@ void											arcade::GCentiped::moveEnemies()
       else if (this->_enemies[i][0].dirX == arcade::CommandType::GO_LEFT && this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x - 1] == arcade::TileType::EMPTY)
       {
         std::cout << " LEFT " << i <<  std::endl;
-
         this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x - 1, this->_enemies[i][0].pos.y, arcade::CommandType::GO_LEFT, this->_enemies[i][0].dirY);
-        this->_enemies[i].erase(this->_enemies[i].end() - 1);
         this->execMove(i);
+        this->_enemies[i].erase(this->_enemies[i].end() - 1);
       }
 
 
-      else if (this->_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x + 1] != arcade::TileType::EMPTY)
+      else if (this->_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && this->_map[(this->_enemies[i][0].pos.y) * WIDTH_MAP + this->_enemies[i][0].pos.x + 1] != arcade::TileType::EMPTY && this->_enemies[i][0].pos.x + 1 != this->_enemies[i][1].pos.x && this->_enemies[i][0].pos.y + 1 != this->_enemies[i][1].pos.y)
       {
-        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x - 1, this->_enemies[i][0].pos.y + 1, arcade::CommandType::GO_LEFT, this->_enemies[i][0].dirY);
-        this->_enemies[i].erase(this->_enemies[i].end() - 1);
+        std::cout << " DOWN RIGHT " << i <<  std::endl;
+
+        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x, this->_enemies[i][0].pos.y + 1, arcade::CommandType::GO_LEFT, this->_enemies[i][0].dirY);
         this->execMove(i);
+        this->_enemies[i].erase(this->_enemies[i].end() - 1);
       }
-      else if (this->_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x - 1] != arcade::TileType::EMPTY)
+      else if (this->_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && this->_map[(this->_enemies[i][0].pos.y) * WIDTH_MAP + this->_enemies[i][0].pos.x - 1] != arcade::TileType::EMPTY  && this->_enemies[i][0].pos.x - 1 != this->_enemies[i][1].pos.x  && this->_enemies[i][0].pos.y - 1 != this->_enemies[i][1].pos.y)
       {
-        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x, this->_enemies[i][0].pos.y - 1, arcade::CommandType::GO_RIGHT, this->_enemies[i][0].dirY);
-        this->_enemies[i].erase(this->_enemies[i].end() - 1);
+        std::cout << " DOWN LEFT " << i <<  std::endl;
+
+        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x, this->_enemies[i][0].pos.y + 1, arcade::CommandType::GO_RIGHT, this->_enemies[i][0].dirY);
         this->execMove(i);
+        this->_enemies[i].erase(this->_enemies[i].end() - 1);
       }
 
-
-      /*if (this->_enemies[i][0].pos.y == 3 && toto && this->_enemies[i][0].pos.x == 5)
+      if (this->_enemies[i][0].pos.y == 1 && this->_enemies[i][0].pos.x == 8 && toto)
       {
-        this->cutCenti(i, 5);
+        this->cutCenti(i, 2);
         toto = false;
-      }*/
+      }
+      //for (int f = 0; f < 100000000; f++);
   }
 }
 

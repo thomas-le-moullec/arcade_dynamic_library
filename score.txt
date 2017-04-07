@@ -236,3 +236,4 @@ snake:AAA:325
 solarfox:AAA:0
 solarfox:AAA:20
 solarfox:AAA:20
+centiped:AAA:0
