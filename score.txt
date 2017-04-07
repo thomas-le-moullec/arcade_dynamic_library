@@ -135,6 +135,11 @@ solarfox:AAA:0
 solarfox:AAA:0
 solarfox:AAA:50
 pacman:AAA:2460
+snake:AAA:390
+snake:AAA:1389
+solarfox:AAA:50
+solarfox:AAA:40
+solarfox:AAA:0
 solarfox:AAA:0
 snake:AAA:436
 solarfox:AAA:20

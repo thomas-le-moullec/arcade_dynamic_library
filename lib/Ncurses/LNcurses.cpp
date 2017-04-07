@@ -199,7 +199,9 @@ bool								arcade::LNcurses::printFile(const char *fileName, int y)
 
 std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
 {
-  return libName.substr(size_path, libName.length() - 3 - size_path);
+  if (libName.find(".so") != std::string::npos && libName.find("lib_arcade_") != std::string::npos)
+    return libName.substr(size_path, libName.length() - 3 - size_path);
+  return (libName);
 }
 
 void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
