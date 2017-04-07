@@ -223,7 +223,9 @@ void									arcade::OpenGL::putNbrOpenGl(int nb, float x, float y, std::vector<
 
 std::string						arcade::OpenGL::cutName(std::string &libName, int size_path) const
 {
-  return libName.substr(size_path, libName.length() - 3 - size_path);
+  if (libName.find(".so") != std::string::npos && libName.find("lib_arcade_") != std::string::npos)
+    return libName.substr(size_path, libName.length() - 3 - size_path);
+  return (libName);
 }
 
 void									arcade::OpenGL::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,

@@ -25,6 +25,8 @@ OBJS							=		$(SRCS:.cpp=.o)
 all:
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
+									$(MAKE) games/Centiped
+
 
 full:						  $(NAME)
 									$(MAKE) lib/Ncurses
@@ -32,6 +34,7 @@ full:						  $(NAME)
 									$(MAKE) lib/SFml
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
+									$(MAKE) games/Centiped
 
 arcade:						$(NAME)
 
@@ -41,6 +44,7 @@ libs:
 									$(MAKE) lib/SFml
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
+									$(MAKE) games/Centiped
 
 $(NAME): 					$(OBJS)
 				 					@echo "Compiling with Position Independent Code..."
@@ -54,6 +58,7 @@ clean:
 									@$(CLEAN) lib/SFml
 									@$(CLEAN) games/Snake
 									@$(CLEAN) games/SolarFox
+									@$(CLEAN) games/Centiped
 									@echo "Object files cleaned."
 
 fclean: 					clean
@@ -64,6 +69,7 @@ fclean: 					clean
 									@$(FCLEAN) lib/SFml
 									@$(FCLEAN) games/Snake
 									@$(FCLEAN) games/SolarFox
+									@$(FCLEAN) games/Centiped
 									@echo "Files cleaned."
 
 re: 							fclean all

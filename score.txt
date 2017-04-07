@@ -188,3 +188,13 @@ solarfox:AAA:0
 solarfox:AAA:0
 solarfox:AAA:0
 snake:AAA:3503
+snake:AAA:593
+snake:AAA:1047
+snake:AAA:26
+snake:AAA:1625
+solarfox:AAA:0
+snake:AAA:245
+centiped:AAA:4293591032
+centiped:AAA:4293591032
+centiped:AAA:4293591032
+centiped:AAA:4293591032
