@@ -29,7 +29,8 @@ namespace arcade
       void								  				drawNumber(int, float, float, std::vector<float>);
       void								  				drawText(char, float, float, std::vector<float>);
       bool													isOnMap(arcade::WhereAmI *, int, int) const;
-      void													initMapColor();
+      void													initMapColor(Assets &assets);
+      void									        initMapColor();
       void													initMapInputGame();
       void													initMapInputCore();
       void													fillColor(float, float, float);
@@ -42,6 +43,8 @@ namespace arcade
       std::map<int, arcade::CommandType>													input_game;
       std::map<int, arcade::CoreCommand>													input_core;
       float																												_angle;
+
+      static const std::string                            RESSOURCES_ASCII;
     };
 };
 

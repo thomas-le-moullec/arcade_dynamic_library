@@ -39,6 +39,8 @@ namespace arcade
 
       bool													printFile(const char *, int);
       std::string										cutName(std::string &, int) const;
+
+      static const std::string                            RESSOURCES_ASCII;
   };
 };
 

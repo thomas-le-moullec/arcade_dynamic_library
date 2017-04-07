@@ -188,6 +188,7 @@ solarfox:AAA:0
 solarfox:AAA:0
 solarfox:AAA:0
 snake:AAA:3503
+<<<<<<< HEAD
 snake:AAA:593
 snake:AAA:1047
 snake:AAA:26
@@ -198,3 +199,39 @@ centiped:AAA:4293591032
 centiped:AAA:4293591032
 centiped:AAA:4293591032
 centiped:AAA:4293591032
+=======
+snake:AAA:387
+solarfox:AAA:0
+solarfox:AAA:10
+solarfox:AAA:0
+solarfox:AAA:40
+solarfox:AAA:0
+solarfox:AAA:0
+solarfox:AAA:0
+snake:AAA:310
+solarfox:AAA:50
+snake:AAA:1671
+snake:AAA:967
+snake:AAA:1004
+snake:AAA:3008
+solarfox:AAA:0
+snake:AAA:8
+solarfox:AAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:YAA:0
+solarfox:AAA:20
+solarfox:AAA:10
+>>>>>>> 0c50498152a41a56d72a47589622406a911ded08
