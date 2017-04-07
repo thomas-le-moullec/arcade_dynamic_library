@@ -23,12 +23,12 @@ SRCS							=		main.cpp										\
 OBJS							=		$(SRCS:.cpp=.o)
 
 all:
+full:						  $(NAME)
 									$(MAKE) games/Snake
 									$(MAKE) games/SolarFox
 									$(MAKE) games/Centiped
 
 
-full:						  $(NAME)
 									$(MAKE) lib/Ncurses
 									$(MAKE) lib/OpenGL
 									$(MAKE) lib/SFml

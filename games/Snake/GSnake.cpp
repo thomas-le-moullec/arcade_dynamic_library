@@ -1,4 +1,5 @@
 #include "GSnake.hpp"
+#include <stdio.h>
 
 arcade::GSnake::GSnake()
 {
@@ -38,13 +39,25 @@ void											arcade::GSnake::dropApple()
 
 void											arcade::GSnake::initMap()
 {
+  unsigned int obstacles;
+
+  srand(time(NULL));
+  obstacles = ((WIDTH_MAP * HEIGHT_MAP) / 64);
   for (int i = 0; i < HEIGHT_MAP * WIDTH_MAP; i++)
   {
     if (i < WIDTH_MAP || i >= HEIGHT_MAP * (WIDTH_MAP - 1) ||
         i % WIDTH_MAP == 0 || i % WIDTH_MAP == WIDTH_MAP - 1)
       this->_map[i] = TileType::BLOCK;
     else
-      this->_map[i] = TileType::EMPTY;
+      {
+        if (obstacles > 0 && (rand() % (WIDTH_MAP * (HEIGHT_MAP / 8))) == 0 && (i != 0 && this->_map[i - 1] != TileType::OBSTACLE) && (i / HEIGHT_MAP) != (HEIGHT_MAP / 2))
+        {
+          this->_map[i] = TileType::OBSTACLE;
+          obstacles--;
+        }
+        else
+          this->_map[i] = TileType::EMPTY;
+      }
   }
   this->dropApple();
 }
@@ -55,6 +68,7 @@ void											arcade::GSnake::initAssets()
   _assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].color = 0xf5f5dcFF;
   _assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].color = 0x5e5d62FF;
   _assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].color = 0xa8353aFF;
+  _assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].color = 0xAF70A4FF;
   _assets.loadMap = true;
   _assets.t_map = "SnakeMap.png";
   _assets.loadPlayer = true;
@@ -100,8 +114,8 @@ void                      arcade::GSnake::move()
     this->dropApple();
     _assets.sound = arcade::SoundType::EATAPPLE;
   }
-  if (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK ||
-      this->snakeBitesItself() == true)
+  if ((this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK) ||
+      this->snakeBitesItself() == true || (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::OBSTACLE))
     this->gameEnd(arcade::Status::LOSE);
 }
 
@@ -117,9 +131,25 @@ void	    							  arcade::GSnake::Update(CommandType type, bool debug)
 {
   _assets.sound = arcade::SoundType::NOTHING;
   if (type == CommandType::WHERE_AM_I)
-    this->GetPlayer(debug);
+  {
+    try {
+      this->GetPlayer(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
   if (type == CommandType::GET_MAP)
-    this->GetMap(debug);
+  {
+    try {
+      this->GetMap(debug);
+    }
+    catch (RunTimeErrorGame const &stdErr) {
+      std::cerr << stdErr.what() << std::endl;
+      exit(-1);
+    }
+  }
   if ((type == CommandType::GO_UP && this->checkDir(CommandType::GO_DOWN)) ||
       (type == CommandType::GO_DOWN && this->checkDir(CommandType::GO_UP)) ||
       (type == CommandType::GO_LEFT && this->checkDir(CommandType::GO_RIGHT)) ||
@@ -147,7 +177,7 @@ struct arcade::GetMap	  					*arcade::GSnake::GetMap(bool debug) const
 
   size = sizeof(*map) + (WIDTH_MAP * HEIGHT_MAP * sizeof(TileType));
   if ((map = new arcade::GetMap[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Map Failed !");
   map->type = CommandType::GET_MAP;
   map->width = WIDTH_MAP;
   map->height = HEIGHT_MAP;
@@ -170,7 +200,7 @@ struct arcade::WhereAmI	     			*arcade::GSnake::GetPlayer(bool debug) const
 
   size = sizeof(*player) + (this->_player.size() * sizeof(Position));
   if ((player = new arcade::WhereAmI[size]) == NULL)
-    exit(0);
+    throw RunTimeErrorGame("New Player Failed !");
   player->type = CommandType::WHERE_AM_I;
   player->lenght = this->_player.size();
   for (unsigned int i = 0; i < this->_player.size(); i++)

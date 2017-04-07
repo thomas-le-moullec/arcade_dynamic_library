@@ -9,26 +9,35 @@ arcade::LNcurses::LNcurses()
   this->initMapInputGame();
   this->initMapInputCore();
   this->initMapDisplay();
-  this->modeCanon(0);
+  try {
+    this->modeCanon(0);
+  }
+  catch (RunTimeErrorGraphic const &stdErr) {
+    std::cerr << stdErr.what() << std::endl;
+    exit(-1);
+  }
 }
 
 arcade::LNcurses::~LNcurses()
 {
-  this->modeCanon(1);
+  try {
+    this->modeCanon(1);
+  }
+  catch (RunTimeErrorGraphic const &stdErr) {
+    std::cerr << stdErr.what() << std::endl;
+    exit(-1);
+  }
   endwin();
 }
 
 void                          arcade::LNcurses::initColors(const Assets &assets)
 {
   init_color(COLOR_BLUE, assets.c_player.val.r * (1000 / 255), assets.c_player.val.v * (1000 / 255), assets.c_player.val.b * (1000 / 255));
-  //init_color(COLOR_BLACK, assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.b * (1000 / 255));
   init_color(COLOR_YELLOW, assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.b * (1000 / 255));
-  //init_color(COLOR_WHITE, assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.b * (1000 / 255));
   init_color(COLOR_RED, assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].val.b * (1000 / 255));
   init_color(COLOR_MAGENTA, assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].val.b * (1000 / 255));
   init_color(COLOR_CYAN, assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].val.b * (1000 / 255));
   init_color(COLOR_GREEN, assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.v * (1000 / 255), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.b * (1000 / 255));
-  //miss one arcade::TileType::OTHER
 
   init_pair(static_cast<int>(arcade::TileType::EMPTY), COLOR_BLACK, COLOR_BLACK);
   init_pair(static_cast<int>(arcade::TileType::BLOCK), COLOR_YELLOW, COLOR_YELLOW);
@@ -69,6 +78,7 @@ void													arcade::LNcurses::initMapDisplay()
   this->map_disp[arcade::TileType::EVIL_SHOOT] = '@';
   this->map_disp[arcade::TileType::BLOCK] = '|';
   this->map_disp[arcade::TileType::POWERUP] = 'O';
+  this->map_disp[arcade::TileType::OBSTACLE] = 'w';
 }
 
 void		arcade::LNcurses::initWindow() const
@@ -116,7 +126,6 @@ void		arcade::LNcurses::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, 
   int		y = 0;
   int		i = 0;
 
-  (void)assets;
   initColors(assets);
   clear();
   this->_width_map = map->width;
@@ -153,19 +162,19 @@ int									arcade::LNcurses::modeCanon(int mode) const
   if (mode == 0)
     {
       if (ioctl(0, TCGETS, &prev) < 0)
-        return (-1);
+        throw RunTimeErrorGraphic("Error with ioctl");
       if (ioctl(0, TCGETS, &next) < 0)
-        return (-1);
+        throw RunTimeErrorGraphic("Error with ioctl");
       next.c_lflag &= ~ECHO;
       next.c_lflag &= ~ICANON;
       next.c_cc[VMIN] = 0;
       next.c_cc[VTIME] = 0;
       if (ioctl(0, TCSETS, &next) < 0)
-        return (-1);
+        throw RunTimeErrorGraphic("Error with ioctl");
     }
   else
     if (ioctl(0, TCSETS, &prev) < 0)
-      return (-1);
+      throw RunTimeErrorGraphic("Error with ioctl");
   return (0);
 }
 
