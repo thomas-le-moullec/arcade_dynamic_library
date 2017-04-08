@@ -36,6 +36,7 @@ namespace arcade
       void                                               loadSounds();
       void                                               loadTextures(Assets &);
       void                                               playSound(arcade::SoundType type);
+      unsigned int                                       _textureMapSize;
       std::map<arcade::SoundType, sf::SoundBuffer>       _sounds;
       sf::Sound                                          _sound;
       sf::RenderWindow                                   *_window;

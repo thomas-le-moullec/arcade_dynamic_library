@@ -16,11 +16,13 @@ arcade::LSfml::LSfml()
   initCoreInputs();
   if (!_fontMasque.loadFromFile(RESSOURCES_FONTS + "Masque.ttf")) {
     if (!_fontMasque.loadFromFile(RESSOURCES_FONTS + "arial.ttf")) {
+      std::cerr << "Error on loading Fonts." << std::endl;
       _window->close();
       exit(0);
     }
   }
   if (!_fontArial.loadFromFile(RESSOURCES_FONTS + "arial.ttf")) {
+    std::cerr << "Error on loading Fonts." << std::endl;
     _window->close();
     exit(0);
   }
@@ -38,6 +40,7 @@ arcade::LSfml::~LSfml()
 void    arcade::LSfml::loadSounds()
 {
   if (!_music.openFromFile(RESSOURCES_SOUNDS + "Push_It_To_The_Limit_scarface_.ogg")) {
+    //maybe do smth
   }
   _music.setVolume(15);
   _music.play();
@@ -147,15 +150,13 @@ std::string	arcade::LSfml::cutName(std::string &libName, int size_path) const
 
 void                  arcade::LSfml::setColor(const unsigned int &color, arcade::TileType tile, sf::RectangleShape rectangle)
 {
-  unsigned int          textureMapSize;
-
   rectangle.setFillColor(sf::Color(color));
   _map[tile] = rectangle;
   if (_mapTexture != NULL) {
-    textureMapSize = _mapTexture->getSize().y;
+    _textureMapSize = _mapTexture->getSize().y;
     _map[tile].setFillColor(sf::Color::White);
     _map[tile].setTexture(_mapTexture);
-    _map[tile].setTextureRect(sf::IntRect(textureMapSize * static_cast<int>(tile), 0, textureMapSize, textureMapSize));
+    _map[tile].setTextureRect(sf::IntRect(_textureMapSize * static_cast<int>(tile), 0, _textureMapSize, _textureMapSize));
   }
 }
 
@@ -270,6 +271,12 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, Ass
             _player->setFillColor(sf::Color::White);
             _player->setTexture(_playerTexture);
             _player->setTextureRect(sf::IntRect(texturePlayerSize * (static_cast<int>(assets.dir) - 2), 0, texturePlayerSize, texturePlayerSize));
+          }
+          else
+          {
+            _player->setFillColor(sf::Color::White);
+            _player->setTexture(_mapTexture);
+            _player->setTextureRect(sf::IntRect(_textureMapSize * static_cast<int>(arcade::TileType::MY_SHOOT), 0, _textureMapSize, _textureMapSize));
           }
           _window->draw(*_player);
         }

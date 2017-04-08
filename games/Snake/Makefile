@@ -6,7 +6,8 @@ RM					= rm -rf
 
 NAME				= ../lib_arcade_snake.so
 
-SRCS				=	GSnake.cpp
+SRCS				=	GSnake.cpp \
+					../../Errors/Errors.cpp
 
 CPPFLAGS   	=   -I ./../Includes/ -I ./../../interfaces -I ../../scoreboard/ -I ../../Errors/
 
