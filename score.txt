@@ -164,9 +164,7 @@ snake:AAA:325
 solarfox:AAA:0
 solarfox:AAA:20
 solarfox:AAA:20
-<<<<<<< HEAD
 centiped:AAA:0
-=======
 snake:AAA:6
 snake:AAA:16
 snake:AAA:368
@@ -182,4 +180,15 @@ snake:AAA:6
 snake:AAA:6
 snake:AAA:259
 snake:AAA:804
->>>>>>> aa8fc838a46644bbcb343bcfd4906b383d08fab2
+snake:AAA:159
+solarfox:AAA:50
+centiped:AAA:0
+centiped:AAA:0
+solarfox:AAA:50
+centiped:AAA:0
+centiped:AAA:300
+centiped:AAA:800
+snake:AAA:165
+snake:AAA:37
+snake:AAA:8
+centiped:AAA:600

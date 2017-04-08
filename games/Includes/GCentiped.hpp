@@ -3,8 +3,8 @@
 
 #include "IGame.hpp"
 
-#define HEIGHT_MAP			20
-#define WIDTH_MAP				20
+#define HEIGHT_MAP			30
+#define WIDTH_MAP				30
 
 namespace arcade
 {
@@ -32,9 +32,9 @@ namespace arcade
 
     private:
       struct Actor																	_player;
-      std::vector<struct Actor>							 				_playerShoot;
+      struct Actor													 				_playerShoot;
       std::vector<std::vector<struct Actor>>  			_enemies;
-      std::vector<struct Actor>											_obstacle;
+      std::vector<struct Actor>											_obstacles;
       TileType																			_map[HEIGHT_MAP * WIDTH_MAP];
       arcade::Status																_statusGame;
       arcade::Assets                    						_assets;
@@ -43,11 +43,22 @@ namespace arcade
       void															initMap();
       void															initAssets();
       void															initEnemies();
+      void															initPlayer();
+      void															initMyShoot();
+      void															initObstacles();
 			void															addEnemy(std::vector<arcade::Actor>);
       void															addBodyEnemy(std::vector<arcade::Actor> *, int, int, CommandType, CommandType);
+      void															addObstacle(int, int);
+      void															deleteObstacle(int);
       void															moveEnemies();
+      void															movePlayer(CommandType);
+      void															moveMyShoot();
+      void															shootEvilDude();
+      void															shootObstacle();
       void															execMove(int);
       void															cutCenti(int, int);
+      void															gameEnd(arcade::Status);
+      bool															isOnPlayer(int, int);
 
   };
 };

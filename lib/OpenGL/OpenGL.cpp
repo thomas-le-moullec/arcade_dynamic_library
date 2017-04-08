@@ -24,7 +24,7 @@ arcade::OpenGL::OpenGL()
   SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
   SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-  flags = SDL_OPENGL;// | SDL_FULLSCREEN;
+  flags = SDL_OPENGL;
   if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 )
     exit(-1);
   this->setupOpengl( width, height );
@@ -90,9 +90,9 @@ void									arcade::OpenGL::initMapColor(Assets &assets)
 
 void													arcade::OpenGL::initMapInputGame()
 {
-  this->input_game[(int)SDLK_s] = arcade::CommandType::GO_UP;
+  this->input_game[(int)SDLK_z] = arcade::CommandType::GO_UP;
   this->input_game[(int)SDLK_q] = arcade::CommandType::GO_LEFT;
-  this->input_game[(int)SDLK_z] = arcade::CommandType::GO_DOWN;
+  this->input_game[(int)SDLK_s] = arcade::CommandType::GO_DOWN;
   this->input_game[(int)SDLK_d] = arcade::CommandType::GO_RIGHT;
   this->input_game[(int)SDLK_t] = arcade::CommandType::ILLEGAL;
   this->input_game[(int)SDLK_RETURN] = arcade::CommandType::SHOOT;
@@ -159,9 +159,9 @@ void									arcade::OpenGL::ShowGame(WhereAmI *player, GetMap *map, Assets &ass
     for (float x = 0; x < map->width; x++)
     {
       if (this->isOnMap(player, (int)y * map->width + (int)x, map->width) == true)
-        this->drawSquare(-2 + x / (map->width / 3), -2 + y / (map->height / 3), _colors[arcade::TileType::OTHER], 0.1);
+        this->drawSquare(-2 + x / (map->width / 3), (-2 - y / (map->height / 3)) + 3, _colors[arcade::TileType::OTHER], 0.1);
       if (map->tile[(int)y * map->width + (int)x] != arcade::TileType::EMPTY)
-        this->drawSquare(-2 + x / (map->width / 3), -2 + y / (map->height / 3), _colors[map->tile[(int)y * map->width + (int)x]], 0.1);
+        this->drawSquare(-2 + x / (map->width / 3), (-2 - y / (map->height / 3)) + 3, _colors[map->tile[(int)y * map->width + (int)x]], 0.1);
     }
   }
   //(void)assets;

@@ -356,6 +356,8 @@ void	    							  arcade::GSolarFox::Update(CommandType type, bool debug)
     this->move();
     this->moveEnemies();
     this->moveShoot();
+    if (this->_playerShoot.lifes > 0)
+      this->moveMyShoot();
 /*    if (this->_cmpt % 3 < 2 || debug == true)
     {
     }*/

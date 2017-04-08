@@ -5,8 +5,11 @@ arcade::GCentiped::GCentiped()
   this->initMap();
   this->initAssets();
   this->initEnemies();
+  this->initPlayer();
+  this->initObstacles();
   this->_statusGame = arcade::Status::RUNNING;
   this->_score = 0;
+  this->_playerShoot.lifes = 0;
 }
 
 void											arcade::GCentiped::initMap()
@@ -33,7 +36,7 @@ void											arcade::GCentiped::initAssets()
   _assets.loadMap = true;
   _assets.t_map = "CentipedMap.png";
   _assets.loadPlayer = true;
-  _assets.t_player= "CentipedPlayer.png";
+  _assets.t_player= "centiped_player.png";
   _assets.loadBg = true;
   _assets.t_bg = "CentipedBackgroundGame.jpg";
   _assets.dir = arcade::CommandType::GO_RIGHT;
@@ -43,9 +46,36 @@ void											arcade::GCentiped::initEnemies()
 {
   std::vector<arcade::Actor>	enemy;
 
-  for (int i = 1; i < 5; i++)
+  for (int i = 1; i < 10; i++)
     this->addBodyEnemy(&enemy, i, 1, CommandType::GO_RIGHT, CommandType::GO_DOWN);
   this->addEnemy(enemy);
+}
+
+void											arcade::GCentiped::initPlayer()
+{
+  this->_player.pos.x = WIDTH_MAP / 2;
+  this->_player.pos.y = HEIGHT_MAP - 3;
+  this->_map[this->_player.pos.y * WIDTH_MAP + this->_player.pos.x] = arcade::TileType::OTHER;
+}
+
+void											arcade::GCentiped::initObstacles()
+{
+  int											x = 0;
+  int											y = 0;
+  int											dropByDefault = 0;
+
+  srand(time(NULL));
+  for (int i = 0; i < 10; i++)
+  {
+    dropByDefault = 0;
+    while (dropByDefault == 0 || this->_map[dropByDefault] != TileType::EMPTY)
+    {
+      x = rand() % (WIDTH_MAP - 2) + 1;
+      y = rand() % (HEIGHT_MAP - HEIGHT_MAP / 4) + 3;
+      dropByDefault = y * WIDTH_MAP + x;
+    }
+    this->addObstacle(x, y);
+  }
 }
 
 void													arcade::GCentiped::addEnemy(std::vector<arcade::Actor> enemy)
@@ -65,108 +95,180 @@ void											arcade::GCentiped::addBodyEnemy(std::vector<arcade::Actor> *enemy
   this->_map[y * WIDTH_MAP + x] = TileType::EVIL_DUDE;
 }
 
+void												arcade::GCentiped::addObstacle(int x, int y)
+{
+  arcade::Actor							obstacle;
+
+  obstacle.pos.x = x;
+  obstacle.pos.y = y;
+  obstacle.lifes = 5;
+  this->_obstacles.insert(this->_obstacles.end(), obstacle);
+  this->_map[y * WIDTH_MAP + x] = TileType::OBSTACLE;
+}
+
+void												arcade::GCentiped::deleteObstacle(int i)
+{
+  this->_map[this->_obstacles[i].pos.y * WIDTH_MAP + this->_obstacles[i].pos.x] = TileType::EMPTY;
+  this->_obstacles.erase(this->_obstacles.begin() + i);
+}
+
 void													arcade::GCentiped::cutCenti(int i, int j)
 {
   std::vector<arcade::Actor>	enemy;
   unsigned int 								tmp;
 
-  std::cout << j << std::endl;
-  this->_map[this->_enemies[i][j].pos.y * WIDTH_MAP + this->_enemies[i][j].pos.x] = arcade::TileType::EMPTY;
+  this->addObstacle(this->_enemies[i][j].pos.x, this->_enemies[i][j].pos.y);
+//  this->_map[this->_enemies[i][j].pos.y * WIDTH_MAP + this->_enemies[i][j].pos.x] = arcade::TileType::OBSTACLE;
   if (this->_enemies[i][0].dirX == arcade::CommandType::GO_LEFT)
   {
-    for (unsigned int y = 0; y < (unsigned int)j; y++)
+    for (int y = 0; y < j && this->_enemies[i].size() > 0; y++)
       this->addBodyEnemy(&enemy, this->_enemies[i][y].pos.x, this->_enemies[i][y].pos.y, arcade::CommandType::GO_RIGHT, this->_enemies[i][y].dirY);
-    for (unsigned int y = 0; y <= (unsigned int)j; y++)
+    for (int y = 0; y <= j; y++)
       this->_enemies[i].erase(this->_enemies[i].begin());
   }
   else
   {
-    std::cout << "-----> RIGHT" << std::endl;
-    for (unsigned int y = j + 1; y < this->_enemies[i].size(); y++)
-    {
-
-      std::cout << " ,,y " << y << std::endl;
+    for (unsigned int y = j + 1; y < this->_enemies[i].size() && this->_enemies[i].size() > 0; y++)
       this->addBodyEnemy(&enemy, this->_enemies[i][y].pos.x, this->_enemies[i][y].pos.y, arcade::CommandType::GO_LEFT, this->_enemies[i][y].dirY);
-    }
     tmp = this->_enemies[i].size();
     for (unsigned int y = j; y < tmp; y++)
-    {
-      std::cout << " ..y " << y << std::endl;
       this->_enemies[i].erase(this->_enemies[i].end() - 1);
-    }
-
   }
-  this->addEnemy(enemy);
-  std::cout << "****" << this->_enemies[0].size() << std::endl;
-  std::cout << "**cc**" << this->_enemies[1].size() << std::endl;
-
-  (void)i;
-  (void)j;
+  if (this->_enemies[i].size() == 0)
+    this->_enemies.erase(this->_enemies.begin() + i);
+  if (enemy.size() > 0)
+    this->addEnemy(enemy);
 }
 
 void											arcade::GCentiped::execMove(int i)
 {
   int											j = (int)this->_enemies[i].size() - 1;
 
-  std::cout << " y " << this->_enemies[i][j].pos.y  << " x " << this->_enemies[i][j].pos.x  << std::endl;
   this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x] = arcade::TileType::EVIL_DUDE;
   this->_map[this->_enemies[i][j].pos.y * WIDTH_MAP + this->_enemies[i][j].pos.x] = arcade::TileType::EMPTY;
 }
 
+bool											arcade::GCentiped::isOnPlayer(int y, int x)
+{
+  if (this->_player.pos.x == x && this->_player.pos.y == y)
+    return true;
+  return false;
+}
+
 void											arcade::GCentiped::moveEnemies()
 {
-bool toto = true;
-  for (unsigned int i = 0; i < this->_enemies.size(); i++)
+
+  for (unsigned int i = 0; i < _enemies.size(); i++)
   {
-    std::cout << " i vaut " << i <<  std::endl;
-    //for (unsigned int j = 0; j < this->_enemies[i].size(); j++)
-    //{
-      if (this->_enemies[i][0].dirX == arcade::CommandType::GO_RIGHT && this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x + 1] == arcade::TileType::EMPTY)
-      {
-        std::cout << " RIGHT " << i <<  std::endl;
-        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x + 1, this->_enemies[i][0].pos.y, arcade::CommandType::GO_RIGHT, this->_enemies[i][0].dirY);
-        this->execMove(i);
-        this->_enemies[i].erase(this->_enemies[i].end() - 1);
-      }
-      else if (this->_enemies[i][0].dirX == arcade::CommandType::GO_LEFT && this->_map[this->_enemies[i][0].pos.y * WIDTH_MAP + this->_enemies[i][0].pos.x - 1] == arcade::TileType::EMPTY)
-      {
-        std::cout << " LEFT " << i <<  std::endl;
-        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x - 1, this->_enemies[i][0].pos.y, arcade::CommandType::GO_LEFT, this->_enemies[i][0].dirY);
-        this->execMove(i);
-        this->_enemies[i].erase(this->_enemies[i].end() - 1);
-      }
+    if (_enemies[i][0].dirX == arcade::CommandType::GO_RIGHT && (_map[_enemies[i][0].pos.y * WIDTH_MAP + _enemies[i][0].pos.x + 1] == arcade::TileType::EMPTY || _map[_enemies[i][0].pos.y * WIDTH_MAP + _enemies[i][0].pos.x + 1] == arcade::TileType::OTHER))
+    {
+      addBodyEnemy(&_enemies[i], _enemies[i][0].pos.x + 1, _enemies[i][0].pos.y, arcade::CommandType::GO_RIGHT, _enemies[i][0].dirY);
+      execMove(i);
+      _enemies[i].erase(_enemies[i].end() - 1);
+    }
+    else if (_enemies[i][0].dirX == arcade::CommandType::GO_LEFT && (_map[_enemies[i][0].pos.y * WIDTH_MAP + _enemies[i][0].pos.x - 1] == arcade::TileType::EMPTY || _map[_enemies[i][0].pos.y * WIDTH_MAP + _enemies[i][0].pos.x - 1] == arcade::TileType::OTHER))
+    {
+      addBodyEnemy(&_enemies[i], _enemies[i][0].pos.x - 1, _enemies[i][0].pos.y, arcade::CommandType::GO_LEFT, _enemies[i][0].dirY);
+      execMove(i);
+      _enemies[i].erase(_enemies[i].end() - 1);
+    }
 
 
-      else if (this->_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && this->_map[(this->_enemies[i][0].pos.y) * WIDTH_MAP + this->_enemies[i][0].pos.x + 1] != arcade::TileType::EMPTY && this->_enemies[i][0].pos.x + 1 != this->_enemies[i][1].pos.x && this->_enemies[i][0].pos.y + 1 != this->_enemies[i][1].pos.y)
-      {
-        std::cout << " DOWN RIGHT " << i <<  std::endl;
-
-        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x, this->_enemies[i][0].pos.y + 1, arcade::CommandType::GO_LEFT, this->_enemies[i][0].dirY);
-        this->execMove(i);
-        this->_enemies[i].erase(this->_enemies[i].end() - 1);
-      }
-      else if (this->_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && this->_map[(this->_enemies[i][0].pos.y) * WIDTH_MAP + this->_enemies[i][0].pos.x - 1] != arcade::TileType::EMPTY  && this->_enemies[i][0].pos.x - 1 != this->_enemies[i][1].pos.x  && this->_enemies[i][0].pos.y - 1 != this->_enemies[i][1].pos.y)
-      {
-        std::cout << " DOWN LEFT " << i <<  std::endl;
-
-        this->addBodyEnemy(&this->_enemies[i], this->_enemies[i][0].pos.x, this->_enemies[i][0].pos.y + 1, arcade::CommandType::GO_RIGHT, this->_enemies[i][0].dirY);
-        this->execMove(i);
-        this->_enemies[i].erase(this->_enemies[i].end() - 1);
-      }
-
-      if (this->_enemies[i][0].pos.y == 1 && this->_enemies[i][0].pos.x == 8 && toto)
-      {
-        this->cutCenti(i, 2);
-        toto = false;
-      }
-      //for (int f = 0; f < 100000000; f++);
+    else if (_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && _map[(_enemies[i][0].pos.y) * WIDTH_MAP + _enemies[i][0].pos.x + 1] != arcade::TileType::EMPTY &&
+             _map[(_enemies[i][0].pos.y + 1) * WIDTH_MAP + _enemies[i][0].pos.x] != arcade::TileType::BLOCK && _enemies[i][0].pos.x + 1 != _enemies[i][1].pos.x && _enemies[i][0].pos.y + 1 != _enemies[i][1].pos.y)
+    {
+      addBodyEnemy(&_enemies[i], _enemies[i][0].pos.x, _enemies[i][0].pos.y + 1, arcade::CommandType::GO_LEFT, _enemies[i][0].dirY);
+      execMove(i);
+      _enemies[i].erase(_enemies[i].end() - 1);
+    }
+    else if (_enemies[i][0].dirY == arcade::CommandType::GO_DOWN && _map[(_enemies[i][0].pos.y) * WIDTH_MAP + _enemies[i][0].pos.x - 1] != arcade::TileType::EMPTY &&
+             _map[(_enemies[i][0].pos.y + 1) * WIDTH_MAP + _enemies[i][0].pos.x] != arcade::TileType::BLOCK && _enemies[i][0].pos.x - 1 != _enemies[i][1].pos.x  && _enemies[i][0].pos.y - 1 != _enemies[i][1].pos.y)
+    {
+      addBodyEnemy(&_enemies[i], _enemies[i][0].pos.x, _enemies[i][0].pos.y + 1, arcade::CommandType::GO_RIGHT, _enemies[i][0].dirY);
+      execMove(i);
+      _enemies[i].erase(_enemies[i].end() - 1);
+    }
+    if (isOnPlayer(_enemies[i][0].pos.y, _enemies[i][0].pos.x))
+      this->gameEnd(arcade::Status::LOSE);
   }
+}
+
+void											arcade::GCentiped::movePlayer(CommandType type)
+{
+  this->_map[this->_player.pos.y * WIDTH_MAP + this->_player.pos.x] = TileType::EMPTY;
+  if (type == CommandType::GO_UP && this->_map[(this->_player.pos.y - 1) * WIDTH_MAP + this->_player.pos.x] == TileType::EMPTY &&
+      this->_player.pos.y - 1 > WIDTH_MAP - WIDTH_MAP / 4)
+    this->_player.pos.y--;
+  else if (type == CommandType::GO_DOWN && this->_map[(this->_player.pos.y + 1) * WIDTH_MAP + this->_player.pos.x] == TileType::EMPTY)
+    this->_player.pos.y++;
+  else if (type == CommandType::GO_RIGHT && this->_map[this->_player.pos.y * WIDTH_MAP + this->_player.pos.x + 1] == TileType::EMPTY)
+    this->_player.pos.x++;
+  else if (type == CommandType::GO_LEFT && this->_map[this->_player.pos.y * WIDTH_MAP + this->_player.pos.x - 1] == TileType::EMPTY)
+    this->_player.pos.x--;
+  this->_map[this->_player.pos.y * WIDTH_MAP + this->_player.pos.x] = TileType::OTHER;
+}
+
+void											arcade::GCentiped::initMyShoot()
+{
+  this->_playerShoot.lifes = 1;
+  this->_playerShoot.pos.x = this->_player.pos.x;
+  this->_playerShoot.pos.y = this->_player.pos.y - 1;
+  this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] = TileType::MY_SHOOT;
+}
+
+void											arcade::GCentiped::shootEvilDude()
+{
+  for (unsigned int i = 0; i < this->_enemies.size(); i++)
+    for (unsigned int j = 0; j < this->_enemies[i].size(); j++)
+      if (this->_playerShoot.pos.x == this->_enemies[i][j].pos.x && this->_playerShoot.pos.y == this->_enemies[i][j].pos.y)
+        this->cutCenti(i, j);
+  this->_playerShoot.lifes = 0;
+  this->_score += 100;
+}
+
+void											arcade::GCentiped::shootObstacle()
+{
+  for (unsigned int i = 0; i < this->_obstacles.size(); i++)
+    if (this->_playerShoot.pos.x == this->_obstacles[i].pos.x && this->_playerShoot.pos.y == this->_obstacles[i].pos.y)
+    {
+      if (this->_obstacles[i].lifes > 0)
+        this->_obstacles[i].lifes--;
+      else
+        this->deleteObstacle(i);
+    }
+  this->_playerShoot.lifes = 0;
+}
+
+void											arcade::GCentiped::moveMyShoot()
+{
+  if (this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] == TileType::EVIL_DUDE)
+    this->shootEvilDude();
+  this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] = TileType::EMPTY;
+  if (this->_playerShoot.lifes == 1)
+    this->_playerShoot.pos.y--;
+  if (this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] == TileType::EMPTY)
+    this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] = TileType::MY_SHOOT;
+  else if (this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] == TileType::EVIL_DUDE)
+    this->shootEvilDude();
+  else if (this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] == TileType::OBSTACLE)
+    this->shootObstacle();
+  else
+    this->_playerShoot.lifes = 0;
+}
+
+void											arcade::GCentiped::gameEnd(arcade::Status status)
+{
+  this->_statusGame = status;
 }
 
 void	    							  arcade::GCentiped::Update(CommandType type, bool debug)
 {
+  if (this->_playerShoot.lifes == 1)
+    this->moveMyShoot();
   this->moveEnemies();
-  /*if (type == CommandType::WHERE_AM_I)
+  if (this->_playerShoot.lifes == 1)
+    this->moveMyShoot();
+  if (type == CommandType::WHERE_AM_I)
   {
     try {
       this->GetPlayer(debug);
@@ -176,7 +278,7 @@ void	    							  arcade::GCentiped::Update(CommandType type, bool debug)
       exit(-1);
     }
   }
-  if (type == CommandType::GET_MAP)
+  else if (type == CommandType::GET_MAP)
   {
     try {
       this->GetMap(debug);
@@ -185,9 +287,13 @@ void	    							  arcade::GCentiped::Update(CommandType type, bool debug)
       std::cerr << stdErr.what() << std::endl;
       exit(-1);
     }
-  }*/
-	(void)type;
-	(void)debug;
+  }
+  else if (type == CommandType::GO_UP || type == CommandType::GO_DOWN || type == CommandType::GO_RIGHT || type == CommandType::GO_LEFT)
+    this->movePlayer(type);
+  else if (type == CommandType::SHOOT && this->_playerShoot.lifes == 0)
+    this->initMyShoot();
+  if (this->_enemies.size() == 0)
+    this->gameEnd(arcade::Status::WIN);
 }
 
 struct arcade::GetMap	  					*arcade::GCentiped::GetMap(bool debug) const
