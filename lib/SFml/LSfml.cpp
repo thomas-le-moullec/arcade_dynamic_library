@@ -285,8 +285,8 @@ void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, Ass
     print_commands();
 }
 
-void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
-                                                std::vector<std::string> graphicsLibs, int idxGraphic,
+void										arcade::LSfml::ShowMenu(const std::vector<std::string> gamesLibs, int idxGame,
+                                                const std::vector<std::string> graphicsLibs, int idxGraphic,
                                                 arcade::Button button, const arcade::playerName &player)
 {
   sf::Text              graphics;
@@ -352,7 +352,7 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
   _window->display();
 }
 
-void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::vector<arcade::IScore *> score)
+void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, const std::vector<arcade::IScore *> &score)
 {
   int									  y = 0;
   sf::Texture           texture;
@@ -394,7 +394,7 @@ void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, std::ve
   _window->display();
 }
 
-void										arcade::LSfml::ShowScore(const arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
+void										arcade::LSfml::ShowScore(arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
 {
   sf::Text              commands;
 

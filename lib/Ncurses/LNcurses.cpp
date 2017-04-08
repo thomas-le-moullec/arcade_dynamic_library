@@ -208,8 +208,8 @@ bool								arcade::LNcurses::printFile(const char *fileName, int y)
   return false;
 }
 
-void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
-                                                   std::vector<std::string> graphicsLibs, int idxGraphic,
+void										arcade::LNcurses::ShowMenu(const std::vector<std::string> gamesLibs, int idxGame,
+                                                   const std::vector<std::string> graphicsLibs, int idxGraphic,
                                                    arcade::Button button, const arcade::playerName &player)
 {
   int 									y = 5;
@@ -252,7 +252,7 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int
   (void)gamesLibs;
 }
 
-void									arcade::LNcurses::ShowScoreboard(const std::string &game, std::vector<arcade::IScore *> score)
+void									arcade::LNcurses::ShowScoreboard(const std::string &game, const std::vector<arcade::IScore *> &score)
 {
   int									y = 0;
 
@@ -269,7 +269,7 @@ void									arcade::LNcurses::ShowScoreboard(const std::string &game, std::vect
   refresh();
 }
 
-void										arcade::LNcurses::ShowScore(const arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
+void										arcade::LNcurses::ShowScore(arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
 {
   int										y = MARGIN_Y - (this->_heigth_map / 2);
   int										x = MARGIN_X + this->_width_map + 3;
