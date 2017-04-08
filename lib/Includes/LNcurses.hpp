@@ -4,6 +4,9 @@
 #include <fstream>
 #include "IGraphic.hpp"
 
+#define MARGIN_Y LINES / 2
+#define MARGIN_X COLS / 2
+
 namespace arcade
 {
   class LNcurses : public IGraphic
@@ -15,7 +18,7 @@ namespace arcade
       virtual void									ShowMenu(const std::vector<std::string>, int, const std::vector<std::string>, int, Button, const arcade::playerName &);
       virtual void									GetInput(ICore *);
       virtual void					        PrintGameOver(arcade::Status);
-      virtual void									ShowScoreboard(const std::string &, const std::vector<arcade::IScore *> &);
+      virtual void									ShowScoreBoard(const std::string &, const std::vector<arcade::IScore *> &);
       void                          initColors(const Assets &);
       virtual void									ShowScore(arcade::IScore *, const std::vector<arcade::IScore *> &);
 
@@ -37,8 +40,6 @@ namespace arcade
       bool													printFile(const char *, int);
 
       static const std::string                            RESSOURCES_ASCII;
-      static const unsigned int                           MARGIN_Y;
-      static const unsigned int                           MARGIN_X;
   };
 };
 

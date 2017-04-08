@@ -2,8 +2,6 @@
 #include <stdio.h>
 
 const std::string                       arcade::LNcurses::RESSOURCES_ASCII = "./ressources/ascii_files/";
-const unsigned int                      arcade::LNcurses::MARGIN_Y = LINES / 2;
-const unsigned int                      arcade::LNcurses::MARGIN_X = COLS / 2;
 
 arcade::LNcurses::LNcurses()
 {
@@ -234,7 +232,7 @@ void										arcade::LNcurses::ShowMenu(const std::vector<std::string> gamesLib
   {
     if ((int)i == idxGraphic)
       attron(A_REVERSE);
-    mvprintw(y + MARGIN_Y - graphicsLibs.size() / 2, MARGIN_X - 10 - graphicsLibs[i].length() + 20, " %s ", graphicsLibs[i].c_str());
+    mvprintw(y + MARGIN_Y - graphicsLibs.size() / 2, MARGIN_X - 10 - graphicsLibs[i].length() , " %s ", graphicsLibs[i].c_str());
     if ((int)i == idxGraphic)
       attroff(A_REVERSE);
     y += 2;
@@ -254,7 +252,7 @@ void										arcade::LNcurses::ShowMenu(const std::vector<std::string> gamesLib
   (void)gamesLibs;
 }
 
-void									arcade::LNcurses::ShowScoreboard(const std::string &game, const std::vector<arcade::IScore *> &score)
+void									arcade::LNcurses::ShowScoreBoard(const std::string &game, const std::vector<arcade::IScore *> &score)
 {
   int									y = 0;
 

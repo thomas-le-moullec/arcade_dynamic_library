@@ -398,5 +398,5 @@ void		arcade::Core::ShowSceneMenu()
 
 void		arcade::Core::ShowSceneScoreboard()
 {
-  this->_graphic->ShowScoreboard(this->takeGameName(), this->_scoreBoard.GetBestScores(this->takeGameName(), 20));
+  this->_graphic->ShowScoreBoard(this->takeGameName(), this->_scoreBoard.GetBestScores(this->takeGameName(), 20));
 }

@@ -18,7 +18,7 @@ namespace arcade
       virtual void				                               GetInput(ICore *);
       virtual void					                             PrintGameOver(arcade::Status);
       virtual void																		   ShowMenu(const std::vector<std::string>, int, const std::vector<std::string>, int, Button, const arcade::playerName &);
-			virtual void										 									 ShowScoreboard(const std::string &, const std::vector<arcade::IScore *> &);
+			virtual void										 									 ShowScoreBoard(const std::string &, const std::vector<arcade::IScore *> &);
       virtual void																			 ShowScore(arcade::IScore *, const std::vector<arcade::IScore *> &);
 
     private:
@@ -35,6 +35,8 @@ namespace arcade
       void                                               loadSounds();
       void                                               loadTextures(Assets &);
       void                                               playSound(arcade::SoundType type);
+      sf::Texture                                        *_LoseTexture;
+      sf::Texture                                        *_WinTexture;
       unsigned int                                       _textureMapSize;
       std::map<arcade::SoundType, sf::SoundBuffer>       _sounds;
       sf::Sound                                          _sound;

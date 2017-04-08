@@ -30,6 +30,10 @@ arcade::LSfml::LSfml()
   _backgroundTexture = NULL;
   _playerTexture = NULL;
   _mapTexture = NULL;
+  if ((_WinTexture = new sf::Texture) && !_WinTexture->loadFromFile(RESSOURCES+"win.jpg"))
+    _WinTexture = NULL;
+  if ((_LoseTexture = new sf::Texture) && !_LoseTexture->loadFromFile(RESSOURCES+"lose.jpg"))
+    _LoseTexture = NULL;
 }
 
 arcade::LSfml::~LSfml()
@@ -296,7 +300,7 @@ void										arcade::LSfml::ShowMenu(const std::vector<std::string> gamesLibs, 
 
   (void)button;
   _window->clear();
-  if (!texture.loadFromFile(RESSOURCES+"backgroundMenu.gif")) {
+  if (!texture.loadFromFile(RESSOURCES+"menu.png")) {
   }
   sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   background.setTexture(&texture);
@@ -310,7 +314,7 @@ void										arcade::LSfml::ShowMenu(const std::vector<std::string> gamesLibs, 
     name.setColor(sf::Color::Black);
     sf::FloatRect textName = name.getLocalBounds();
     name.setOrigin(textName.left + textName.width/2.0f, textName.top  + textName.height/2.0f);
-    name.setPosition(sf::Vector2f((WIDTH_WIN * 0.45) + ((i  + 1)* 30), HEIGHT_WIN * 0.53));
+    name.setPosition(sf::Vector2f((WIDTH_WIN * 0.45) + ((i  + 1)* 30), HEIGHT_WIN * 0.57));
     if (i == player.idx) {
       name.setStyle(sf::Text::Bold);
       name.setColor(sf::Color(0x157FEFFF));
@@ -321,14 +325,14 @@ void										arcade::LSfml::ShowMenu(const std::vector<std::string> gamesLibs, 
   games.setFont(_fontMasque);
   for (unsigned int idx = 0; idx < graphicsLibs.size(); idx++) {
     graphics.setString(graphicsLibs[idx]);
-    graphics.setCharacterSize(12);
+    graphics.setCharacterSize(16);
     graphics.setColor(sf::Color(0x157FEFFF));
     graphics.setStyle(sf::Text::Regular);
     sf::FloatRect textRectGraphics = graphics.getLocalBounds();
     graphics.setOrigin(textRectGraphics.left + textRectGraphics.width/2.0f, textRectGraphics.top  + textRectGraphics.height/2.0f);
-    graphics.setPosition(sf::Vector2f(WIDTH_WIN * 0.2, (HEIGHT_WIN * 0.20) + 200 + (idx * 50)));
+    graphics.setPosition(sf::Vector2f(WIDTH_WIN * 0.18, (HEIGHT_WIN * 0.20) + 200 + (idx * 50)));
     if (static_cast<int>(idx) == idxGraphic) {
-      graphics.setCharacterSize(28);
+      graphics.setCharacterSize(30);
       graphics.setColor(sf::Color(0xD011D0FF));
       graphics.setStyle(sf::Text::Bold);
     }
@@ -336,14 +340,14 @@ void										arcade::LSfml::ShowMenu(const std::vector<std::string> gamesLibs, 
   }
   for (unsigned int idx = 0; idx < gamesLibs.size(); idx++){
     games.setString(gamesLibs[idx]);
-    games.setCharacterSize(12);
+    games.setCharacterSize(16);
     games.setColor(sf::Color(0x157FEFFF));
     games.setStyle(sf::Text::Regular);
     sf::FloatRect textRectGraphics = games.getLocalBounds();
     games.setOrigin(textRectGraphics.left + textRectGraphics.width/2.0f, textRectGraphics.top  + textRectGraphics.height/2.0f);
-    games.setPosition(sf::Vector2f((WIDTH_WIN * 0.7), (HEIGHT_WIN * 0.20) + 200 + (idx * 50)));
+    games.setPosition(sf::Vector2f((WIDTH_WIN * 0.8), (HEIGHT_WIN * 0.20) + 200 + (idx * 50)));
     if (static_cast<int>(idx) == idxGame) {
-      games.setCharacterSize(28);
+      games.setCharacterSize(30);
       games.setColor(sf::Color(0xD011D0FF));
       games.setStyle(sf::Text::Bold);
     }
@@ -352,7 +356,7 @@ void										arcade::LSfml::ShowMenu(const std::vector<std::string> gamesLibs, 
   _window->display();
 }
 
-void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, const std::vector<arcade::IScore *> &score)
+void										arcade::LSfml::ShowScoreBoard(const std::string &nameGame, const std::vector<arcade::IScore *> &score)
 {
   int									  y = 0;
   sf::Texture           texture;
@@ -361,9 +365,11 @@ void										arcade::LSfml::ShowScoreboard(const std::string &nameGame, const s
   _window->clear();
   if (!texture.loadFromFile(RESSOURCES+"Scoreboard.gif")) {
   }
-  sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
-  background.setTexture(&texture);
-  _window->draw(background);
+  else {
+    sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
+    background.setTexture(&texture);
+    _window->draw(background);
+  }
   Scores.setFont(_fontMasque);
   Scores.setCharacterSize(25);
   Scores.setColor(sf::Color(0xe2fefeFF));
@@ -435,17 +441,39 @@ extern "C" arcade::IGraphic*		CreateDisplayModule()
 
 void										arcade::LSfml::PrintGameOver(arcade::Status status)
 {
-  sf::Texture           texture;
+  sf::RectangleShape    background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
+  sf::Text              commands;
+
+  commands.setFont(_fontMasque);
+  commands.setCharacterSize(35);
+  commands.setColor(sf::Color(0xe2fefeFF));
+  sf::FloatRect commandsArea = commands.getLocalBounds();
+  commands.setOrigin(commandsArea.left + commandsArea.width/2.0f, commandsArea.top  + commandsArea.height/2.0f);
+
+  commands.setPosition(sf::Vector2f(WIDTH_WIN * 0.4, HEIGHT_WIN * 0.40));
+  commands.setStyle(sf::Text::Bold);
 
   _window->clear();
-  if (status == arcade::Status::WIN && !texture.loadFromFile(RESSOURCES+"win.jpg"))
-  {
+  if (status == arcade::Status::WIN) {
+    if (_WinTexture == NULL) {
+      commands.setString("YOU WIN!");
+      _window->draw(commands);
+    }
+    else {
+      background.setTexture(_WinTexture);
+      _window->draw(background);
+    }
   }
-  if (status == arcade::Status::LOSE && !texture.loadFromFile(RESSOURCES+"lose.jpg"))
-  {
+
+  if (status == arcade::Status::LOSE) {
+    if (_LoseTexture == NULL) {
+      commands.setString("GAME OVER");
+      _window->draw(commands);
+    }
+    else {
+      background.setTexture(_LoseTexture);
+      _window->draw(background);
+    }
   }
-  sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
-  background.setTexture(&texture);
-  _window->draw(background);
   _window->display();
 }
