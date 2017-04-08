@@ -4,9 +4,10 @@ CC					= g++
 
 RM					= rm -rf
 
-NAME				= ../lib_arcade_centiped.so
+NAME				= ../lib_arcade_centipede.so
 
-SRCS				=	GCentiped.cpp
+SRCS				=	GCentiped.cpp							\
+							../../Errors/Errors.cpp		\
 
 CPPFLAGS   	=   -I ./../Includes/ -I ./../../interfaces -I ../../scoreboard/ -I ../../Errors/
 

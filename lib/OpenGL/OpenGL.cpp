@@ -250,8 +250,8 @@ void									arcade::OpenGL::putNbrOpenGl(int nb, float x, float y, std::vector<
   }
 }
 
-void									arcade::OpenGL::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
-                                               std::vector<std::string> graphicsLibs, int idxGraphic,
+void									arcade::OpenGL::ShowMenu(const std::vector<std::string> gamesLibs, int idxGame,
+                                               const std::vector<std::string> graphicsLibs, int idxGraphic,
                                                arcade::Button button, const arcade::playerName &player)
 {
   int									y = 0;
@@ -324,7 +324,7 @@ void					        arcade::OpenGL::PrintGameOver(arcade::Status status)
   SDL_GL_SwapBuffers( );
 }
 
-void									arcade::OpenGL::ShowScoreboard(const std::string &game, std::vector<arcade::IScore *>bestScore)
+void									arcade::OpenGL::ShowScoreboard(const std::string &game, const std::vector<arcade::IScore *> &bestScore)
 {
   (void)game;
   (void)bestScore;
@@ -337,7 +337,7 @@ void                  arcade::OpenGL::initColors(const Assets &assets)
 
 void	renderText(const char *text, TTF_Font *font, SDL_Color color, SDL_Rect *location);
 
-void									arcade::OpenGL::ShowScore(const arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
+void									arcade::OpenGL::ShowScore(arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
 {
   this->putStrOpenGl("Meilleurs Scores", 1.5, 40, this->_colors[arcade::TileType::EVIL_DUDE]);
   for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++)
