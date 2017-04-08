@@ -6,7 +6,8 @@ RM					= rm -rf
 
 NAME				= ../lib_arcade_solarfox.so
 
-SRCS				=	GSolarFox.cpp
+SRCS				=	GSolarFox.cpp \
+					../../Errors/Errors.cpp
 
 CPPFLAGS   	=   -I ./../Includes/ -I ./../../interfaces -I ../../scoreboard/ -I ../../Errors/
 
