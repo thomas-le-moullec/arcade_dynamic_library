@@ -1,0 +1,15 @@
+MAN - ARCADE
+
+Project Arcade is a software that allows you to play arcade games using different graphic libraries.
+The software allows you to change "dynamically" the game and the graphic library while playing.
+
+How to use the program :
+    $> ./arcade ./lib/lib_arcade_***.so (replace *** by the name of the graphic library you want)
+
+How to add a game :
+    put a shared library of your game in the folder "games" (at the root of the project)
+    the name of this shared library must be "lib_arcade_'name_of_the_game'.so"
+
+How to add a graphic library :
+    put a shared library of your graphic library in the folder "lib" (at the root of the project)
+    the name of this shared library must be "lib_arcade_'name_of_the_graphic_lib'.so"

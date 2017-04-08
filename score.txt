@@ -265,3 +265,6 @@ snake:AAA:8
 centipede:AAA:700
 centipede:AAA:0
 snake:AAA:8
+centipede:AAA:200
+centipede:AAA:800
+centipede:AAA:700
