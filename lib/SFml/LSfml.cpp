@@ -1,9 +1,9 @@
 #include "LSfml.hpp"
 
 const std::string arcade::LSfml::RESSOURCES = "./ressources/";
-const std::string arcade::LSfml::RESSOURCES_SOUNDS = "./ressources/Sounds/";
-const std::string arcade::LSfml::RESSOURCES_FONTS = "./ressources/Fonts/";
-const std::string arcade::LSfml::RESSOURCES_TEXTURES = "./ressources/Textures/";
+const std::string arcade::LSfml::RESSOURCES_SOUNDS = "./ressources/sounds/";
+const std::string arcade::LSfml::RESSOURCES_FONTS = "./ressources/fonts/";
+const std::string arcade::LSfml::RESSOURCES_TEXTURES = "./ressources/textures/";
 const unsigned int arcade::LSfml::WIDTH_WIN = 1200;
 const unsigned int arcade::LSfml::HEIGHT_WIN = 720;
 const unsigned int arcade::LSfml::PIXELS_WIN = 24;
