@@ -1,5 +1,7 @@
 #include "ScoreBoard.hpp"
 
+const std::string      arcade::ScoreBoard::SB_FILENAME = "score.txt";
+
 arcade::ScoreBoard::ScoreBoard(const std::string& filename)
 {
   std::string	str;

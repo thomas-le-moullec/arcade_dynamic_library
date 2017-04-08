@@ -1,5 +1,7 @@
 #include "Score.hpp"
 
+const std::string      arcade::Score::SB_FILENAME = "score.txt";
+
 arcade::Score::Score(const std::string &nameGame, const std::string &namePlayer, unsigned int valueScore)
 {
   this->_nameGame = nameGame;

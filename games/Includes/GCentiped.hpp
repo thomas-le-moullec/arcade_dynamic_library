@@ -3,8 +3,8 @@
 
 #include "IGame.hpp"
 
-#define HEIGHT_MAP			30
-#define WIDTH_MAP				30
+#define WIDTH_MAP   20
+#define HEIGHT_MAP  20
 
 namespace arcade
 {
@@ -59,7 +59,6 @@ namespace arcade
       void															cutCenti(int, int);
       void															gameEnd(arcade::Status);
       bool															isOnPlayer(int, int);
-
   };
 };
 

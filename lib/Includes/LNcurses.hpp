@@ -4,9 +4,6 @@
 #include <fstream>
 #include "IGraphic.hpp"
 
-#define	MARGIN_Y	LINES / 2
-#define MARGIN_X	COLS / 2
-
 namespace arcade
 {
   class LNcurses : public IGraphic
@@ -40,6 +37,8 @@ namespace arcade
       bool													printFile(const char *, int);
 
       static const std::string                            RESSOURCES_ASCII;
+      static const unsigned int                           MARGIN_Y;
+      static const unsigned int                           MARGIN_X;
   };
 };
 

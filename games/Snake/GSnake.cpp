@@ -1,5 +1,4 @@
 #include "GSnake.hpp"
-#include <stdio.h>
 
 arcade::GSnake::GSnake()
 {
