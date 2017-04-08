@@ -324,7 +324,7 @@ void					        arcade::OpenGL::PrintGameOver(arcade::Status status)
   SDL_GL_SwapBuffers( );
 }
 
-void									arcade::OpenGL::ShowScoreboard(const std::string &game, const std::vector<arcade::IScore *> &bestScore)
+void									arcade::OpenGL::ShowScoreBoard(const std::string &game, const std::vector<arcade::IScore *> &bestScore)
 {
   (void)game;
   (void)bestScore;
