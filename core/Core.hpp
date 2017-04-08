@@ -73,6 +73,7 @@ namespace arcade
       void						getIndexLib(bool, const std::string &);
       void						loadLibAfterMenu();
       std::string			takeGameName() const;
+      std::string			cutName(std::string &, int) const;
       void						takeLibInDir(const char *, int);
 
       static const unsigned int                 SIZE_PATH;

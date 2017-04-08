@@ -35,7 +35,6 @@ namespace arcade
       void													initMapDisplay();
 
       bool													printFile(const char *, int);
-      std::string										cutName(std::string &, int) const;
 
       static const std::string                            RESSOURCES_ASCII;
       static const unsigned int                           MARGIN_Y;

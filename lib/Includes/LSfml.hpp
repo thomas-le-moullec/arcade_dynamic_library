@@ -32,7 +32,6 @@ namespace arcade
       void                                               initCoreInputs();
       void                                               setColor(const unsigned int &, arcade::TileType, sf::RectangleShape);
       void                                               print_commands() const;
-      std::string										                     cutName(std::string &, int) const;
       void                                               loadSounds();
       void                                               loadTextures(Assets &);
       void                                               playSound(arcade::SoundType type);
