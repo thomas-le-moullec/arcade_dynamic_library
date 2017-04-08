@@ -19,7 +19,6 @@ namespace arcade
       virtual void									GetInput(ICore *);
       virtual void					        PrintGameOver(arcade::Status);
       virtual void									ShowScoreBoard(const std::string &, const std::vector<arcade::IScore *> &);
-      void                          initColors(const Assets &);
       virtual void									ShowScore(arcade::IScore *, const std::vector<arcade::IScore *> &);
 
     private:

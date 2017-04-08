@@ -4,7 +4,8 @@ RM								= rm -rf
 
 NAME_LIB_OPENGL		= ../lib_arcade_opengl.so
 
-SRCS_LIB_OPENGL		=	./OpenGL.cpp
+SRCS_LIB_OPENGL		=	./OpenGL.cpp \
+										../../Errors/Errors.cpp		\
 
 CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/ -I ../../Errors/
 

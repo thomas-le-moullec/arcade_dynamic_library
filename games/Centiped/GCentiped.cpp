@@ -33,8 +33,9 @@ void											arcade::GCentiped::initAssets()
   _assets.c_map[static_cast<int>(arcade::TileType::EVIL_DUDE)].color = 0xa40061FF;
   _assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].color = 0xd9f7f7FF;
   _assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].color = 0xffc5e4FF;
+  _assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].color = 0xf4977eFF;
   _assets.loadMap = true;
-  _assets.t_map = "CentipedMap.png";
+  _assets.t_map = "centiped_map.png";
   _assets.loadPlayer = true;
   _assets.t_player= "centiped_player.png";
   _assets.loadBg = true;

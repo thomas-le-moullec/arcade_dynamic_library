@@ -28,6 +28,7 @@ namespace arcade
     SHOOT = 2,                          // Play a "Pew pew pew" sound
     WAKA = 3,                           // Play a "Waka Waka" sound
     INTRO_PACMAN = 4,                   // Play a "Toulitoutoulitoutou" sound
+    SPECIAL_PACMAN = 5                  // Play a special sound for Pacman
   };
 
   enum class			Scene : uint16_t

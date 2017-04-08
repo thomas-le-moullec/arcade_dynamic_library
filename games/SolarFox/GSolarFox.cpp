@@ -55,9 +55,9 @@ void											arcade::GSolarFox::initAssets()
   _assets.c_map[static_cast<int>(arcade::TileType::MY_SHOOT)].color = 0xd9f7f7FF;
   _assets.c_map[static_cast<int>(arcade::TileType::EVIL_SHOOT)].color = 0xffc5e4FF;
   _assets.loadMap = true;
-  _assets.t_map = "SolarFoxMap.png";
+  _assets.t_map = "solarfox_map.png";
   _assets.loadPlayer = true;
-  _assets.t_player= "SpaceShip.png";
+  _assets.t_player= "solarfox_player.png";
   _assets.loadBg = true;
   _assets.t_bg = "SolarFoxBackgroundGame.jpg";
   _assets.dir = arcade::CommandType::GO_RIGHT;

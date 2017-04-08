@@ -67,9 +67,9 @@ void											arcade::GSnake::initAssets()
   _assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].color = 0xf5f5dcFF;
   _assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].color = 0x5e5d62FF;
   _assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].color = 0xa8353aFF;
-  _assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].color = 0xAF70A4FF;
+  _assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].color = 0x809DC4FF;
   _assets.loadMap = true;
-  _assets.t_map = "SnakeMap.png";
+  _assets.t_map = "snake_map.png";
   _assets.loadPlayer = true;
   _assets.t_player= "snake_player.png";
   _assets.loadBg = true;

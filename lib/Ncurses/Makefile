@@ -4,7 +4,8 @@ RM								= rm -rf
 
 NAME_LIB_NCURSES	= ../lib_arcade_ncurses.so
 
-SRCS_LIB_NCURSES	=	./LNcurses.cpp
+SRCS_LIB_NCURSES	=	./LNcurses.cpp 						\
+										../../Errors/Errors.cpp		\
 
 CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/ -I ../../Errors/
 

@@ -69,7 +69,6 @@ void									arcade::OpenGL::initMapColor()
 
 void									arcade::OpenGL::initMapColor(Assets &assets)
 {
-  //printf("%d * (1/255) => %f\n", assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r, assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r * (1.0 / 255.0));
   this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::EMPTY)].val.b * (1.0 / 255.0));
   this->_colors[arcade::TileType::EMPTY] = this->_rgb;
   this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::BLOCK)].val.b * (1.0 / 255.0));
@@ -84,7 +83,7 @@ void									arcade::OpenGL::initMapColor(Assets &assets)
   this->_colors[arcade::TileType::EVIL_SHOOT] = this->_rgb;
   this->fillColor(static_cast<float>(assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.r) * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.b * (1.0 / 255.0));
   this->_colors[arcade::TileType::POWERUP] = this->_rgb;
-  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::POWERUP)].val.b * (1.0 / 255.0));
+  this->fillColor(assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.r * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.v * (1.0 / 255.0), assets.c_map[static_cast<int>(arcade::TileType::OBSTACLE)].val.b * (1.0 / 255.0));
   this->_colors[arcade::TileType::OBSTACLE] = this->_rgb;
 }
 
@@ -105,7 +104,7 @@ void													arcade::OpenGL::initMapInputCore()
   this->input_core[13] = arcade::CoreCommand::PREV_GAME;
   this->input_core[14] = arcade::CoreCommand::NEXT_GAME;
   this->input_core[(int)SDLK_SPACE] = arcade::CoreCommand::PAUSE;
-  this->input_core[18] = arcade::CoreCommand::RESTART;
+  this->input_core[(int)SDLK_8] = arcade::CoreCommand::RESTART;
   this->input_core[(int)SDLK_ESCAPE] = arcade::CoreCommand::ESCAPE;
 }
 
@@ -256,6 +255,7 @@ void									arcade::OpenGL::ShowMenu(const std::vector<std::string> gamesLibs, 
 {
   int									y = 0;
 
+  initMapColor();
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   this->putStrOpenGl("ARCADE", -0.5, 70, this->_colors[arcade::TileType::MY_SHOOT]);
   this->putStrOpenGl("APPUYER SUR ENTREE POUR COMMENCER L AVENTURE", -4.5, 50, this->_colors[arcade::TileType::MY_SHOOT]);
@@ -315,6 +315,7 @@ void									arcade::OpenGL::GetInput(ICore *core)
 
 void					        arcade::OpenGL::PrintGameOver(arcade::Status status)
 {
+  initMapColor();
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
   if (status == arcade::Status::WIN)
     this->putStrOpenGl("WIN", -0.5, 40, this->_colors[arcade::TileType::MY_SHOOT]);
@@ -328,11 +329,6 @@ void									arcade::OpenGL::ShowScoreBoard(const std::string &game, const std::
 {
   (void)game;
   (void)bestScore;
-}
-
-void                  arcade::OpenGL::initColors(const Assets &assets)
-{
-  (void)assets;
 }
 
 void	renderText(const char *text, TTF_Font *font, SDL_Color color, SDL_Rect *location);

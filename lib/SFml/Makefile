@@ -4,7 +4,8 @@ RM								= rm -rf
 
 NAME_LIB_SFML			= 	../lib_arcade_sfml.so
 
-SRCS_LIB_SFML			=	./LSfml.cpp
+SRCS_LIB_SFML			=	./LSfml.cpp 							\
+										../../Errors/Errors.cpp		\
 
 CPPFLAGS   				=  -I ../Includes/ -I ../../interfaces/ -I ../../scoreboard/ -I ../../Errors/
 
