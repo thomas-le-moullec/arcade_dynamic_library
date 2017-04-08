@@ -10,8 +10,6 @@
 #include <algorithm>
 #include "IScore.hpp"
 
-#define SB_FILENAME "score.txt"
-
 namespace arcade
 {
   class	Score : public IScore
@@ -30,6 +28,8 @@ namespace arcade
     std::string		_nameGame;
     std::string		_namePlayer;
     unsigned int	_valueScore;
+
+    static const std::string    SB_FILENAME;
   };
 };
 

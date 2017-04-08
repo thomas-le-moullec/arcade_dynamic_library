@@ -3,9 +3,8 @@
 
 #include "IGame.hpp"
 
-#define HEIGHT_MAP			40
-#define WIDTH_MAP				40
-#define RANGE						4
+#define HEIGHT_MAP 40
+#define WIDTH_MAP 40
 
 namespace arcade
 {
@@ -70,6 +69,8 @@ namespace arcade
       void															addMyShoot(int, int, CommandType);
       void															moveMyShoot();
       void															initMyShoot();
+
+      static const unsigned int         RANGE;
     };
 };
 

@@ -10,8 +10,6 @@
 #include <algorithm>
 #include "Score.hpp"
 
-#define SB_FILENAME "score.txt"
-
 namespace arcade
 {
   class ScoreBoard : public IScoreBoard
@@ -31,8 +29,10 @@ namespace arcade
     std::ofstream									_fileOut;
     std::string										_filename;
 
-    void												separateInfoScore(std::string);
-    void												writeScore();
+    void												  separateInfoScore(std::string);
+    void												  writeScore();
+
+    static const std::string      SB_FILENAME;
   };
 };
 

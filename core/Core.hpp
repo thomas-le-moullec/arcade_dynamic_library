@@ -15,8 +15,6 @@
 #include "ScoreBoard.hpp"
 #include "Score.hpp"
 
-#define	 SIZE_PATH 17
-
 namespace arcade
 {
   class Core : public ICore
@@ -76,6 +74,8 @@ namespace arcade
       void						loadLibAfterMenu();
       std::string			takeGameName() const;
       void						takeLibInDir(const char *, int);
+
+      static const unsigned int                 SIZE_PATH;
   };
 };
 

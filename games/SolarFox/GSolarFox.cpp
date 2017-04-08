@@ -1,5 +1,7 @@
 #include "GSolarFox.hpp"
 
+const unsigned int         arcade::GSolarFox::RANGE = 4;
+
 arcade::GSolarFox::GSolarFox()
 {
   this->initMap();

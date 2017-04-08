@@ -3,8 +3,8 @@
 
 #include "IGame.hpp"
 
-#define HEIGHT_MAP			20
-#define WIDTH_MAP				20
+#define         HEIGHT_MAP 20
+#define         WIDTH_MAP 20
 
 namespace arcade
 {

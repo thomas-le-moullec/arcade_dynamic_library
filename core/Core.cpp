@@ -1,5 +1,7 @@
 #include "Core.hpp"
 
+const unsigned int                 arcade::Core::SIZE_PATH = 17;
+
 arcade::Core::Core()
 {
   this->_handle_game = NULL;
