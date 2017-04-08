@@ -36,7 +36,6 @@ namespace arcade
       void													fillColor(float, float, float);
       void													putStrOpenGl(const char *, float, float, std::vector<float>);
       void													putNbrOpenGl(int, float, float, std::vector<float>);
-      std::string										cutName(std::string &, int) const;
 
       std::vector<float>																					_rgb;
       std::map<arcade::TileType, std::vector<float>>							_colors;

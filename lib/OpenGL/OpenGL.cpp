@@ -250,14 +250,6 @@ void									arcade::OpenGL::putNbrOpenGl(int nb, float x, float y, std::vector<
   }
 }
 
-
-std::string						arcade::OpenGL::cutName(std::string &libName, int size_path) const
-{
-  if (libName.find(".so") != std::string::npos && libName.find("lib_arcade_") != std::string::npos)
-    return libName.substr(size_path, libName.length() - 3 - size_path);
-  return (libName);
-}
-
 void									arcade::OpenGL::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                std::vector<std::string> graphicsLibs, int idxGraphic,
                                                arcade::Button button, const arcade::playerName &player)
@@ -271,18 +263,18 @@ void									arcade::OpenGL::ShowMenu(std::vector<std::string> gamesLibs, int id
   for(unsigned int i = 0; i < graphicsLibs.size(); i++)
   {
     if ((int)i == idxGraphic)
-      this->putStrOpenGl(this->cutName(graphicsLibs[i], 15).c_str(), -3, 2 - y, this->_colors[arcade::TileType::EVIL_DUDE]);
+      this->putStrOpenGl(graphicsLibs[i].c_str(), -3, 2 - y, this->_colors[arcade::TileType::EVIL_DUDE]);
     else
-      this->putStrOpenGl(this->cutName(graphicsLibs[i], 15).c_str(), -3, 2 - y, this->_colors[arcade::TileType::BLOCK]);
+      this->putStrOpenGl(graphicsLibs[i].c_str(), -3, 2 - y, this->_colors[arcade::TileType::BLOCK]);
     y += 10;
   }
   y = 0;
   for(unsigned int i = 0; i < gamesLibs.size(); i++)
   {
     if ((int)i == idxGame)
-      this->putStrOpenGl(this->cutName(gamesLibs[i], 17).c_str(), 2, 2 - y, this->_colors[arcade::TileType::EVIL_DUDE]);
+      this->putStrOpenGl(gamesLibs[i].c_str(), 2, 2 - y, this->_colors[arcade::TileType::EVIL_DUDE]);
     else
-      this->putStrOpenGl(this->cutName(gamesLibs[i], 17).c_str(), 2, 2 - y, this->_colors[arcade::TileType::BLOCK]);
+      this->putStrOpenGl(gamesLibs[i].c_str(), 2, 2 - y, this->_colors[arcade::TileType::BLOCK]);
     y += 10;
   }
   (void)button;

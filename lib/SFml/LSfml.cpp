@@ -138,13 +138,6 @@ void   arcade::LSfml::print_commands() const
   _window->draw(commands);
 }
 
-std::string	arcade::LSfml::cutName(std::string &libName, int size_path) const
-{
-  if (libName.find(".so") != std::string::npos && libName.find("lib_arcade_") != std::string::npos)
-    return libName.substr(size_path, libName.length() - 3 - size_path);
-  return (libName);
-}
-
 void                  arcade::LSfml::setColor(const unsigned int &color, arcade::TileType tile, sf::RectangleShape rectangle)
 {
   unsigned int          textureMapSize;
@@ -320,7 +313,7 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
   graphics.setFont(_fontMasque);
   games.setFont(_fontMasque);
   for (unsigned int idx = 0; idx < graphicsLibs.size(); idx++) {
-    graphics.setString(cutName(graphicsLibs[idx], 15));
+    graphics.setString(graphicsLibs[idx]);
     graphics.setCharacterSize(12);
     graphics.setColor(sf::Color(0x157FEFFF));
     graphics.setStyle(sf::Text::Regular);
@@ -335,7 +328,7 @@ void										arcade::LSfml::ShowMenu(std::vector<std::string> gamesLibs, int id
     _window->draw(graphics);
   }
   for (unsigned int idx = 0; idx < gamesLibs.size(); idx++){
-    games.setString(cutName(gamesLibs[idx], 17));
+    games.setString(gamesLibs[idx]);
     games.setCharacterSize(12);
     games.setColor(sf::Color(0x157FEFFF));
     games.setStyle(sf::Text::Regular);

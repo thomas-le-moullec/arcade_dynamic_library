@@ -208,13 +208,6 @@ bool								arcade::LNcurses::printFile(const char *fileName, int y)
   return false;
 }
 
-std::string	arcade::LNcurses::cutName(std::string &libName, int size_path) const
-{
-  if (libName.find(".so") != std::string::npos && libName.find("lib_arcade_") != std::string::npos)
-    return libName.substr(size_path, libName.length() - 3 - size_path);
-  return (libName);
-}
-
 void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int idxGame,
                                                    std::vector<std::string> graphicsLibs, int idxGraphic,
                                                    arcade::Button button, const arcade::playerName &player)
@@ -239,7 +232,7 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int
   {
     if ((int)i == idxGraphic)
       attron(A_REVERSE);
-    mvprintw(y + MARGIN_Y - graphicsLibs.size() / 2, MARGIN_X - 10 - graphicsLibs[i].length() + 20, " %s ", this->cutName(graphicsLibs[i], 15).c_str());
+    mvprintw(y + MARGIN_Y - graphicsLibs.size() / 2, MARGIN_X - 10 - graphicsLibs[i].length() + 20, " %s ", graphicsLibs[i].c_str());
     if ((int)i == idxGraphic)
       attroff(A_REVERSE);
     y += 2;
@@ -249,7 +242,7 @@ void										arcade::LNcurses::ShowMenu(std::vector<std::string> gamesLibs, int
   {
     if ((int)i == idxGame)
       attron(A_REVERSE);
-    mvprintw(y + MARGIN_Y - gamesLibs.size() / 2, MARGIN_X + 10 , " %s ", this->cutName(gamesLibs[i], 17).c_str());
+    mvprintw(y + MARGIN_Y - gamesLibs.size() / 2, MARGIN_X + 10 , " %s ", gamesLibs[i].c_str());
     if ((int)i == idxGame)
       attroff(A_REVERSE);
     y += 2;

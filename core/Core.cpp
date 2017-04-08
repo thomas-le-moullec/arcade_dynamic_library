@@ -67,9 +67,9 @@ void								arcade::Core::takeLibInDir(const char *dirName, int mode)
   {
     str = path + DirEntry->d_name;
     if (mode == 0 && str.compare(0, 17, "games/lib_arcade_") == 0)
-      this->_gamesLibs.insert(this->_gamesLibs.begin(), str);
+      this->_gamesLibs.insert(this->_gamesLibs.begin(), this->cutName(str, 17));
     if (mode == 1 && str.compare(0, 15, "lib/lib_arcade_") == 0)
-      this->_graphicLibs.insert(this->_graphicLibs.begin(), str);
+      this->_graphicLibs.insert(this->_graphicLibs.begin(), this->cutName(str, 15));
   }
 }
 
@@ -79,14 +79,17 @@ void										arcade::Core::getIndexLib(bool isGame, const std::string& lib)
 
   if (isGame == true)
   {
-    while (j < this->_gamesLibs.size() && this->_gamesLibs[j] != lib)
+    while (j < this->_gamesLibs.size() && "games/lib_arcade_" + this->_gamesLibs[j] + ".so" != lib)
       j++;
     this->_idxGamesLib = j;
   }
   else
   {
-    while (j < this->_graphicLibs.size() && this->_graphicLibs[j] != lib)
+    while (j < this->_graphicLibs.size() && "lib/lib_arcade_" + this->_graphicLibs[j] + ".so" != lib)
+    {
+    //  std::cout << "./games/lib_arcade_" + this->_graphicLibs[j] + ".so" << ":::" << lib;
       j++;
+    }
     this->_idxGraphicLib = j;
   }
 }
@@ -149,7 +152,7 @@ void		arcade::Core::LoadPrevGraphic()
   if (this->_scene == arcade::Scene::GAME)
     {
       try {
-        this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+        this->LoadGraphic("./lib/lib_arcade_" + this->_graphicLibs[this->_idxGraphicLib] + ".so");
       }
       catch (RunTimeErrorCore const &stdErr) {
         std::cerr << stdErr.what() << std::endl;
@@ -167,7 +170,7 @@ void		arcade::Core::LoadNextGraphic()
   if (this->_scene == arcade::Scene::GAME)
   {
     try {
-      this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+      this->LoadGraphic("./lib/lib_arcade_" + this->_graphicLibs[this->_idxGraphicLib] + ".so");
     }
     catch (RunTimeErrorCore const &stdErr) {
       std::cerr << stdErr.what() << std::endl;
@@ -182,7 +185,7 @@ void		arcade::Core::LoadPrevGame()
   if (this->_idxGamesLib == -1)
     this->_idxGamesLib = this->_gamesLibs.size() - 1;
   try {
-    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    this->LoadGame("./games/lib_arcade_" + this->_gamesLibs[this->_idxGamesLib] + ".so");
   }
   catch (RunTimeErrorCore const &stdErr) {
     std::cerr << stdErr.what() << std::endl;
@@ -196,7 +199,7 @@ void		arcade::Core::LoadNextGame()
   if (this->_idxGamesLib == (int)this->_gamesLibs.size())
     this->_idxGamesLib = 0;
   try {
-    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    this->LoadGame("./games/lib_arcade_" + this->_gamesLibs[this->_idxGamesLib] + ".so");
   }
   catch (RunTimeErrorCore const &stdErr) {
     std::cerr << stdErr.what() << std::endl;
@@ -206,7 +209,7 @@ void		arcade::Core::LoadNextGame()
 void		arcade::Core::Restart()
 {
   try {
-    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    this->LoadGame("./games/lib_arcade_" + this->_gamesLibs[this->_idxGamesLib] + ".so");
   }
   catch (RunTimeErrorCore const &stdErr) {
     std::cerr << stdErr.what() << std::endl;
@@ -242,13 +245,18 @@ std::string	arcade::Core::takeGameName() const
 {
   int				idx = this->_idxGamesLib;
 
-  return this->_gamesLibs[idx].substr(SIZE_PATH, this->_gamesLibs[idx].length() - 3 - SIZE_PATH);
+  return this->_gamesLibs[idx];
+}
+
+std::string	arcade::Core::cutName(std::string &libName, int size_path) const
+{
+  return libName.substr(size_path, libName.length() - 3 - size_path);
 }
 
 void		arcade::Core::loadLibAfterMenu()
 {
   try {
-    this->LoadGraphic(this->_graphicLibs[this->_idxGraphicLib]);
+    this->LoadGraphic("./lib/lib_arcade_" + this->_graphicLibs[this->_idxGraphicLib] + ".so");
   }
   catch (RunTimeErrorCore const &stdErr) {
     std::cerr << stdErr.what() << std::endl;
@@ -262,7 +270,7 @@ void									arcade::Core::RunArcade()
   int									j = 0;
 
   try {
-    this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+    this->LoadGame("./games/lib_arcade_" + this->_gamesLibs[this->_idxGamesLib] + ".so");
   }
   catch (RunTimeErrorCore const &stdErr) {
     std::cerr << stdErr.what() << std::endl;
@@ -297,7 +305,7 @@ void		arcade::Core::NotifySceneGame(arcade::CommandType type)
   {
     this->_status = arcade::Status::RUNNING;
     try {
-      this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+      this->LoadGame("./games/lib_arcade_" + this->_gamesLibs[this->_idxGamesLib] + ".so");
     }
     catch (RunTimeErrorCore const &stdErr) {
       std::cerr << stdErr.what() << std::endl;
@@ -314,7 +322,7 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
   {
     this->_scene = arcade::Scene::GAME;
     try {
-      this->LoadGame(this->_gamesLibs[this->_idxGamesLib]);
+      this->LoadGame("./games/lib_arcade_" + this->_gamesLibs[this->_idxGamesLib] + ".so");
     }
     catch (RunTimeErrorCore const &stdErr) {
       std::cerr << stdErr.what() << std::endl;
