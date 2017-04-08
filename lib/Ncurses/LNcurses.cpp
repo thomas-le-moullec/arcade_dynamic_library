@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 const std::string                       arcade::LNcurses::RESSOURCES_ASCII = "./ressources/ascii_files/";
-const unsigned int                      arcade::LNcurses::MARGIN_Y = LINES / 2;
-const unsigned int                      arcade::LNcurses::MARGIN_X = COLS / 2;
+//const unsigned int                      arcade::LNcurses::MARGIN_Y = LINES / 2;
+//const unsigned int                      arcade::LNcurses::MARGIN_X = COLS / 2;
 
 arcade::LNcurses::LNcurses()
 {

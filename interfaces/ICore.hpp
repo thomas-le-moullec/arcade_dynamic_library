@@ -66,18 +66,18 @@ namespace arcade
   {
     public:
 	     virtual ~ICore() {};
-       virtual void		NotifyCore(arcade::CoreCommand) = 0;
        virtual void		RunArcade() = 0;
+       virtual void		NotifyCore(arcade::CoreCommand) = 0;
        virtual void   LoadGame(const std::string&) = 0;
        virtual void   LoadGraphic(const std::string&) = 0;
        virtual void		LoadPrevGraphic() = 0;
        virtual void		LoadNextGraphic() = 0;
        virtual void		LoadPrevGame() = 0;
        virtual void		LoadNextGame() = 0;
+       virtual void		Pause() = 0;
        virtual void		Restart() = 0;
        virtual void	  Menu() = 0;
        virtual void		Quit() = 0;
-       virtual void		Pause() = 0;
        virtual void		ShowSceneMenu() = 0;
        virtual void		ShowSceneGame() = 0;
        virtual void		ShowSceneScoreboard() = 0;
