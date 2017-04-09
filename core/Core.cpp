@@ -291,6 +291,7 @@ void									arcade::Core::RunArcade()
     if (this->_coreCmd != arcade::CoreCommand::NOTHING)
     {
       (this->*_mapCore[this->_coreCmd])();
+      std::cout << "";
       this->_coreCmd = arcade::CoreCommand::NOTHING;
     }
     if (this->_scene == arcade::Scene::GAME && this->_status != arcade::Status::RUNNING && this->_addScore)

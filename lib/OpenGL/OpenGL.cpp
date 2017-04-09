@@ -104,7 +104,7 @@ void													arcade::OpenGL::initMapInputCore()
   this->input_core[13] = arcade::CoreCommand::PREV_GAME;
   this->input_core[14] = arcade::CoreCommand::NEXT_GAME;
   this->input_core[(int)SDLK_SPACE] = arcade::CoreCommand::PAUSE;
-  this->input_core[(int)SDLK_8] = arcade::CoreCommand::RESTART;
+  this->input_core[(int)SDLK_UNDERSCORE] = arcade::CoreCommand::RESTART;
   this->input_core[(int)SDLK_ESCAPE] = arcade::CoreCommand::ESCAPE;
 }
 
@@ -288,10 +288,9 @@ void 									arcade::OpenGL::handle_key_down( SDL_keysym* keysym, ICore *core)
   if (keysym->sym == SDLK_q || keysym->sym == SDLK_z || keysym->sym == SDLK_d || keysym->sym == SDLK_s ||
       keysym->sym == SDLK_RETURN || keysym->sym == SDLK_t)
       core->NotifyScene(this->input_game[(int)keysym->sym]);
-  if (keysym->scancode == 11|| keysym->scancode == 12 || keysym->scancode == 13 ||keysym->scancode == 14 ||
-      keysym->scancode == 18)
+  if (keysym->scancode == 11|| keysym->scancode == 12 || keysym->scancode == 13 ||keysym->scancode == 14)
       core->NotifyCore(this->input_core[(int)keysym->scancode]);
-  if (keysym->sym == SDLK_ESCAPE || keysym->sym == SDLK_SPACE)
+  if (keysym->sym == SDLK_ESCAPE || keysym->sym == SDLK_SPACE || keysym->sym == SDLK_UNDERSCORE)
     core->NotifyCore(this->input_core[(int)keysym->sym]);
 }
 
