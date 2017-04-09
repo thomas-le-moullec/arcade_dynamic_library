@@ -470,3 +470,4 @@ snake:AAA:242
 centipede:AAA:600
 centipede:AAA:300
 centipede:AAA:400
+centipede:CAA:500

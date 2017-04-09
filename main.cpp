@@ -16,5 +16,10 @@ int							main(int ac, char **av)
     core->RunArcade();
     delete core;
   }
+  else
+  {
+    std::cout << "Usage: ./arcade graphic_library" << std::endl;
+    std::cout << "Ex:    ./arcade lib/lib_arcade_ncurses.so" << std::endl;
+  }
   return (0);
 }
