@@ -460,3 +460,9 @@ solarfox:AAA:50
 snake:AAA:10
 snake:AAA:242
 snake:AAA:133
+centipede:AAA:400
+centipede:AAA:500
+snake:AAA:8
+snake:AAA:242
+centipede:AAA:600
+centipede:AAA:300

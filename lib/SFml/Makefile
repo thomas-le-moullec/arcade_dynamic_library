@@ -24,6 +24,7 @@ $(NAME_LIB_SFML):
 clean:
 	@echo "Cleaning object files ..."
 	@$(RM) $(OBJS_LIB_SFML)
+	@$(RM) *.o
 	@echo "Object files cleaned."
 
 fclean: clean

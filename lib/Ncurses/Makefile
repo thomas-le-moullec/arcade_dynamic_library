@@ -24,6 +24,7 @@ $(NAME_LIB_NCURSES):
 clean:
 	@echo "Cleaning object files ..."
 	@$(RM) $(OBJS_LIB_NCURSES)
+	@$(RM) *.o
 	@echo "Object files cleaned."
 
 fclean: clean

@@ -237,12 +237,22 @@ bool		arcade::LSfml::isHeadPlayer(arcade::WhereAmI *player, int i, int width) co
 
 void arcade::LSfml::playSound(arcade::SoundType type, unsigned int volume, float pitch)
 {
-  _sound.setBuffer(_sounds[type]);
-  if (type == arcade::SoundType::EATAPPLE)
-    volume -= 20;
-  _sound.setVolume(volume);
-  _sound.setPitch(pitch);
-  _sound.play();
+  static unsigned int sound = 0;
+  if (type == arcade::SoundType::BOOM && sound % 2 == 0) {
+    _sound.setBuffer(_sounds[type]);
+    _sound.setVolume(volume);
+    _sound.setPitch(pitch);
+    _sound.play();
+  }
+  else {
+    _sound.setBuffer(_sounds[type]);
+    if (type == arcade::SoundType::EATAPPLE)
+      volume -= 40;
+    _sound.setVolume(volume);
+    _sound.setPitch(pitch);
+    _sound.play();
+  }
+  sound++;
 }
 
 void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, Assets &assets)
