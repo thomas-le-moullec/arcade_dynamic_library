@@ -24,6 +24,7 @@ $(NAME_LIB_OPENGL):
 clean:
 	@echo "Cleaning object files ..."
 	@$(RM) $(OBJS_LIB_OPENGL)
+	@$(RM) *.o
 	@echo "Object files cleaned."
 
 fclean: clean

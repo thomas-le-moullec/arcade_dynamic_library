@@ -463,3 +463,10 @@ snake:AAA:133
 centipede:AAA:300
 snake:AAA:5
 snake:AAA:552
+centipede:AAA:400
+centipede:AAA:500
+snake:AAA:8
+snake:AAA:242
+centipede:AAA:600
+centipede:AAA:300
+centipede:AAA:400
