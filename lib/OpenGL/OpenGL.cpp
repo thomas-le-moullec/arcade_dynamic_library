@@ -65,6 +65,12 @@ void									arcade::OpenGL::initMapColor()
   this->_colors[arcade::TileType::POWERUP] = this->_rgb;
   this->fillColor(1, 1, 1);
   this->_colors[arcade::TileType::OBSTACLE] = this->_rgb;
+  this->_red.insert(this->_red.end(), 1);
+  this->_red.insert(this->_red.end(), 0);
+  this->_red.insert(this->_red.end(), 0);
+  this->_white.insert(this->_white.end(), 1);
+  this->_white.insert(this->_white.end(), 1);
+  this->_white.insert(this->_white.end(), 1);
 }
 
 void									arcade::OpenGL::initMapColor(Assets &assets)
@@ -277,8 +283,6 @@ void									arcade::OpenGL::ShowMenu(const std::vector<std::string> gamesLibs, 
       this->putStrOpenGl(gamesLibs[i].c_str(), 2, 2 - y, this->_colors[arcade::TileType::BLOCK]);
     y += 10;
   }
-  (void)button;
-  (void)player;
   glEnd( );
   SDL_GL_SwapBuffers( );
 }
@@ -335,14 +339,14 @@ void	renderText(const char *text, TTF_Font *font, SDL_Color color, SDL_Rect *loc
 
 void									arcade::OpenGL::ShowScore(arcade::IScore *currentScore, const std::vector<arcade::IScore *> &bestScore)
 {
-  this->putStrOpenGl("Meilleurs Scores", 1.5, 40, this->_colors[arcade::TileType::EVIL_DUDE]);
+  this->putStrOpenGl("Meilleurs Scores", 1.5, 40, this->_red);
   for (unsigned int i = 0; i < bestScore.size() && bestScore.size() > 0; i++)
   {
-    this->putStrOpenGl(bestScore[i]->getName().c_str(), 1.5, 30 - i * 10, this->_colors[arcade::TileType::MY_SHOOT]);
-    this->putNbrOpenGl((int)(bestScore[i]->getScore()), 3, 30 - i * 10, this->_colors[arcade::TileType::BLOCK]);
+    this->putStrOpenGl(bestScore[i]->getName().c_str(), 1.5, 30 - i * 10, this->_white);
+    this->putNbrOpenGl((int)(bestScore[i]->getScore()), 3, 30 - i * 10, this->_white);
   }
-  this->putStrOpenGl("Score actuel", 1.5, 0, this->_colors[arcade::TileType::EVIL_DUDE]);
-  this->putNbrOpenGl((int)(currentScore->getScore()), 1.5, -10,  this->_colors[arcade::TileType::BLOCK]);
+  this->putStrOpenGl("Score actuel", 1.5, 0, this->_red);
+  this->putNbrOpenGl((int)(currentScore->getScore()), 1.5, -10, this->_white);
   (void)currentScore;
   (void)bestScore;
   glEnd( );

@@ -264,11 +264,14 @@ void											arcade::GCentiped::gameEnd(arcade::Status status)
 
 void	    							  arcade::GCentiped::Update(CommandType type, bool debug)
 {
-  if (this->_playerShoot.lifes == 1)
-    this->moveMyShoot();
-  this->moveEnemies();
-  if (this->_playerShoot.lifes == 1)
-    this->moveMyShoot();
+  if (type == CommandType::PLAY)
+  {
+    if (this->_playerShoot.lifes == 1)
+      this->moveMyShoot();
+    this->moveEnemies();
+    if (this->_playerShoot.lifes == 1)
+      this->moveMyShoot();
+  }
   if (type == CommandType::WHERE_AM_I)
   {
     try {

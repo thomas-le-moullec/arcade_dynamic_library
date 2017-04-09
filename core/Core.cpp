@@ -21,6 +21,7 @@ arcade::Core::Core()
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
   this->_player.name = "AAA";
+  this->_player.idx = 0;
   this->_checkSwitch = false;
 }
 
@@ -320,6 +321,7 @@ void		arcade::Core::NotifySceneGame(arcade::CommandType type)
 
 void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
 {
+  std::cout << "debug 1" << std::endl;
   if (type == arcade::CommandType::SHOOT)
   {
     this->_scene = arcade::Scene::GAME;
@@ -336,6 +338,7 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
       this->_checkSwitch = false;
     }
   }
+
   else if (type == arcade::CommandType::GO_RIGHT)
     this->_player.idx++;
   else if (type == arcade::CommandType::GO_LEFT)
@@ -346,14 +349,17 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
     this->_player.name[this->_player.idx]--;
   else if (type == arcade::CommandType::ILLEGAL)
     this->_scene = arcade::Scene::SCOREBOARD;
+  std::cout << "---->" << this->_player.idx << std::endl;
   if (this->_player.idx == 3)
     this->_player.idx = 0;
   else if (this->_player.idx > 3)
     this->_player.idx = 2;
+  std::cout << "debug 2" << std::endl;
   if (this->_player.name[this->_player.idx] < 'A')
     this->_player.name[this->_player.idx] = 'Z';
   else if (this->_player.name[this->_player.idx] > 'Z')
     this->_player.name[this->_player.idx] = 'A';
+  std::cout << "debug 3" << std::endl;
 }
 
 void		arcade::Core::NotifySceneScoreboard(arcade::CommandType type)

@@ -325,3 +325,10 @@ snake:AAA:358
 snake:AAA:499
 snake:AAA:490
 centipede:AAA:500
+solarfox:AAA:0
+solarfox:AAA:0
+snake:AAA:8
+snake:AAA:380
+snake:AAA:10
+snake:AAA:8
+solarfox:AAA:0
