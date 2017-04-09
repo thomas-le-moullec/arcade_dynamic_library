@@ -46,12 +46,19 @@ void    arcade::LSfml::loadSounds()
   if (!_music.openFromFile(RESSOURCES_SOUNDS + "Push_It_To_The_Limit_scarface_.ogg")) {
     //maybe do smth
   }
-  _music.setVolume(15);
+  _music.setVolume(10);
   _music.play();
   _music.setLoop(true);
 
   _sounds[arcade::SoundType::EATAPPLE].loadFromFile(RESSOURCES_SOUNDS + "eatApple.wav");
   _sounds[arcade::SoundType::SHOOT].loadFromFile(RESSOURCES_SOUNDS + "shoot.wav");
+  _sounds[arcade::SoundType::WIN].loadFromFile(RESSOURCES_SOUNDS + "win.wav");
+  _sounds[arcade::SoundType::LOSE].loadFromFile(RESSOURCES_SOUNDS + "lose.wav");
+  _sounds[arcade::SoundType::CENTIPED_SHOT].loadFromFile(RESSOURCES_SOUNDS + "centiped_shot.wav");
+  _sounds[arcade::SoundType::BOOM].loadFromFile(RESSOURCES_SOUNDS + "boom.wav");
+  _sounds[arcade::SoundType::SNAKE_START].loadFromFile(RESSOURCES_SOUNDS + "snake_start.wav");
+  _sounds[arcade::SoundType::SOLARFOX_START].loadFromFile(RESSOURCES_SOUNDS + "solarfox_start.wav");
+  _sounds[arcade::SoundType::CENTIPED_START].loadFromFile(RESSOURCES_SOUNDS + "centiped_start.wav");
 }
 
 void    arcade::LSfml::loadTextures(Assets &assets)
@@ -228,25 +235,31 @@ bool		arcade::LSfml::isHeadPlayer(arcade::WhereAmI *player, int i, int width) co
   return false;
 }
 
-void arcade::LSfml::playSound(arcade::SoundType type)
+void arcade::LSfml::playSound(arcade::SoundType type, unsigned int volume, float pitch)
 {
   _sound.setBuffer(_sounds[type]);
-  _sound.setVolume(100);
+  if (type == arcade::SoundType::EATAPPLE)
+    volume -= 20;
+  _sound.setVolume(volume);
+  _sound.setPitch(pitch);
   _sound.play();
 }
 
 void		arcade::LSfml::ShowGame(arcade::WhereAmI *player, arcade::GetMap *map, Assets &assets)
 {
     unsigned int          x;
-    unsigned int          y;
     int                   i;
+    unsigned int          y;
     static                sf::RectangleShape  background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
     unsigned int          texturePlayerSize;
 
     _window->clear();
+    _music.setVolume(8);
+    if (_sound.getVolume() == 95)
+      _sound.stop();
     if (assets.sound != arcade::SoundType::NOTHING && \
         _sound.getStatus() != sf::SoundSource::Playing)
-      playSound(assets.sound);
+      playSound(assets.sound, 100);
     loadTextures(assets);
     initMap(map->height, map->width, assets);
     if (_playerTexture != NULL) {
@@ -444,6 +457,7 @@ void										arcade::LSfml::PrintGameOver(arcade::Status status)
   sf::RectangleShape    background(sf::Vector2f(WIDTH_WIN, HEIGHT_WIN));
   sf::Text              commands;
 
+  _music.setVolume(1);
   commands.setFont(_fontMasque);
   commands.setCharacterSize(35);
   commands.setColor(sf::Color(0xe2fefeFF));
@@ -455,6 +469,9 @@ void										arcade::LSfml::PrintGameOver(arcade::Status status)
 
   _window->clear();
   if (status == arcade::Status::WIN) {
+    if (_sound.getStatus() != sf::SoundSource::Playing) {
+      playSound(arcade::SoundType::WIN, 95, 1.18);
+    }
     if (_WinTexture == NULL) {
       commands.setString("YOU WIN!");
       _window->draw(commands);
@@ -466,6 +483,8 @@ void										arcade::LSfml::PrintGameOver(arcade::Status status)
   }
 
   if (status == arcade::Status::LOSE) {
+    if (_sound.getStatus() != sf::SoundSource::Playing)
+      playSound(arcade::SoundType::LOSE, 95, 0.95);
     if (_LoseTexture == NULL) {
       commands.setString("GAME OVER");
       _window->draw(commands);

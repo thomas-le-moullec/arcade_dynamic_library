@@ -105,7 +105,7 @@ void   				arcade::Core::LoadGame(const std::string& lib)
   if (this->_idxGamesLib == -1)
     this->getIndexLib(true, lib);
   if (this->_game != NULL)
-  delete this->_game;
+    delete this->_game;
   if (this->_handle_game != NULL)
     dlclose(this->_handle_game);
   this->_handle_game = dlopen(lib.c_str(), RTLD_LAZY);

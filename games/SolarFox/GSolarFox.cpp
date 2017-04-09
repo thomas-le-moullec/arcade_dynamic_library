@@ -61,6 +61,7 @@ void											arcade::GSolarFox::initAssets()
   _assets.loadBg = true;
   _assets.t_bg = "SolarFoxBackgroundGame.jpg";
   _assets.dir = arcade::CommandType::GO_RIGHT;
+  _assets.sound = arcade::SoundType::SOLARFOX_START;
 }
 
 void											arcade::GSolarFox::initPowerUp()
@@ -418,6 +419,12 @@ struct arcade::WhereAmI	     			*arcade::GSolarFox::GetPlayer(bool debug) const
 
 void												 			arcade::GSolarFox::gameEnd(arcade::Status status)
 {
+  if (status == arcade::Status::LOSE) {
+    _assets.sound = arcade::SoundType::LOSE;
+  }
+  else {
+    _assets.sound = arcade::SoundType::WIN;
+  }
   this->_statusGame = status;
 }
 

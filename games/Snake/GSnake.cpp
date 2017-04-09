@@ -75,6 +75,7 @@ void											arcade::GSnake::initAssets()
   _assets.loadBg = true;
   _assets.t_bg = "SnakeBackgroundGame.jpg";
   _assets.dir = arcade::CommandType::GO_RIGHT;
+  _assets.sound = arcade::SoundType::SNAKE_START;
 }
 
 void                      arcade::GSnake::increaseSnake(int x, int y)
@@ -114,8 +115,10 @@ void                      arcade::GSnake::move()
     _assets.sound = arcade::SoundType::EATAPPLE;
   }
   if ((this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::BLOCK) ||
-      this->snakeBitesItself() == true || (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::OBSTACLE))
-    this->gameEnd(arcade::Status::LOSE);
+      this->snakeBitesItself() == true || (this->_map[this->_player[0].y * WIDTH_MAP + this->_player[0].x] == TileType::OBSTACLE)) {
+        _assets.sound = arcade::SoundType::LOSE;
+        this->gameEnd(arcade::Status::LOSE);
+      }
 }
 
 bool											arcade::GSnake::checkDir(arcade::CommandType type)

@@ -34,7 +34,7 @@ namespace arcade
       void                                               print_commands() const;
       void                                               loadSounds();
       void                                               loadTextures(Assets &);
-      void                                               playSound(arcade::SoundType type);
+      void                                               playSound(arcade::SoundType type, unsigned int, float pitch = 1);
       sf::Texture                                        *_LoseTexture;
       sf::Texture                                        *_WinTexture;
       unsigned int                                       _textureMapSize;

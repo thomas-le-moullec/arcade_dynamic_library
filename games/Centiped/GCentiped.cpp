@@ -41,6 +41,7 @@ void											arcade::GCentiped::initAssets()
   _assets.loadBg = true;
   _assets.t_bg = "CentipedBackgroundGame.jpg";
   _assets.dir = arcade::CommandType::GO_RIGHT;
+  _assets.sound = arcade::SoundType::CENTIPED_START;
 }
 
 void											arcade::GCentiped::initEnemies()
@@ -189,8 +190,10 @@ void											arcade::GCentiped::moveEnemies()
       execMove(i);
       _enemies[i].erase(_enemies[i].end() - 1);
     }
-    if (isOnPlayer(_enemies[i][0].pos.y, _enemies[i][0].pos.x))
+    if (isOnPlayer(_enemies[i][0].pos.y, _enemies[i][0].pos.x)) {
+      _assets.sound = arcade::SoundType::LOSE;
       this->gameEnd(arcade::Status::LOSE);
+    }
   }
 }
 
@@ -215,14 +218,17 @@ void											arcade::GCentiped::initMyShoot()
   this->_playerShoot.pos.x = this->_player.pos.x;
   this->_playerShoot.pos.y = this->_player.pos.y - 1;
   this->_map[this->_playerShoot.pos.y * WIDTH_MAP + this->_playerShoot.pos.x] = TileType::MY_SHOOT;
+  _assets.sound = arcade::SoundType::BOOM;
 }
 
 void											arcade::GCentiped::shootEvilDude()
 {
   for (unsigned int i = 0; i < this->_enemies.size(); i++)
     for (unsigned int j = 0; j < this->_enemies[i].size(); j++)
-      if (this->_playerShoot.pos.x == this->_enemies[i][j].pos.x && this->_playerShoot.pos.y == this->_enemies[i][j].pos.y)
+      if (this->_playerShoot.pos.x == this->_enemies[i][j].pos.x && this->_playerShoot.pos.y == this->_enemies[i][j].pos.y) {
+        _assets.sound = arcade::SoundType::CENTIPED_SHOT;
         this->cutCenti(i, j);
+      }
   this->_playerShoot.lifes = 0;
   this->_score += 100;
 }
@@ -264,6 +270,7 @@ void											arcade::GCentiped::gameEnd(arcade::Status status)
 
 void	    							  arcade::GCentiped::Update(CommandType type, bool debug)
 {
+  _assets.sound = arcade::SoundType::NOTHING;
   if (type == CommandType::PLAY) {
     if (this->_playerShoot.lifes == 1)
       this->moveMyShoot();
@@ -295,8 +302,10 @@ void	    							  arcade::GCentiped::Update(CommandType type, bool debug)
     this->movePlayer(type);
   else if (type == CommandType::SHOOT && this->_playerShoot.lifes == 0)
     this->initMyShoot();
-  if (this->_enemies.size() == 0)
+  if (this->_enemies.size() == 0) {
+    _assets.sound = arcade::SoundType::WIN;
     this->gameEnd(arcade::Status::WIN);
+  }
 }
 
 struct arcade::GetMap	  					*arcade::GCentiped::GetMap(bool debug) const
