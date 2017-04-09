@@ -21,6 +21,7 @@ arcade::Core::Core()
   this->_scene = arcade::Scene::MENU;
   this->_status = arcade::Status::RUNNING;
   this->_player.name = "AAA";
+  this->_player.idx = 0;
   this->_checkSwitch = false;
 }
 
@@ -337,6 +338,7 @@ void		arcade::Core::NotifySceneMenu(arcade::CommandType type)
       this->_checkSwitch = false;
     }
   }
+
   else if (type == arcade::CommandType::GO_RIGHT)
     this->_player.idx++;
   else if (type == arcade::CommandType::GO_LEFT)

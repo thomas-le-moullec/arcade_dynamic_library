@@ -37,6 +37,8 @@ namespace arcade
       void													putNbrOpenGl(int, float, float, std::vector<float>);
 
       std::vector<float>																					_rgb;
+      std::vector<float>																					_red;
+      std::vector<float>																					_white;
       std::map<arcade::TileType, std::vector<float>>							_colors;
       std::map<int, arcade::CommandType>													input_game;
       std::map<int, arcade::CoreCommand>													input_core;
